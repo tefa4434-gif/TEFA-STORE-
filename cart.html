@@ -10,21 +10,22 @@
 <body class="bg-gray-200">
 
 <header class="bg-gray-300 p-4 flex justify-between items-center">
-  <a href="index.html">← رجوع للمتجر</a>
-  <h1 class="font-bold">🛒 سلة الطلبات</h1>
+  <a href="index.html" class="text-sm">← رجوع للمتجر</a>
+  <h1 class="font-bold">سلة الطلبات</h1>
+  <span></span>
 </header>
 
 <section class="container mx-auto p-4">
 
-  <!-- عناصر السلة -->
-  <div id="cartItems" class="space-y-3"></div>
+  <!-- عرض عناصر السلة -->
+  <div id="cartItems" class="space-y-3 mb-4"></div>
 
-  <div class="bg-white p-4 rounded-xl shadow mt-4">
+  <div id="cartTotalBox" class="bg-white p-3 rounded-xl shadow mb-4 hidden">
     <p>إجمالي المنتجات: <strong><span id="cartTotal">0</span> جنيه</strong></p>
   </div>
 
   <button id="checkoutBtn"
-    class="bg-black text-white w-full py-3 mt-4 rounded-xl">
+    class="bg-black text-white w-full py-3 rounded-xl hidden">
     إنهاء الطلب
   </button>
 </section>
@@ -33,7 +34,9 @@
 <section id="orderSection"
   class="hidden container mx-auto bg-white p-4 rounded-xl shadow mt-4">
 
-  <form id="orderForm" class="space-y-3">
+  <h2 class="font-bold text-lg mb-3 text-center">إدخال بيانات العميل</h2>
+
+  <form id="orderForm" class="space-y-3 text-sm">
 
     <textarea id="orderDetails" readonly
       class="w-full border p-2 rounded bg-gray-100 text-sm"></textarea>
@@ -46,11 +49,21 @@
     <input id="weight" placeholder="الوزن (اختياري)" class="w-full border p-2 rounded">
     <input id="height" placeholder="الطول (اختياري)" class="w-full border p-2 rounded">
 
-    <select id="gov" required class="w-full border p-2 rounded">
+    <select id="governorate" required class="w-full border p-2 rounded">
       <option value="">اختر المحافظة</option>
       <option>القاهرة</option>
       <option>الجيزة</option>
       <option>الإسكندرية</option>
+      <option>الدقهلية</option>
+      <option>الشرقية</option>
+      <option>الغربية</option>
+      <option>المنوفية</option>
+      <option>القليوبية</option>
+      <option>سوهاج</option>
+      <option>أسيوط</option>
+      <option>قنا</option>
+      <option>أسوان</option>
+      <option>الأقصر</option>
       <option>باقي المحافظات</option>
     </select>
 
@@ -71,58 +84,157 @@
 </section>
 
 <script>
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let cart = [];
+try {
+  cart = JSON.parse(localStorage.getItem("cart") || "[]");
+} catch(e) { cart = []; }
 
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
+const cartItemsEl   = document.getElementById("cartItems");
+const cartTotalBox  = document.getElementById("cartTotalBox");
+const cartTotalEl   = document.getElementById("cartTotal");
+const checkoutBtn   = document.getElementById("checkoutBtn");
 
+const orderSection  = document.getElementById("orderSection");
+const orderForm     = document.getElementById("orderForm");
+const orderDetails  = document.getElementById("orderDetails");
+const fullNameEl    = document.getElementById("fullName");
+const phone1El      = document.getElementById("phone1");
+const phone2El      = document.getElementById("phone2");
+const addressEl     = document.getElementById("address");
+const weightEl      = document.getElementById("weight");
+const heightEl      = document.getElementById("height");
+const governorateEl = document.getElementById("governorate");
+const notesEl       = document.getElementById("notes");
+const summaryBox    = document.getElementById("summary");
+const sumProductsEl = document.getElementById("sumProducts");
+const sumShippingEl = document.getElementById("sumShipping");
+const sumTotalEl    = document.getElementById("sumTotal");
+
+let productsTotal = 0;
+
+// عرض السلة
 function renderCart(){
-  cartItems.innerHTML = "";
-  let total = 0;
+  cartItemsEl.innerHTML = "";
+  productsTotal = 0;
 
   if(cart.length === 0){
-    cartItems.innerHTML = "<p class='text-center text-gray-500'>السلة فارغة</p>";
+    cartItemsEl.innerHTML = `
+      <p class="text-center text-gray-500">السلة فارغة، يمكنك الرجوع للمتجر وإضافة منتجات.</p>
+    `;
+    cartTotalBox.classList.add("hidden");
+    checkoutBtn.classList.add("hidden");
     return;
   }
 
-  cart.forEach((item, i) => {
+  cart.forEach((item, index) => {
     const sub = item.qty * item.price;
-    total += sub;
-    cartItems.innerHTML += `
-      <div class="bg-white p-3 rounded-xl shadow">
+    productsTotal += sub;
+
+    const div = document.createElement("div");
+    div.className = "bg-white p-3 rounded-xl shadow flex justify-between items-center text-sm";
+    div.innerHTML = `
+      <div class="text-right">
         <p><strong>${item.name}</strong></p>
         <p>اللون: ${item.color}</p>
         <p>الكمية: ${item.qty}</p>
         <p>الإجمالي: ${sub} جنيه</p>
-        <button onclick="removeItem(${i})" class="text-red-600 text-sm mt-1">
-          حذف
-        </button>
       </div>
+      <button type="button" data-index="${index}"
+        class="text-red-600 text-xs">حذف</button>
     `;
+    cartItemsEl.appendChild(div);
   });
 
-  cartTotal.textContent = total;
+  cartTotalEl.textContent = productsTotal;
+  cartTotalBox.classList.remove("hidden");
+  checkoutBtn.classList.remove("hidden");
 }
 renderCart();
 
-function removeItem(i){
-  cart.splice(i,1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-}
+// حذف عنصر من السلة
+cartItemsEl.addEventListener("click", e => {
+  if(e.target.matches("button[data-index]")){
+    const i = parseInt(e.target.dataset.index);
+    cart.splice(i,1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+  }
+});
 
-document.getElementById("checkoutBtn").onclick = ()=>{
-  if(cart.length === 0) return alert("السلة فارغة");
-  let text="", total=0;
-  cart.forEach((item,i)=>{
-    const s = item.qty * item.price;
-    total += s;
-    text += `${i+1}) ${item.name} - ${item.color} × ${item.qty} = ${s} جنيه\n`;
+// زر إنهاء الطلب
+checkoutBtn.addEventListener("click", () => {
+  if(cart.length === 0){
+    alert("السلة فارغة");
+    return;
+  }
+
+  let text = "";
+  productsTotal = 0;
+
+  cart.forEach((item, i) => {
+    const sub = item.qty * item.price;
+    productsTotal += sub;
+    text += `${i+1}) ${item.name} - ${item.color} × ${item.qty} = ${sub} جنيه\n`;
   });
+
   orderDetails.value = text;
-  sumProducts.innerText = total;
-  document.getElementById("orderSection").classList.remove("hidden");
-};
+  sumProductsEl.textContent = productsTotal;
+
+  updateSummary();
+  orderSection.classList.remove("hidden");
+  orderSection.scrollIntoView({behavior:"smooth"});
+});
+
+// تحديث ملخص الفاتورة
+function updateSummary(){
+  if(productsTotal <= 0){
+    summaryBox.classList.add("hidden");
+    return;
+  }
+  let shipping = 70;
+  if(governorateEl.value === "القاهرة") shipping = 60;
+  sumShippingEl.textContent = shipping;
+  sumTotalEl.textContent = productsTotal + shipping;
+  summaryBox.classList.remove("hidden");
+}
+governorateEl.addEventListener("change", updateSummary);
+
+// إرسال الطلب وتخزينه في localStorage (orders)
+orderForm.addEventListener("submit", e => {
+  e.preventDefault();
+
+  let shipping = 70;
+  if(governorateEl.value === "القاهرة") shipping = 60;
+  const total = productsTotal + shipping;
+  const now = new Date();
+
+  const orderData = {
+    product: orderDetails.value,
+    name: fullNameEl.value,
+    phone1: phone1El.value,
+    phone2: phone2El.value,
+    address: addressEl.value,
+    weight: weightEl.value,
+    height: heightEl.value,
+    governorate: governorateEl.value,
+    notes: notesEl.value,
+    shipping: shipping,
+    total: total,
+    time: now.toLocaleString("ar-EG"),
+    timestamp: now.getTime()
+  };
+
+  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+  orders.push(orderData);
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  // تنظيف السلة
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("✅ تم تأكيد الطلب بنجاح");
+  window.location.href = "index.html";
+});
 </script>
 
 </body>
