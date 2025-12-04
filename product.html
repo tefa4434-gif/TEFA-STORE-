@@ -67,7 +67,7 @@ const COLOR_STYLES = {
   }
 };
 
-// خريطة صور كل لون (هنا تحط أسماء ملفات الصور لكل لون)
+// خريطة صور كل لون
 const COLOR_IMAGES = {
   rozalin: {
     "كافيه": "rozalin-kafeh.jpg",
@@ -115,10 +115,10 @@ function renderProduct(){
     <p class="font-bold text-sm mb-2">🔥 ${product.price} جنيه</p>
     <p class="text-[12px] text-gray-700 mb-3">${product.desc}</p>
     <p class="text-[11px] text-gray-500 mb-2">
-      اختاري اللون عن طريق الدوائر، ثم حددي الكمية لكل لون واضغطي "إضافة للسلة".
+      اختاري اللون من الدوائر الكبيرة، ثم حددي الكمية لكل لون واضغطي "إضافة للسلة".
     </p>
-    <div id="colorsArea" class="space-y-2 mb-3 text-right"></div>
-    <button id="addBtn" class="bg-black text-white w-full py-2 rounded-xl text-sm">
+    <div id="colorsArea" class="space-y-3 mb-3 text-right"></div>
+    <button id="addBtn" class="bg-black text-white w-full py-3 rounded-xl text-sm font-semibold">
       إضافة للسلة
     </button>
   `;
@@ -135,24 +135,24 @@ function renderProduct(){
     row.className = "color-row flex justify-between items-center border rounded-xl px-3 py-2 bg-gray-50";
     row.dataset.color = color; // عشان نعرف اسم اللون
     row.innerHTML = `
-      <div class="flex items-center gap-2">
-        <!-- دائرة اللون -->
-        <span class="color-dot w-4 h-4 rounded-full border border-gray-300 inline-block cursor-pointer"
+      <div class="flex items-center gap-3">
+        <!-- دائرة اللون مكبرة -->
+        <span class="color-dot w-7 h-7 rounded-full border border-gray-300 inline-block cursor-pointer"
               style="background-color:${hex};"></span>
-        <!-- اسم اللون مخفي (يستخدم فقط في الطلبات) -->
+        <!-- اسم اللون مخفي (للاستخدام في الطلب فقط) -->
         <span class="text-[0px] opacity-0">${color}</span>
       </div>
       <div class="flex items-center gap-2">
-        <button type="button" class="dec px-2 text-sm bg-gray-200 rounded">-</button>
+        <button type="button" class="dec px-2 text-base bg-gray-200 rounded">-</button>
         <input type="number" min="0" value="0"
-               class="qty w-10 text-center border rounded text-xs">
-        <button type="button" class="inc px-2 text-sm bg-gray-200 rounded">+</button>
+               class="qty w-12 text-center border rounded text-sm">
+        <button type="button" class="inc px-2 text-base bg-gray-200 rounded">+</button>
       </div>
     `;
     colorsArea.appendChild(row);
   });
 
-  // =================== تغيير الصورة عند اختيار اللون ===================
+  // تغيير الصورة عند اختيار اللون
   colorsArea.addEventListener("click", e => {
     const dot = e.target.closest(".color-dot");
     if(!dot) return;
