@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>TEFA STORE - المنتج</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200">
+
+<header class="bg-gray-300 p-4 flex justify-between items-center">
+  <a href="index.html" class="text-sm">← رجوع للصفحة الرئيسية</a>
+  <h1 class="text-lg font-bold">TEFA STORE</h1>
+  <button id="cartBtn" class="relative text-2xl">
+    🛒
+    <span id="cartCount"
+      class="absolute -top-2 -left-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+  </button>
+</header>
+
+<!-- هنا تفاصيل المنتج -->
+<section class="container mx-auto p-4">
+  <div id="productBox" class="bg-white rounded-xl shadow p-3 text-center"></div>
+</section>
+
+<!-- سلة الطلبات -->
+<section id="cartSection"
+  class="hidden container mx-auto bg-white p-4 rounded-xl shadow mt-4">
+  <h3 class="text-center font-bold mb-3">🛒 سلة الطلبات</h3>
+  <div id="cartItems"></div>
+  <p class="text-sm mt-2">
+    إجمالي المنتجات: <span id="cartTotal">0</span> جنيه
+  </p>
+  <button id="goForm"
+    class="bg-black text-white w-full mt-3 p-2 rounded">
+    متابعة لإدخال بيانات العميل
+  </button>
+</section>
+
+<!-- نموذج بيانات العميل -->
+<section id="orderSection"
+  class="hidden container mx-auto bg-white p-4 mt-4 rounded-xl shadow">
+
+  <form id="orderForm" class="space-y-3">
+
+    <textarea id="selectedProduct" readonly
+      class="w-full border p-2 rounded bg-gray-100 text-sm"></textarea>
+
+    <input id="fullName" required placeholder="الاسم بالكامل" class="w-full border p-2 rounded">
+    <input id="phone1" required placeholder="رقم الهاتف" class="w-full border p-2 rounded">
+    <input id="phone2" placeholder="رقم هاتف 2" class="w-full border p-2 rounded">
+    <input id="address" required placeholder="العنوان بالتفصيل" class="w-full border p-2 rounded">
+
+    <input id="weight" placeholder="الوزن (اختياري)" class="w-full border p-2 rounded">
+    <input id="height" placeholder="الطول (اختياري)" class="w-full border p-2 rounded">
+
+    <select id="governorate" required class="w-full border p-2 rounded">
+      <option value="">اختر المحافظة</option>
+      <option>القاهرة</option>
+      <option>الجيزة</option>
+      <option>الإسكندرية</option>
+      <option>الدقهلية</option>
+      <option>الشرقية</option>
+      <option>الغربية</option>
+      <option>المنوفية</option>
+      <option>القليوبية</option>
+      <option>سوهاج</option>
+      <option>أسيوط</option>
+      <option>قنا</option>
+      <option>أسوان</option>
+      <option>الأقصر</option>
+      <option>باقي المحافظات</option>
+    </select>
+
+    <textarea id="notes" placeholder="ملاحظات (اختياري)"
+      class="w-full border p-2 rounded"></textarea>
+
+    <div id="orderSummary" class="hidden bg-gray-100 p-2 rounded text-sm">
+      <p>إجمالي المنتجات: <span id="sumProducts"></span> جنيه</p>
+      <p>الشحن: <span id="sumShipping"></span> جنيه</p>
+      <p class="font-bold">الإجمالي: <span id="sumTotal"></span> جنيه</p>
+    </div>
+
+    <button class="bg-black text-white w-full p-3 rounded">
+      تأكيد الطلب
+    </button>
+
+  </form>
+</section>
+
+<script>
+// إعداد بيانات المنتجات
+const PRODUCTS = {
+  rozalin: {
+    name: "طقم روزالين 3 قطع",
+    price: 749,
+    oldPrice: 999,
+    mainImg: "rozalin-main.jpg",
+    desc: "",
+    colors: ["كافيه","بيج","موف","زيتي","أسود","سيمون"]
+  },
+  formal: {
+    name: "طقم فورمال 3 قطع",
+    price: 699,
+    oldPrice: 949,
+    mainImg: "formal-main.jpg",
+    desc: "الخامة روزالين مستورد – وان سايز من 65ك لـ 85ك",
+    colors: ["منت","بيبي بلو","بيج","هافان","أسود"]
+  }
+};
+
+let cart = [];
+
+// عناصر عامة
+const cartBtn      = document.getElementById("cartBtn");
+const cartCountEl  = document.getElementById("cartCount");
+const cartSection  = document.getElementById("cartSection");
+const cartItemsEl  = document.getElementById("cartItems");
+const cartTotalEl  = document.getElementById("cartTotal");
+const goFormBtn    = document.getElementById("goForm");
+
+const orderSection = document.getElementById("orderSection");
+const orderForm    = document.getElementById("orderForm");
+const selectedProductEl = document.getElementById("selectedProduct");
+const sumProductsEl = document.getElementById("sumProducts");
+const sumShippingEl = document.getElementById("sumShipping");
+const sumTotalEl    = document.getElementById("sumTotal");
+const orderSummary  = document.getElementById("orderSummary");
+
+const fullNameEl   = document.getElementById("fullName");
+const phone1El     = document.getElementById("phone1");
+const phone2El     = document.getElementById("phone2");
+const addressEl    = document.getElementById("address");
+const weightEl     = document.getElementById("weight");
+const heightEl     = document.getElementById("height");
+const governorateEl= document.getElementById("governorate");
+const notesEl      = document.getElementById("notes");
+
+// قراءة ID المنتج من رابط الصفحة
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id") || "rozalin";
+const productData = PRODUCTS[productId] || PRODUCTS["rozalin"];
+
+// تحميل السلة من localStorage
+try {
+  cart = JSON.parse(localStorage.getItem("cart") || "[]");
+} catch(e){
+  cart = [];
+}
+
+// تحديث عداد السلة
+function updateCartBadge(){
+  const totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
+  cartCountEl.textContent = totalQty;
+}
+updateCartBadge();
+
+// بناء واجهة المنتج
+function renderProduct(){
+  const box = document.getElementById("productBox");
+  box.innerHTML = `
+    <img src="${productData.mainImg}"
+         class="productImg w-full aspect-[3/4] rounded mb-2 object-cover"
+         alt="${productData.name}">
+    <h2 class="font-bold text-base mb-1">${productData.name}</h2>
+    <p class="line-through text-xs text-red-500">${productData.oldPrice} جنيه</p>
+    <p class="font-bold text-sm mb-1">🔥 ${productData.price} جنيه</p>
+    ${productData.desc ? `<p class="text-[11px] text-gray-600 mb-2">${productData.desc}</p>` : ""}
+    <p class="text-[11px] text-gray-500 mb-2">اختر اللون والكمية ثم أضف للسلة</p>
+    <div id="colorsArea" class="space-y-2 text-right mb-3"></div>
+    <button id="addToCartBtn"
+      class="bg-black text-white w-full p-2 rounded text-sm">
+      إضافة للسلة
+    </button>
+  `;
+
+  const colorsArea = document.getElementById("colorsArea");
+
+  productData.colors.forEach(color => {
+    const row = document.createElement("div");
+    row.className = "flex justify-between items-center border rounded p-1 bg-gray-50";
+    row.innerHTML = `
+      <span class="text-xs">${color}</span>
+      <div class="flex gap-1 items-center">
+        <button type="button" class="dec px-2 text-xs bg-gray-200 rounded">−</button>
+        <input type="number" min="0" value="0"
+               class="qty w-10 text-center border rounded text-xs">
+        <button type="button" class="inc px-2 text-xs bg-gray-200 rounded">+</button>
+      </div>
+    `;
+    colorsArea.appendChild(row);
+  });
+
+  // أزرار + و -
+  colorsArea.addEventListener("click", (e) => {
+    if(e.target.classList.contains("inc") || e.target.classList.contains("dec")){
+      const row = e.target.closest("div");
+      const input = row.querySelector(".qty");
+      let val = parseInt(input.value) || 0;
+      if(e.target.classList.contains("inc")) val++;
+      if(e.target.classList.contains("dec") && val > 0) val--;
+      input.value = val;
+    }
+  });
+
+  // إضافة للسلة
+  document.getElementById("addToCartBtn").addEventListener("click", () => {
+    const rows = colorsArea.querySelectorAll(".qty");
+    let added = false;
+
+    rows.forEach((inp, idx) => {
+      const qty = parseInt(inp.value) || 0;
+      if(qty > 0){
+        added = true;
+        const colorName = productData.colors[idx];
+        cart.push({
+          productId: productId,
+          name: productData.name,
+          color: colorName,
+          qty: qty,
+          price: productData.price
+        });
+        inp.value = 0;
+      }
+    });
+
+    if(!added){
+      alert("اختر كمية واحدة على الأقل من لون واحد.");
+      return;
+    }
+
+    saveCart();
+    updateCartBadge();
+    updateCartUI();
+    alert("✅ تم إضافة المنتج للسلة");
+  });
+}
+
+// حفظ السلة
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// تحديث واجهة السلة
+function updateCartUI(){
+  cartItemsEl.innerHTML = "";
+  let total = 0;
+
+  if(cart.length === 0){
+    cartItemsEl.innerHTML = `<p class="text-center text-sm text-gray-500">السلة فارغة</p>`;
+    cartTotalEl.textContent = "0";
+    saveCart();
+    updateCartBadge();
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    const subtotal = item.qty * item.price;
+    total += subtotal;
+    const div = document.createElement("div");
+    div.className = "border p-2 rounded mb-1 text-xs flex justify-between items-center bg-gray-50";
+    div.innerHTML = `
+      <div class="text-right">
+        <p><strong>${item.name}</strong></p>
+        <p>اللون: ${item.color} - الكمية: ${item.qty}</p>
+        <p>الإجمالي: ${subtotal} جنيه</p>
+      </div>
+      <button type="button" data-index="${index}"
+              class="text-red-600 text-[11px]">حذف</button>
+    `;
+    cartItemsEl.appendChild(div);
+  });
+
+  cartTotalEl.textContent = total;
+  saveCart();
+  updateCartBadge();
+}
+
+// حذف عنصر من السلة
+cartItemsEl.addEventListener("click", (e) => {
+  if(e.target.matches("button[data-index]")){
+    const i = parseInt(e.target.dataset.index);
+    cart.splice(i, 1);
+    updateCartUI();
+  }
+});
+
+// فتح/غلق السلة
+cartBtn.addEventListener("click", () => {
+  if(cart.length === 0){
+    alert("السلة فارغة حاليًا.");
+    return;
+  }
+  cartSection.classList.toggle("hidden");
+  if(!cartSection.classList.contains("hidden")){
+    cartSection.scrollIntoView({behavior: "smooth"});
+  }
+});
+
+// الذهاب لإدخال بيانات العميل
+goFormBtn.addEventListener("click", () => {
+  if(cart.length === 0){
+    alert("السلة فارغة.");
+    return;
+  }
+
+  let text = "";
+  let total = 0;
+  cart.forEach((item, idx) => {
+    const sub = item.qty * item.price;
+    total += sub;
+    text += `${idx+1}) ${item.name} - ${item.color} × ${item.qty} = ${sub} جنيه\n`;
+  });
+
+  selectedProductEl.value = text;
+  sumProductsEl.textContent = total;
+  updateSummary();
+  orderSection.classList.remove("hidden");
+  orderSection.scrollIntoView({behavior: "smooth"});
+});
+
+// حساب ملخص الفاتورة
+function updateSummary(){
+  const productsTotal = parseInt(sumProductsEl.textContent) || 0;
+  let shipping = 70;
+  if(governorateEl.value === "القاهرة") shipping = 60;
+  sumShippingEl.textContent = shipping;
+  sumTotalEl.textContent = productsTotal + shipping;
+  orderSummary.classList.remove("hidden");
+}
+governorateEl.addEventListener("change", updateSummary);
+
+// إرسال الطلب
+orderForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const shipping = parseInt(sumShippingEl.textContent) || 0;
+  const total = parseInt(sumTotalEl.textContent) || 0;
+  const now = new Date();
+
+  const orderData = {
+    product: selectedProductEl.value,
+    name: fullNameEl.value,
+    phone1: phone1El.value,
+    phone2: phone2El.value,
+    address: addressEl.value,
+    weight: weightEl.value,
+    height: heightEl.value,
+    governorate: governorateEl.value,
+    notes: notesEl.value,
+    shipping: shipping,
+    total: total,
+    time: now.toLocaleString("ar-EG"),
+    timestamp: now.getTime()
+  };
+
+  const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+  orders.push(orderData);
+  localStorage.setItem("orders", JSON.stringify(orders));
+
+  // فضي السلة بعد الطلب
+  cart = [];
+  saveCart();
+  updateCartUI();
+
+  alert("✅ تم إرسال طلبك بنجاح");
+  window.location.href = "index.html";
+});
+
+// تشغيل أولي
+renderProduct();
+updateCartUI();
+</script>
+
+</body>
+</html>
