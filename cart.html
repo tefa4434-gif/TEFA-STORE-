@@ -448,7 +448,6 @@
           <option>شمال سيناء</option>
           <option>جنوب سيناء</option>
           <option>الوادي الجديد</option>
-          <!-- مدن خاصة بسعر 120 -->
           <option>شرم الشيخ</option>
           <option>الغردقة</option>
         </select>
@@ -502,11 +501,11 @@
 </main>
 
 <script>
-  // 🔗 لينك Google Apps Script الجديد
+  // 🔗 لينك Google Apps Script
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwPgm3Ez315GP5_E4SyM-NOjId3Whah4tdrXCRCHF1wYlk_CVwEgs4kd8WHCpJ50ggpiw/exec";
 
-  // 🔑 اسم المفتاح في localStorage – مهم يكون نفس الاسم في index و product
+  // 🔑 المفتاح الموحد للسلة
   const CART_KEY = "tefa_cart";
 
   const cartCountEl = document.getElementById("cartCount");
@@ -525,14 +524,19 @@
   let cart = [];
   let discountValue = 0;
 
-  function loadCart() {
+  // دايماً نقرأ السلة من localStorage
+  function getStoredCart() {
     try {
       const stored = localStorage.getItem(CART_KEY);
-      cart = stored ? JSON.parse(stored) : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
-      cart = [];
+      return [];
     }
-    if (!Array.isArray(cart)) cart = [];
+  }
+
+  function loadCart() {
+    cart = getStoredCart();
     updateCartBadge();
     renderCart();
   }
@@ -543,15 +547,20 @@
   }
 
   function updateCartBadge() {
-    const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const currentCart = getStoredCart();
+    const count = currentCart.reduce((sum, item) => sum + (item.qty || 1), 0);
     cartCountEl.textContent = count;
   }
 
   function renderCart() {
+    cart = getStoredCart();
     cartItemsEl.innerHTML = "";
     if (cart.length === 0) {
       emptyCartEl.style.display = "block";
       totalsBoxEl.style.display = "none";
+      itemsTotalEl.textContent = "0 ج";
+      shippingTotalEl.textContent = "0 ج";
+      grandTotalEl.textContent = "0 ج";
       return;
     }
     emptyCartEl.style.display = "none";
@@ -632,10 +641,10 @@
   }
 
   function changeQty(index, delta) {
+    cart = getStoredCart();
     const item = cart[index];
     if (!item) return;
     let newQty = (item.qty || 1) + delta;
-    // نخليها من 1 لـ 20 بس – من غير ما نحذف لو نزلت بالغلط
     if (newQty < 1) newQty = 1;
     if (newQty > 20) newQty = 20;
     item.qty = newQty;
@@ -644,6 +653,7 @@
   }
 
   function removeItem(index) {
+    cart = getStoredCart();
     cart.splice(index, 1);
     saveCart();
     renderCart();
@@ -667,6 +677,8 @@
   }
 
   function updateTotals() {
+    cart = getStoredCart();
+
     const itemsTotal = cart.reduce(
       (sum, item) => sum + (item.price || 0) * (item.qty || 1),
       0
@@ -706,7 +718,6 @@
       updateTotals();
       return;
     }
-    // خصم 10٪ على المنتجات فقط
     discountValue = 0.1;
     alert("تم تطبيق كود الخصم 10٪ بنجاح 🎉");
     updateTotals();
@@ -717,6 +728,8 @@
     .getElementById("orderForm")
     .addEventListener("submit", async (e) => {
       e.preventDefault();
+      cart = getStoredCart();
+
       if (cart.length === 0) {
         alert("السلة فاضية، اختار منتج واحد على الأقل.");
         return;
@@ -747,7 +760,6 @@
         )
         .join(" | ");
 
-      // الأرقام المعروضة في صفحة السلة
       const itemsTotal = cart.reduce(
         (sum, item) => sum + (item.price || 0) * (item.qty || 1),
         0
@@ -778,15 +790,10 @@
       submitBtn.textContent = "جاري إرسال الطلب ...";
 
       try {
-        const res = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", // نتجنب مشاكل CORS مع Apps Script
+          mode: "no-cors",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(payload),
-        });
-
-        alert("تم استلام طلبك بنجاح ❤️ هنكلمك لتأكده في أسرع وقت.");
-        // نمسح السلة
-        localStorage.r
+    
