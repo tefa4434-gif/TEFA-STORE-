@@ -2,299 +2,174 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>TEFA STORE | أطقم روزالين و فورمال</title>
+  <title>TEFA STORE | أطقم حريمي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100">
 
-<!-- شريط عرض لفترة محدودة (مكبّر) -->
-<div class="bg-gradient-to-r from-black via-gray-900 to-black text-white text-center py-3 px-3 shadow-md">
-  <div class="text-xs md:text-sm">
-    <span class="inline-block bg-red-600 px-3 py-1 rounded-full text-[11px] md:text-xs font-bold mr-1">
-      عرض خاص 🔥
-    </span>
-    <span class="font-semibold text-sm md:text-base">
-      خصم على الأطقم الكاملة روزالين و فورمال
-    </span>
-  </div>
-  <div class="mt-1 text-[11px] md:text-xs">
-    ينتهي خلال:
-    <span id="offerTimer" class="font-mono font-semibold"></span>
-  </div>
+<!-- شريط العرض -->
+<div class="bg-black text-white text-center py-3 text-sm md:text-lg font-semibold">
+  🔥 خصم لفترة محدودة على كل الأطقم – الدفع عند الاستلام
 </div>
 
 <!-- الهيدر -->
-<header class="bg-gray-200/90 backdrop-blur p-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
-  <div class="flex items-center gap-2">
-    <div class="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white text-sm font-bold">
-      TS
-    </div>
-    <div>
-      <h1 class="text-2xl font-bold">TEFA STORE</h1>
-      <p class="text-[12px] text-gray-600">متجر أطقم حريمي روزالين و فورمال</p>
-    </div>
+<header class="bg-white p-4 shadow flex justify-between items-center sticky top-0 z-20">
+  <div>
+    <h1 class="text-2xl md:text-3xl font-extrabold">TEFA STORE</h1>
+    <p class="text-sm md:text-base text-gray-600">
+      متجر أطقم حريمي روزالين و فورمال
+    </p>
   </div>
 
-  <!-- أيقونة السلة -->
   <a href="cart.html" class="relative text-3xl">
     🛒
     <span id="cartCount"
-      class="absolute -top-2 -left-2 bg-red-600 text-white text-[10px] rounded-full w-5 h-5 flex items-center justify-center">
+      class="absolute -top-2 -left-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
       0
     </span>
   </a>
 </header>
 
-<!-- هيرو / بانر رئيسي -->
-<section class="bg-gradient-to-b from-gray-200 to-gray-100 py-6">
-  <div class="container mx-auto px-4 flex flex-col gap-4 max-w-md">
+<!-- الهيرو -->
+<section class="bg-gradient-to-b from-gray-200 to-gray-100 py-8">
+  <div class="max-w-md mx-auto px-4 text-center">
 
-    <div class="text-center">
-      <span class="inline-block px-4 py-1 rounded-full border border-black text-[12px] mb-3 font-medium">
-        خصم على الأطقم الكاملة 🔥
-      </span>
-      <h2 class="text-3xl md:text-4xl font-extrabold mb-3 leading-snug">
-        أطقم حريمي جاهزة للخروجات والمناسبات
-      </h2>
-      <p class="text-base text-gray-700 mb-4 leading-relaxed">
-        أطقم 3 قطع بخامة روزالين مستوردة، قصّة مريحة وشياكة، مع شحن حتى باب البيت
-        لكل محافظات مصر ودفع عند الاستلام.
-      </p>
+    <span class="inline-block border border-black px-4 py-1 rounded-full mb-4 text-sm font-semibold">
+      خصم على الأطقم الكاملة 🔥
+    </span>
 
-      <ul class="text-[13px] md:text-[14px] text-gray-800 mb-4 text-right space-y-1">
-        <li>• خامة ناعمة وثابتة اللون</li>
-        <li>• أطقم 3 قطع كاملة جاهزة على اللبس</li>
-        <li>• شحن سريع + دفع عند الاستلام</li>
-      </ul>
+    <h2 class="text-3xl md:text-5xl font-extrabold mb-4">
+      أطقم حريمي جاهزة للخروجات  
+      <br> والمناسبات
+    </h2>
 
-      <div class="flex items-center justify-center gap-3">
-        <button id="shopNowBtn"
-          class="bg-black text-white px-6 py-3 rounded-2xl text-base md:text-lg font-semibold shadow-md">
-          تصفّح الأطقم الآن
-        </button>
-        <a href="https://wa.me/201157834203"
-          class="border border-black text-black px-6 py-3 rounded-2xl text-base md:text-lg">
-          استفسار على واتساب
-        </a>
-      </div>
+    <p class="text-lg md:text-xl text-gray-700 mb-4">
+      أطقم 3 قطع بخامة روزالين مستوردة، شياكة وراحة مع شحن لكل المحافظات
+      ودفع عند الاستلام.
+    </p>
+
+    <ul class="text-base md:text-lg text-gray-800 mb-5 space-y-1 text-right">
+      <li>• خامة ناعمة وثابتة اللون</li>
+      <li>• أطقم 3 قطع جاهزة على اللبس</li>
+      <li>• شحن سريع + دفع عند الاستلام</li>
+    </ul>
+
+    <div class="flex gap-3 justify-center mb-4">
+      <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})"
+        class="bg-black text-white px-6 py-4 rounded-2xl text-xl font-extrabold shadow-lg">
+        تصفّح الأطقم الآن
+      </button>
+
+      <a href="https://wa.me/201157834203"
+        class="border border-black px-6 py-4 rounded-2xl text-xl font-semibold">
+        واتساب
+      </a>
     </div>
 
-    <!-- مميزات سريعة -->
-    <div class="grid grid-cols-3 gap-3 text-center text-[11px] md:text-[13px] mt-4">
-      <div class="bg-white rounded-xl p-2 shadow-sm">
-        <p class="text-xl mb-1">🚚</p>
-        <p class="font-semibold text-sm md:text-base">شحن لكل المحافظات</p>
-        <p class="text-gray-600 mt-1 text-[11px] md:text-[12px]">60 للقاهرة / 70 لباقي المحافظات</p>
-      </div>
-      <div class="bg-white rounded-xl p-2 shadow-sm">
-        <p class="text-xl mb-1">💳</p>
-        <p class="font-semibold text-sm md:text-base">دفع عند الاستلام</p>
-        <p class="text-gray-600 mt-1 text-[11px] md:text-[12px]">اطمني قبل ما تدفعي</p>
-      </div>
-      <div class="bg-white rounded-xl p-2 shadow-sm">
-        <p class="text-xl mb-1">✨</p>
-        <p class="font-semibold text-sm md:text-base">روزالين عالي الجودة</p>
-        <p class="text-gray-600 mt-1 text-[11px] md:text-[12px]">ملمس ناعم وشياكة في اللبس</p>
-      </div>
+    <!-- رسالة الطمأنة -->
+    <div class="bg-white rounded-2xl shadow p-4 mt-4">
+      <p class="text-2xl md:text-3xl font-extrabold">
+        اطلب وانت مطمئن ❤️
+        <br>
+        <span class="text-gray-700 text-xl md:text-2xl font-semibold">
+          وعاين براحتك قبل الاستلام 🥰
+        </span>
+      </p>
     </div>
 
   </div>
 </section>
 
-<!-- قسم المنتجات -->
-<section id="productsSection" class="container mx-auto px-4 py-6 max-w-md">
-  <div class="flex items-center justify-between mb-3">
-    <h3 class="text-xl font-bold">منتجاتنا</h3>
-    <span class="text-[12px] text-gray-600">اختاري الطقم المناسب لكِ ✨</span>
+<!-- المنتجات -->
+<section id="products" class="max-w-md mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="text-2xl md:text-3xl font-extrabold">منتجاتنا</h3>
+    <span class="text-sm md:text-base text-gray-600">
+      اختاري الطقم المناسب لك ✨
+    </span>
   </div>
 
   <div class="grid grid-cols-2 gap-4">
 
-    <!-- طقم روزالين -->
+    <!-- روزالين -->
     <a href="product.html?id=rozalin"
-      class="group bg-white rounded-2xl shadow p-3 text-center block transition hover:-translate-y-1 hover:shadow-lg">
+      class="bg-white p-3 rounded-2xl shadow hover:shadow-lg transition text-center">
 
       <div class="relative mb-2">
         <img src="rozalin-main.jpg"
-          class="w-full aspect-[3/4] object-cover rounded-xl"
-          alt="طقم روزالين 3 قطع">
-        <div
-          class="absolute top-2 right-2 bg-red-600 text-white text-[10px] md:text-xs px-2.5 py-1 rounded-full shadow">
-          خصم كبير 🔥 من
-          <span class="line-through text-[10px]">999</span>
-          إلى
-          <span class="font-bold">749</span> ج
+          class="w-full aspect-[3/4] object-cover rounded-xl">
+        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold">
+          🔥 من 999 إلى 749 ج
         </div>
       </div>
 
-      <h4 class="font-semibold text-sm md:text-base mb-1 text-gray-700">
+      <h4 class="font-semibold text-base md:text-lg text-gray-700 mb-1">
         طقم روزالين 3 قطع
       </h4>
 
-      <p class="text-sm md:text-base font-medium text-gray-800 mb-1">
-        الخامة: روزالين
-      </p>
-      <p class="text-sm md:text-base text-gray-700 mb-2">
-        المقاس: وان سايز تلبيس من 60 لـ 95 كيلو
+      <p class="text-sm md:text-base">الخامة: روزالين</p>
+      <p class="text-sm md:text-base mb-2">
+        وان سايز من 60 لـ 95 ك
       </p>
 
-      <!-- السعر أكبر من الاسم -->
       <div class="flex flex-col items-center mb-2">
-        <span class="line-through text-red-500 text-sm">
-          999 ج
-        </span>
-        <span class="font-extrabold text-2xl md:text-3xl text-black leading-none">
-          749 ج
-        </span>
+        <span class="line-through text-red-500 text-sm">999 ج</span>
+        <span class="text-2xl md:text-3xl font-extrabold">749 ج</span>
       </div>
 
-      <!-- دوائر ألوان بدون أسماء -->
-      <div class="flex items-center justify-center gap-2 mt-1 mb-1">
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#8b6a4f;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#e9d8b7;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#c39bd3;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#556b2f;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#000000;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#f8a89a;"></span>
-      </div>
-
-      <p class="text-[11px] text-gray-500">
-        اختاري اللون والكمية داخل صفحة المنتج
-      </p>
-
-      <!-- زر شراء كبير وواضح -->
       <button
-        class="mt-3 bg-black text-white w-full py-4 rounded-2xl 
-               text-lg md:text-xl font-extrabold 
-               shadow-lg transition transform active:scale-95 hover:scale-[1.02]">
-        👈 عرض التفاصيل واختيار الألوان
+        class="bg-black text-white w-full py-4 rounded-2xl text-lg md:text-xl font-extrabold">
+        اختيار اللون والكمية
       </button>
     </a>
 
-    <!-- طقم فورمال -->
+    <!-- فورمال -->
     <a href="product.html?id=formal"
-      class="group bg-white rounded-2xl shadow p-3 text-center block transition hover:-translate-y-1 hover:shadow-lg">
+      class="bg-white p-3 rounded-2xl shadow hover:shadow-lg transition text-center">
 
       <div class="relative mb-2">
         <img src="formal-main.jpg"
-          class="w-full aspect-[3/4] object-cover rounded-xl"
-          alt="طقم فورمال 3 قطع">
-        <div
-          class="absolute top-2 right-2 bg-red-600 text-white text-[10px] md:text-xs px-2.5 py-1 rounded-full shadow">
-          خصم كبير 🔥 من
-          <span class="line-through text-[10px]">949</span>
-          إلى
-          <span class="font-bold">699</span> ج
+          class="w-full aspect-[3/4] object-cover rounded-xl">
+        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold">
+          🔥 من 949 إلى 699 ج
         </div>
       </div>
 
-      <h4 class="font-semibold text-sm md:text-base mb-1 text-gray-700">
+      <h4 class="font-semibold text-base md:text-lg text-gray-700 mb-1">
         طقم فورمال 3 قطع
       </h4>
 
-      <p class="text-sm md:text-base font-medium text-gray-800 mb-1">
-        الخامة: روزالين مستورد
-      </p>
-      <p class="text-sm md:text-base text-gray-700 mb-2">
-        المقاس: وان سايز تلبيس تقريبًا من 65 لـ 85 كيلو
+      <p class="text-sm md:text-base">الخامة: روزالين مستورد</p>
+      <p class="text-sm md:text-base mb-2">
+        وان سايز تقريبًا 65–85 ك
       </p>
 
-      <!-- السعر أكبر من الاسم -->
       <div class="flex flex-col items-center mb-2">
-        <span class="line-through text-red-500 text-sm">
-          949 ج
-        </span>
-        <span class="font-extrabold text-2xl md:text-3xl text-black leading-none">
-          699 ج
-        </span>
+        <span class="line-through text-red-500 text-sm">949 ج</span>
+        <span class="text-2xl md:text-3xl font-extrabold">699 ج</span>
       </div>
 
-      <!-- دوائر ألوان بدون أسماء -->
-      <div class="flex items-center justify-center gap-2 mt-1 mb-1">
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#98ff98;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#a7c7ff;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#e9d8b7;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#8b5a2b;"></span>
-        <span class="w-4 h-4 rounded-full border border-gray-300 inline-block"
-              style="background-color:#000000;"></span>
-      </div>
-
-      <p class="text-[11px] text-gray-500">
-        اختاري اللون والكمية داخل صفحة المنتج
-      </p>
-
-      <!-- زر شراء كبير وواضح -->
       <button
-        class="mt-3 bg-black text-white w-full py-4 rounded-2xl 
-               text-lg md:text-xl font-extrabold 
-               shadow-lg transition transform active:scale-95 hover:scale-[1.02]">
-        👈 عرض التفاصيل واختيار الألوان
+        class="bg-black text-white w-full py-4 rounded-2xl text-lg md:text-xl font-extrabold">
+        اختيار اللون والكمية
       </button>
     </a>
 
   </div>
 </section>
 
-<!-- فوتر بسيط -->
-<footer class="border-t border-gray-300 mt-4 py-3 text-center text-[12px] text-gray-600">
-  للطلب والاستفسار على واتساب: 01157834203
+<footer class="text-center py-4 text-sm text-gray-600 border-t">
+  للطلب والاستفسار: 01157834203
 </footer>
 
 <script>
-  // تحديث عداد السلة من localStorage
-  (function(){
-    try {
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      const totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-      document.getElementById("cartCount").textContent = totalQty;
-    } catch(e){}
-  })();
-
-  // زر تسوّق الآن ينزل لقسم المنتجات
-  document.getElementById("shopNowBtn")?.addEventListener("click", function(){
-    const section = document.getElementById("productsSection");
-    if(section){
-      section.scrollIntoView({behavior: "smooth"});
-    }
-  });
-
-  // عدّاد تنازلي لعرض لفترة محدودة
-  (function(){
-    const endTime = new Date("2025-12-31T23:59:59").getTime();
-    const el = document.getElementById("offerTimer");
-    if(!el) return;
-
-    function updateTimer(){
-      const now = new Date().getTime();
-      let diff = endTime - now;
-      if(diff <= 0){
-        el.textContent = "انتهى العرض";
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      diff -= days * (1000 * 60 * 60 * 24);
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      diff -= hours * (1000 * 60 * 60);
-      const mins = Math.floor(diff / (1000 * 60));
-
-      el.textContent = days + " يوم / " + hours + " ساعة / " + mins + " دقيقة";
-    }
-
-    updateTimer();
-    setInterval(updateTimer, 60000);
-  })();
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    document.getElementById("cartCount").textContent =
+      cart.reduce((s,i)=>s+(i.qty||0),0);
+  } catch {}
 </script>
 
 </body>
