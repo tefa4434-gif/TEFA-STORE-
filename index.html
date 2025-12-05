@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>TEFA STORE - أطقم حريمي روزالين و فورمال</title>
+  <title>TEFA STORE - أطقم حريمي جاهزة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
@@ -61,9 +61,12 @@
       font-size: 11px;
       color: #9ca3af;
     }
+
     .cart-btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
@@ -73,6 +76,21 @@
       cursor: pointer;
       font-size: 12px;
     }
+    .cart-count-badge {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
 
     main {
       padding: 16px;
@@ -80,7 +98,6 @@
       margin: 0 auto 40px;
     }
 
-    /* HERO */
     .hero {
       background: #fff;
       border-radius: 18px;
@@ -127,7 +144,6 @@
       font-weight: 700;
       color: #16a34a;
     }
-
     .hero-buttons {
       display: flex;
       gap: 10px;
@@ -209,6 +225,8 @@
       width: 100%;
       display: block;
       transition: transform 0.25s ease-out;
+      max-height: 260px;
+      object-fit: cover;
     }
     .product-card:hover .product-image-wrapper img {
       transform: scale(1.03);
@@ -309,176 +327,154 @@
     <div class="logo-circle">TS</div>
     <div>
       <div class="brand-title">TEFA STORE</div>
-      <div class="brand-sub">أطقم حريمي روزالين و فورمال</div>
+      <div class="brand-sub">أطقم حريمي جاهزة على اللبس</div>
     </div>
   </div>
   <button class="cart-btn" onclick="window.location.href='cart.html'">
+    <span class="cart-count-badge" id="cart-count">0</span>
     🛒 سلة الطلبات
   </button>
 </header>
 
 <main>
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-badge">
-      🔥 خصم على الأطقم + كود خصم 10٪ لأول أوردر
+      🔥 كود خصم 10٪ لأول أوردر: TEFA4434
     </div>
     <h1 class="hero-title">
-      أطقم حريمي جاهزة للخروجات والمناسبات 💃✨
+      أطقم حريمي 3 قطع وخامات مستوردة جاهزة للخروجات والمناسبات 💃✨
     </h1>
     <p class="hero-sub">
-      خامة روزالين وجوخ و شمواه مستورد عالية الجودة – شحن لحد باب البيت لكل
-      محافظات مصر، والدفع عند الاستلام.
+      روزالين – فورمال – عبايات – شمواه بناتي 🙈  
+      شحن لحد باب البيت، والدفع عند الاستلام.
     </p>
-
     <ul class="hero-bullets">
       <li>• خامات ناعمة وثابتة في الغسيل 🤍</li>
-      <li>• أطقم 3 قطع جاهزة على اللبس 👗</li>
-      <li>• شحن سريع + دفع عند الاستلام 🚚</li>
+      <li>• اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️</li>
+      <li>• شحن لجميع المحافظات + خدمة عملاء على واتساب</li>
     </ul>
-
     <p class="hero-offer">
-      استخدمي كود الخصم <strong>TEFA4434</strong> على أول أوردر بنفس رقم
-      الموبايل واستفيدي بخصم <span>10٪</span> 🧡
+      استخدمي كود الخصم <strong>TEFA4434</strong> على أول طلب بنفس رقم الموبايل واستفيدي بخصم <span>10٪</span> 💸
     </p>
-
     <div class="hero-buttons">
-      <a href="#products" class="btn-main">تصفّحي الأطقم الآن</a>
-      <a href="https://wa.me/201157834203" target="_blank" class="btn-ghost">
-        استفسار سريع على واتساب
+      <a href="#products" class="btn-main">شوفي العروض دلوقتي</a>
+      <a href="https://wa.me/2010209942139" target="_blank" class="btn-ghost">
+        تواصل واتساب للاستفسار السريع
       </a>
     </div>
-
     <div class="usp-row">
       <div class="usp-card">
-        <strong>روزالين عالي الجودة</strong>
-        ملمس ناعم وثابت في الغسيل
+        <strong>خامة مريحة</strong>
+        خامات مستوردة عالية الجودة
       </div>
       <div class="usp-card">
         <strong>دفع عند الاستلام</strong>
-        تعايني براحتك قبل الدفع
+        تعاينـي براحتك قبل الدفع
       </div>
       <div class="usp-card">
         <strong>شحن لكل المحافظات</strong>
-        60 للقاهرة/الجيزة – 70 لباقي المحافظات – 120 لبعض المناطق
+        60 للقاهرة/الجيزة – 70 – 120 لبعض المناطق
       </div>
     </div>
   </section>
 
-  <!-- PRODUCTS -->
   <h2 class="section-title" id="products">منتجاتنا</h2>
 
   <section class="products-grid">
-    <!-- طقم روزالين -->
+    <!-- روزالين -->
     <article class="product-card" onclick="openProduct('rozalin')">
       <div class="product-image-wrapper">
-        <div class="discount-badge">من 949ج إلى 749ج</div>
+        <div class="discount-badge">749 بدل 949</div>
         <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" />
       </div>
       <div class="product-body">
         <div class="product-name">طقم روزالين 3 قطع</div>
         <div class="product-material">خامة روزالين مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز من 60 لحد 95 كيلو تقريبًا</div>
+        <div class="product-size">وان سايز تلبيس من 60 لـ 95 ك تقريبًا</div>
         <div class="product-price-row">
           <div class="product-price">749 ج</div>
           <div class="product-old">949 ج</div>
         </div>
         <div class="product-colors">
-          الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون – موف غامق
+          ألوان: سيمون – موف – كافيه – بيج – زيتي – أسود
         </div>
         <div class="product-actions">
-          <button
-            type="button"
-            class="btn-view"
-            onclick="event.stopPropagation(); openProduct('rozalin')"
-          >
+          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('rozalin')">
             شوفي الألوان واطلبي
           </button>
         </div>
       </div>
     </article>
 
-    <!-- طقم فورمال -->
+    <!-- فورمال -->
     <article class="product-card" onclick="openProduct('formal')">
       <div class="product-image-wrapper">
-        <div class="discount-badge">من 949ج إلى 699ج</div>
+        <div class="discount-badge">699 بدل 949</div>
         <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" />
       </div>
       <div class="product-body">
         <div class="product-name">طقم فورمال 3 قطع</div>
         <div class="product-material">خامة روزالين مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز من 65 لحد 85 كيلو تقريبًا</div>
+        <div class="product-size">وان سايز من 65 لـ 85 ك تقريبًا</div>
         <div class="product-price-row">
           <div class="product-price">699 ج</div>
           <div class="product-old">949 ج</div>
         </div>
         <div class="product-colors">
-          الألوان: منت – بيبي بلو – بيج – هافان – أسود
+          ألوان: منت – بيبي بلو – بيج – هافان – أسود
         </div>
         <div class="product-actions">
-          <button
-            type="button"
-            class="btn-view"
-            onclick="event.stopPropagation(); openProduct('formal')"
-          >
+          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('formal')">
             شوفي الألوان واطلبي
           </button>
         </div>
       </div>
     </article>
 
-    <!-- عباية زراير كبس -->
+    <!-- عباية -->
     <article class="product-card" onclick="openProduct('abaya')">
       <div class="product-image-wrapper">
-        <div class="discount-badge">من 1049ج إلى 749ج</div>
+        <div class="discount-badge">749 بدل 1049</div>
         <img src="abaya-main.jpg" alt="عباية زراير كبس" />
       </div>
       <div class="product-body">
         <div class="product-name">عباية زراير كبس</div>
         <div class="product-material">جوخ ليكرا مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز تلبيس لحد 80 كيلو مرتاح</div>
+        <div class="product-size">وان سايز تلبيس حتى 80 ك مرتاح</div>
         <div class="product-price-row">
           <div class="product-price">749 ج</div>
           <div class="product-old">1049 ج</div>
         </div>
         <div class="product-colors">
-          الألوان: أسود – زيتي – رمادي فاتح – نبيتي – كاراميل – رمادي غامق
+          ألوان: أسود – زيتي – رمادي فاتح – نبيتي – كاراميل – رمادي غامق
         </div>
         <div class="product-actions">
-          <button
-            type="button"
-            class="btn-view"
-            onclick="event.stopPropagation(); openProduct('abaya')"
-          >
+          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('abaya')">
             شوفي الألوان واطلبي
           </button>
         </div>
       </div>
     </article>
 
-    <!-- موديل تونز -->
+    <!-- تونز -->
     <article class="product-card" onclick="openProduct('toonz')">
       <div class="product-image-wrapper">
-        <div class="discount-badge">من 1199ج إلى 799ج</div>
+        <div class="discount-badge">799 بدل 1199</div>
         <img src="toonz-main.jpg" alt="موديل تونز قطعتين" />
       </div>
       <div class="product-body">
-        <div class="product-name">موديل تونز قطعتين</div>
-        <div class="product-material">شمواه في شمواه ناعم</div>
-        <div class="product-size">من 60 لحد 90 كيلو مرتاح</div>
+        <div class="product-name">تونز قطعتين</div>
+        <div class="product-material">شمواه × شمواه ناعم</div>
+        <div class="product-size">من 60 لـ 90 ك تقريبًا</div>
         <div class="product-price-row">
           <div class="product-price">799 ج</div>
           <div class="product-old">1199 ج</div>
         </div>
         <div class="product-colors">
-          الألوان: أزرق – بينك – أوف وايت – زيتي – نبيتي – بنفسجي
+          ألوان: بيج – زيتي – بينك – بنفسجي – نبيتي
         </div>
         <div class="product-actions">
-          <button
-            type="button"
-            class="btn-view"
-            onclick="event.stopPropagation(); openProduct('toonz')"
-          >
+          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('toonz')">
             شوفي الألوان واطلبي
           </button>
         </div>
@@ -490,17 +486,45 @@
 <footer>
   © TEFA STORE – كل ما هو جديد في عالم الموضة
   <div class="footer-whatsapp">
-    للتواصل والاقتراحات:
-    <a href="https://wa.me/2010209942139" target="_blank">
-      010209942139 (واتساب)
+    للتواصل والاقتراحات واتساب:
+    <a href="https://wa.me/201029942139" target="_blank">
+      01029942139
     </a>
   </div>
 </footer>
 
 <script>
+  const CART_KEY = "tefa_cart";
+
+  function loadCart() {
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function updateCartBadge() {
+    const cart = loadCart();
+    const totalQty = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    const badge = document.getElementById("cart-count");
+    if (!badge) return;
+    if (totalQty > 0) {
+      badge.textContent = totalQty;
+      badge.style.display = "flex";
+    } else {
+      badge.style.display = "none";
+    }
+  }
+
   function openProduct(id) {
     window.location.href = "product.html?product=" + encodeURIComponent(id);
   }
+
+  document.addEventListener("DOMContentLoaded", updateCartBadge);
 </script>
 </body>
 </html>
