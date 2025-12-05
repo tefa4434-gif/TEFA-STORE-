@@ -230,13 +230,13 @@
         "خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لحد 95 كيلو تقريبًا.",
       extra: "الموديل 3 قطع جاهزين على اللبس.",
       colors: [
-        { name: "كافيه", code: "#c8a27a" },
-        { name: "بيج", code: "#e7d4b5" },
-        { name: "موف", code: "#c084fc" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "أسود", code: "#111827" },
-        { name: "سيمون", code: "#f9a8a8" },
-        { name: "موف غامق", code: "#7c3aed" }
+        { name: "كافيه",     code: "#c8a27a", image: "rozalin-kafeh.jpg" },
+        { name: "بيج",       code: "#e7d4b5", image: "rozalin-beige.jpg" },
+        { name: "موف",       code: "#c084fc", image: "rozalin-mov.jpg" },
+        { name: "زيتي",      code: "#4b7350", image: "rozalin-zyti.jpg" },
+        { name: "أسود",      code: "#111827", image: "rozalin-black.jpg" },
+        { name: "سيمون",     code: "#f9a8a8", image: "rozalin-simon.jpg" },
+        { name: "موف غامق",  code: "#7c3aed", image: "rozalin-movdark.jpg" }
       ]
     },
     formal: {
@@ -249,11 +249,11 @@
         "خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لحد 85 كيلو تقريبًا.",
       extra: "موديل فورمال شيك للمشاوير و المناسبات.",
       colors: [
-        { name: "منت", code: "#7cd3aa" },
-        { name: "بيبي بلو", code: "#93c5fd" },
-        { name: "بيج", code: "#e7d4b5" },
-        { name: "هافان", code: "#b45309" },
-        { name: "أسود", code: "#111827" }
+        { name: "منت",      code: "#7cd3aa", image: "formal-ment.jpg" },
+        { name: "بيبي بلو", code: "#93c5fd", image: "formal-babyblue.jpg" },
+        { name: "بيج",      code: "#e7d4b5", image: "formal-beige.jpg" },
+        { name: "هافان",    code: "#b45309", image: "formal-havan.jpg" },
+        { name: "أسود",     code: "#111827", image: "formal-black.jpg" }
       ]
     },
     abaya: {
@@ -266,12 +266,12 @@
         "جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.",
       extra: "",
       colors: [
-        { name: "أسود", code: "#111827" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "رمادي فاتح", code: "#d1d5db" },
-        { name: "نبيتي", code: "#7f1d1d" },
-        { name: "كاراميل", code: "#b45309" },
-        { name: "رمادي غامق", code: "#4b5563" }
+        { name: "أسود",        code: "#111827", image: "abaya-black.jpg" },
+        { name: "زيتي",        code: "#4b7350", image: "abaya-green.jpg" },
+        { name: "رمادي فاتح",  code: "#d1d5db", image: "abaya-lightgray.jpg" },
+        { name: "نبيتي",       code: "#7f1d1d", image: "abaya-burgundy.jpg" },
+        { name: "كاراميل",     code: "#b45309", image: "abaya-caramel.jpg" },
+        { name: "رمادي غامق",  code: "#4b5563", image: "abaya-darkgray.jpg" }
       ]
     },
     toonz: {
@@ -283,12 +283,11 @@
       desc: "الخامة شمواه × شمواه ناعمة – من 60 لحد 90 كيلو مرتاح.",
       extra: "",
       colors: [
-        { name: "أزرق", code: "#1d4ed8" },
-        { name: "بينك", code: "#f9a8d4" },
-        { name: "أوف وايت", code: "#fef9c3" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "نبيتي", code: "#7f1d1d" },
-        { name: "بنفسجي", code: "#7c3aed" }
+        { name: "بيج",     code: "#e7d4b5", image: "toonz-beige.jpg" },
+        { name: "زيتي",    code: "#4b7350", image: "toonz-olive.jpg" },
+        { name: "بينك",    code: "#f9a8d4", image: "toonz-pink.jpg" },
+        { name: "موف غامق",code: "#7c3aed", image: "toonz-purple.jpg" },
+        { name: "نبيتي",   code: "#7f1d1d", image: "toonz-wine.jpg" }
       ]
     }
   };
@@ -314,7 +313,7 @@
   }
 
   function renderProduct() {
-    document.getElementById("product-image").src = currentProduct.image;
+    const imgEl = document.getElementById("product-image");
     document.getElementById("product-title").textContent =
       currentProduct.title;
     document.getElementById("product-price").textContent =
@@ -325,6 +324,7 @@
       currentProduct.desc;
     document.getElementById("product-extra").textContent =
       currentProduct.extra || "";
+    imgEl.src = currentProduct.image;
 
     const colorsRow = document.getElementById("colors-row");
     const colorsNote = document.getElementById("colors-note");
@@ -335,9 +335,8 @@
     const productStatus = status[currentProduct.id] || {};
 
     const enabledColors = currentProduct.colors.filter((c) => {
-      // لو اللون مش موجود في الستاتس → شغال
       if (typeof productStatus[c.name] === "undefined") return true;
-      return !!productStatus[c.name]; // true → شغال ، false → متوقف
+      return !!productStatus[c.name];
     });
 
     if (!enabledColors.length) {
@@ -353,11 +352,11 @@
       dot.style.background = c.code;
       dot.dataset.name = c.name;
       dot.dataset.color = c.code;
+      dot.dataset.image = c.image || currentProduct.image;
       dot.addEventListener("click", () => selectColor(dot));
       colorsRow.appendChild(dot);
       if (index === 0) {
-        // أول لون افتراضي
-        selectColor(dot);
+        selectColor(dot); // أول لون افتراضي
       }
     });
   }
@@ -369,8 +368,11 @@
     dot.classList.add("selected");
     selectedColor = {
       name: dot.dataset.name,
-      code: dot.dataset.color
+      code: dot.dataset.color,
+      image: dot.dataset.image
     };
+    const imgEl = document.getElementById("product-image");
+    imgEl.src = selectedColor.image || currentProduct.image;
   }
 
   function changeQty(delta) {
@@ -392,7 +394,6 @@
       } catch (e) {}
     }
 
-    // لو نفس المنتج ونفس اللون موجود -> نزود الكمية
     const existing = items.find(
       (i) =>
         i.productId === currentProduct.id &&

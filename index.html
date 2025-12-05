@@ -276,11 +276,6 @@
       color: #fff;
       font-weight: 700;
     }
-    .product-actions .btn-whatsapp {
-      background: #22c55e1a;
-      color: #16a34a;
-      border: 1px solid #bbf7d0;
-    }
 
     footer {
       text-align: center;
@@ -399,13 +394,6 @@
           >
             شوفي الألوان واطلبي
           </button>
-          <button
-            type="button"
-            class="btn-whatsapp"
-            onclick="event.stopPropagation(); whatsappProduct('طقم روزالين 3 قطع')"
-          >
-            استفسار واتساب
-          </button>
         </div>
       </div>
     </article>
@@ -434,13 +422,6 @@
             onclick="event.stopPropagation(); openProduct('formal')"
           >
             شوفي الألوان واطلبي
-          </button>
-          <button
-            type="button"
-            class="btn-whatsapp"
-            onclick="event.stopPropagation(); whatsappProduct('طقم فورمال 3 قطع')"
-          >
-            اسألي عن الألوان
           </button>
         </div>
       </div>
@@ -471,13 +452,6 @@
           >
             شوفي الألوان واطلبي
           </button>
-          <button
-            type="button"
-            class="btn-whatsapp"
-            onclick="event.stopPropagation(); whatsappProduct('عباية زراير كبس')"
-          >
-            استفسار عن الطول
-          </button>
         </div>
       </div>
     </article>
@@ -507,13 +481,6 @@
           >
             شوفي الألوان واطلبي
           </button>
-          <button
-            type="button"
-            class="btn-whatsapp"
-            onclick="event.stopPropagation(); whatsappProduct('موديل تونز قطعتين')"
-          >
-            استفسار وتصوير لون
-          </button>
         </div>
       </div>
     </article>
@@ -523,25 +490,16 @@
 <footer>
   © TEFA STORE – كل ما هو جديد في عالم الموضة
   <div class="footer-whatsapp">
-    للتواصل والاقتراحات: 
+    للتواصل والاقتراحات:
     <a href="https://wa.me/2010209942139" target="_blank">
-      01029942139 (واتساب)
+      010209942139 (واتساب)
     </a>
   </div>
 </footer>
 
 <script>
-  const CART_KEY = "tefa_cart";
-
   function openProduct(id) {
     window.location.href = "product.html?product=" + encodeURIComponent(id);
-  }
-
-  function whatsappProduct(name) {
-    const url =
-      "https://wa.me/201157834203?text=" +
-      encodeURIComponent("عايزة استفسر عن: " + name);
-    window.open(url, "_blank");
   }
 </script>
 </body>
