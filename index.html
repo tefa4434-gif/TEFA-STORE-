@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -127,6 +126,7 @@
       font-size: 14px;
       color: #333;
       margin: 6px 0 10px;
+      padding-right: 18px;
     }
     .hero-bullets li {
       margin-bottom: 3px;
@@ -163,12 +163,14 @@
       background: #111;
       color: #fff;
       flex: 1;
+      text-align: center;
     }
     .btn-outline {
       background: #fff;
       color: #111;
       border: 1px solid #ddd;
       flex: 1;
+      text-align: center;
     }
 
     /* Features */
@@ -315,6 +317,24 @@
       width: 100%;
       font-size: 14px;
     }
+
+    /* Footer contact */
+    .footer-contact {
+      margin-top: 24px;
+      padding: 14px 16px 18px;
+      text-align: center;
+      font-size: 13px;
+      color: #444;
+      border-top: 1px solid #ddd;
+      background: #f9fafb;
+    }
+    .footer-contact strong {
+      font-weight: 700;
+    }
+    .footer-contact a {
+      color: #111;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -397,10 +417,12 @@
       <div class="products-grid">
         <!-- روزالين -->
         <article class="product-card">
-          <div class="product-img-wrapper">
-            <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
-            <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
-          </div>
+          <a href="product.html?product=rozalin">
+            <div class="product-img-wrapper">
+              <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
+              <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
+            </div>
+          </a>
           <div class="product-body">
             <div class="product-name">طقم روزالين 3 قطع</div>
             <div class="product-desc">
@@ -419,10 +441,12 @@
 
         <!-- فورمال -->
         <article class="product-card">
-          <div class="product-img-wrapper">
-            <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
-            <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
-          </div>
+          <a href="product.html?product=formal">
+            <div class="product-img-wrapper">
+              <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
+              <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
+            </div>
+          </a>
           <div class="product-body">
             <div class="product-name">طقم فورمال 3 قطع</div>
             <div class="product-desc">
@@ -441,10 +465,12 @@
 
         <!-- عباية زراير كبس -->
         <article class="product-card">
-          <div class="product-img-wrapper">
-            <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
-            <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
-          </div>
+          <a href="product.html?product=abaya">
+            <div class="product-img-wrapper">
+              <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
+              <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
+            </div>
+          </a>
           <div class="product-body">
             <div class="product-name">عباية زراير كبس</div>
             <div class="product-desc">
@@ -463,10 +489,12 @@
 
         <!-- تونز قطعتين -->
         <article class="product-card">
-          <div class="product-img-wrapper">
-            <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
-            <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
-          </div>
+          <a href="product.html?product=toonz">
+            <div class="product-img-wrapper">
+              <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
+              <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
+            </div>
+          </a>
           <div class="product-body">
             <div class="product-name">طقم تونز قطعتين</div>
             <div class="product-desc">
@@ -484,6 +512,12 @@
         </article>
       </div>
     </section>
+
+    <!-- واتساب للتواصل والاقتراحات -->
+    <footer class="footer-contact">
+      للتواصل والاقتراحات عبر واتساب:  
+      <strong><a href="https://wa.me/201029942139" target="_blank">01029942139</a></strong>
+    </footer>
   </main>
 
   <script>
@@ -507,7 +541,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // عد تنازلي 3 أيام من أول زيارة
+    // عد تنازلي 3 أيام من أول زيارة (ثابت بسيط للصفحة)
     function initCountdown() {
       const targetMs = Date.now() + 3 * 24 * 60 * 60 * 1000;
       const el = document.getElementById('countdown');
