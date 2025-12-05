@@ -2,583 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة تحكم TEFA STORE</title>
+  <title>تسجيل دخول لوحة التحكم | TEFA STORE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="bg-gray-100 font-sans">
 
-<!-- شاشة تسجيل الدخول -->
-<div id="loginScreen" class="min-h-screen flex items-center justify-center">
+<div class="min-h-screen flex items-center justify-center">
   <div class="bg-white rounded-3xl shadow p-6 w-full max-w-sm text-center">
     <h1 class="text-2xl font-extrabold mb-4">تسجيل دخول لوحة التحكم</h1>
+    <p class="text-xs text-gray-500 mb-4">
+      من فضلك أدخل بيانات الدخول الخاصة بك.
+    </p>
+
     <input id="adminUser"
            type="text"
            placeholder="اسم المستخدم"
            class="w-full mb-3 p-2 border rounded-xl text-center">
+
     <input id="adminPass"
            type="password"
-           placeholder="كلمة السر"
+           placeholder="كلمة المرور"
            class="w-full mb-3 p-2 border rounded-xl text-center">
+
     <button id="loginBtn"
             class="w-full bg-black text-white py-2 rounded-2xl font-bold">
       دخول
     </button>
+
     <p id="loginError" class="text-red-600 text-sm mt-2 hidden">
-      بيانات الدخول غير صحيحة
+      اسم المستخدم أو كلمة المرور غير صحيحة
     </p>
   </div>
 </div>
 
-<!-- لوحة التحكم الرئيسية -->
-<div id="adminPanel" class="hidden min-h-screen">
-  <!-- هيدر -->
-  <header class="bg-black text-white p-4 flex justify-between items-center">
-    <h1 class="text-xl font-extrabold">لوحة تحكم TEFA STORE</h1>
-    <button id="logoutBtn"
-            class="bg-red-600 text-white px-4 py-2 rounded-2xl text-sm">
-      تسجيل خروج
-    </button>
-  </header>
-
-  <main class="p-4 max-w-5xl mx-auto">
-
-    <!-- إحصائيات -->
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <div class="bg-white rounded-2xl shadow p-4 text-center">
-        <p class="text-sm text-gray-500">إجمالي الطلبات</p>
-        <p id="statTotalOrders" class="text-2xl font-extrabold">0</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-4 text-center">
-        <p class="text-sm text-gray-500">طلبات اليوم</p>
-        <p id="statTodayOrders" class="text-2xl font-extrabold">0</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-4 text-center">
-        <p class="text-sm text-gray-500">آخر محافظة في الطلبات</p>
-        <p id="statLastGov" class="text-lg font-bold">-</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-4 text-center">
-        <p class="text-sm text-gray-500">عدد زوار الموقع (هذا المتصفح)</p>
-        <p id="statViews" class="text-2xl font-extrabold">0</p>
-      </div>
-    </section>
-
-    <!-- إدارة الموديلات و إيقاف الألوان -->
-    <section class="bg-white rounded-2xl shadow p-4 mb-6">
-      <h2 class="text-xl font-extrabold mb-2">إدارة الموديلات و إيقاف الألوان</h2>
-      <p class="text-xs text-gray-500 mb-3">
-        لو عايز توقف لون معين، شيل علامة ✓ من أمامه. اللون الموقوف هيظهر عند العميل باهت و مش هيقدر يطلبه.
-      </p>
-      <div id="modelsManagement" class="space-y-4"></div>
-    </section>
-
-    <!-- إضافة موديلات جديدة تظهر في الصفحة الرئيسية -->
-    <section class="bg-white rounded-2xl shadow p-4 mb-6">
-      <h2 class="text-xl font-extrabold mb-2">إضافة موديلات جديدة للصفحة الرئيسية</h2>
-      <p class="text-xs text-gray-500 mb-3">
-        1️⃣ ارفع الصور من حسابك على GitHub (Upload files).<br>
-        2️⃣ هنا اكتب <span class="font-bold">اسم ملف الصورة</span> فقط بعد التعديل (مثال:
-        <span class="font-mono">myset-main.jpg</span>).<br>
-        3️⃣ لألوان الموديل اكتب كل اسم صورة في سطر (مثال:
-        <span class="font-mono">myset-green.jpg</span> لكل لون).
-      </p>
-
-      <div class="flex flex-col md:flex-row gap-2 mb-3">
-        <input id="newModelName"
-               type="text"
-               placeholder="اسم الموديل (إجباري)"
-               class="flex-1 border rounded-xl p-2 text-sm">
-        <input id="newModelId"
-               type="text"
-               placeholder="معرف المنتج (ID) لو عايز تربطه بصفحة product.html"
-               class="flex-1 border rounded-xl p-2 text-xs">
-      </div>
-
-      <div class="flex flex-col md:flex-row gap-2 mb-3">
-        <input id="newModelPrice"
-               type="number"
-               placeholder="السعر بعد الخصم (مثال 749)"
-               class="flex-1 border rounded-xl p-2 text-sm">
-        <input id="newModelOldPrice"
-               type="number"
-               placeholder="السعر قبل الخصم (اختياري)"
-               class="flex-1 border rounded-xl p-2 text-sm">
-      </div>
-
-      <!-- خانة اسم الصورة الأساسية -->
-      <div class="mb-3">
-        <label class="text-xs text-gray-600 mb-1 block">
-          اسم الصورة الأساسية بعد رفعها (مثال: <span class="font-mono">myset-main.jpg</span>)
-        </label>
-        <input id="newModelImg"
-               type="text"
-               placeholder="اكتب اسم ملف الصورة بالظبط مع .jpg"
-               class="w-full border rounded-xl p-2 text-sm">
-      </div>
-
-      <!-- خانة أسماء صور الألوان -->
-      <div class="mb-3">
-        <label class="text-xs text-gray-600 mb-1 block">
-          أسماء صور الألوان (كل لون في سطر) – بعد رفعها وتعديل الاسم في GitHub:
-          <br>مثال:<br>
-          <span class="font-mono text-[11px]">
-          myset-green.jpg<br>
-          myset-black.jpg<br>
-          myset-beige.jpg
-          </span>
-        </label>
-        <textarea id="newModelColorImgs"
-                  rows="3"
-                  placeholder="اكتب هنا أسماء ملفات صور الألوان..."
-                  class="w-full border rounded-xl p-2 text-sm"></textarea>
-      </div>
-
-      <textarea id="newModelDesc"
-                rows="2"
-                placeholder="وصف مختصر للموديل (اختياري)"
-                class="w-full border rounded-xl p-2 text-sm mb-3"></textarea>
-
-      <button id="addModelBtn"
-              class="bg-black text-white px-4 py-2 rounded-2xl text-sm font-bold">
-        إضافة موديل
-      </button>
-
-      <div id="homeModelsList" class="mt-4 space-y-2 text-sm">
-        <!-- قائمة بالموديلات المضافة -->
-      </div>
-    </section>
-
-    <!-- قائمة الطلبات -->
-    <section class="bg-white rounded-2xl shadow p-4 mb-6">
-      <h2 class="text-xl font-extrabold mb-2">قائمة الطلبات</h2>
-      <p class="text-xs text-gray-500 mb-3">
-        الطلبات محفوظة في LocalStorage لهذا المتصفح.
-      </p>
-
-      <!-- بحث و فلاتر -->
-      <div class="flex flex-col md:flex-row gap-2 mb-3">
-        <input id="searchInput"
-               type="text"
-               placeholder="بحث بالاسم أو التليفون..."
-               class="flex-1 border rounded-xl p-2 text-sm">
-        <select id="filterGov"
-                class="border rounded-xl p-2 text-sm">
-          <option value="">كل المحافظات</option>
-        </select>
-        <select id="filterDate"
-                class="border rounded-xl p-2 text-sm">
-          <option value="all">كل الأوقات</option>
-          <option value="today">اليوم فقط</option>
-        </select>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm text-center border">
-          <thead class="bg-gray-100">
-          <tr>
-            <th class="border p-2">#</th>
-            <th class="border p-2">العميل</th>
-            <th class="border p-2">التليفون</th>
-            <th class="border p-2">المحافظة</th>
-            <th class="border p-2">الإجمالي</th>
-            <th class="border p-2">المنتجات</th>
-            <th class="border p-2">الوقت</th>
-            <th class="border p-2">إجراءات</th>
-          </tr>
-          </thead>
-          <tbody id="ordersTableBody">
-          <!-- الصفوف تتولد بالسكربت -->
-          </tbody>
-        </table>
-      </div>
-
-      <p id="ordersSummary" class="text-xs text-gray-600 mt-2">
-        لا توجد طلبات مسجلة.
-      </p>
-    </section>
-
-  </main>
-</div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  // ===================== تسجيل الدخول =====================
   const ADMIN_USERNAME = "tefa";
   const ADMIN_PASSWORD = "4434";
 
-  const loginScreen = document.getElementById("loginScreen");
-  const adminPanel  = document.getElementById("adminPanel");
-  const loginBtn    = document.getElementById("loginBtn");
-  const logoutBtn   = document.getElementById("logoutBtn");
-  const loginError  = document.getElementById("loginError");
-
-  function showPanel() {
-    loginScreen.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    initDashboard();
-  }
-  function showLogin() {
-    adminPanel.classList.add("hidden");
-    loginScreen.classList.remove("hidden");
+  // لو أصلاً عامل تسجيل دخول من قبل يدخل على طول
+  if (localStorage.getItem("admin_logged_in") === "1") {
+    window.location.href = "dashboard.html";
   }
 
-  (function checkLogin() {
-    const logged = localStorage.getItem("admin_logged_in") === "1";
-    if (logged) showPanel();
-  })();
-
-  loginBtn.addEventListener("click", () => {
+  document.getElementById("loginBtn").addEventListener("click", function () {
     const user = document.getElementById("adminUser").value.trim().toLowerCase();
     const pass = document.getElementById("adminPass").value.trim();
+
     if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
       localStorage.setItem("admin_logged_in", "1");
-      loginError.classList.add("hidden");
-      showPanel();
+      document.getElementById("loginError").classList.add("hidden");
+      window.location.href = "dashboard.html";
     } else {
-      loginError.classList.remove("hidden");
+      document.getElementById("loginError").classList.remove("hidden");
     }
   });
+</script>
 
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("admin_logged_in");
-    showLogin();
-  });
-
-  // ===================== بيانات المنتجات و الألوان =====================
-  const PRODUCT_MODELS = {
-    rozalin: {
-      name: "طقم روزالين 3 قطع",
-      colors: [
-        { label: "كافيه", hex: "#8b6a4f" },
-        { label: "بيج",   hex: "#ead7b7" },
-        { label: "موف",   hex: "#7c3aed" },
-        { label: "زيتي",  hex: "#4b7351" },
-        { label: "أسود",  hex: "#000000" },
-        { label: "سيمون", hex: "#f4a6a6" }
-      ]
-    },
-    formal: {
-      name: "طقم فورمال 3 قطع",
-      colors: [
-        { label: "منت",      hex: "#98ff98" },
-        { label: "بيبي بلو", hex: "#a7c7ff" },
-        { label: "بيج",      hex: "#ead7b7" },
-        { label: "هافان",    hex: "#8b5a2b" },
-        { label: "أسود",     hex: "#000000" }
-      ]
-    },
-    toonz: {
-      name: "تونز – قطعتين",
-      colors: [
-        { label: "أزرق",  hex: "#1e3a8a" },
-        { label: "بينك",  hex: "#ec4899" },
-        { label: "بيج",   hex: "#ead7b7" },
-        { label: "زيتي",  hex: "#6b8f71" },
-        { label: "نبيتي", hex: "#6d1b1b" },
-        { label: "موف",   hex: "#7c3aed" }
-      ]
-    },
-    abaya_btn: {
-      name: "عباية زراير كبس",
-      colors: [
-        { label: "كراميل",     hex: "#c19a6b" },
-        { label: "نبيتي",      hex: "#6b1b1b" },
-        { label: "رمادي فاتح", hex: "#d1d5db" },
-        { label: "زيتي",       hex: "#6b8f71" },
-        { label: "أسود",       hex: "#000000" },
-        { label: "رمادي غامق", hex: "#374151" }
-      ]
-    }
-  };
-
-  function loadDisabledColors() {
-    try {
-      return JSON.parse(localStorage.getItem("disabledColors") || "{}");
-    } catch (e) {
-      return {};
-    }
-  }
-  function saveDisabledColors(map) {
-    localStorage.setItem("disabledColors", JSON.stringify(map));
-  }
-
-  // ===================== موديلات الصفحة الرئيسية (من لوحة التحكم) =====================
-  function loadHomeModels() {
-    try {
-      return JSON.parse(localStorage.getItem("homeModels") || "[]");
-    } catch (e) {
-      return [];
-    }
-  }
-  function saveHomeModels(list) {
-    localStorage.setItem("homeModels", JSON.stringify(list));
-  }
-
-  // ===================== الطلبات =====================
-  function loadOrders() {
-    try {
-      return JSON.parse(localStorage.getItem("orders") || "[]");
-    } catch (e) {
-      return [];
-    }
-  }
-  function saveOrders(list) {
-    localStorage.setItem("orders", JSON.stringify(list));
-  }
-
-  // ===================== تهيئة لوحة التحكم =====================
-  function initDashboard() {
-    renderStats();
-    renderModelsManagement();
-    renderHomeModelsList();
-    renderOrdersTable();
-  }
-
-  // --------- الإحصائيات ---------
-  function renderStats() {
-    const orders = loadOrders();
-    const totalOrders = orders.length;
-
-    const today = new Date();
-    today.setHours(0,0,0,0);
-
-    let todayCount = 0;
-    let lastGov = "-";
-
-    orders.forEach(o => {
-      if (o.createdAt) {
-        const d = new Date(o.createdAt);
-        if (!isNaN(d) && d >= today) todayCount++;
-      }
-      if (o.governorate) lastGov = o.governorate;
-    });
-
-    const views = parseInt(localStorage.getItem("store_total_views") || "0", 10) || 0;
-
-    document.getElementById("statTotalOrders").textContent = totalOrders;
-    document.getElementById("statTodayOrders").textContent = todayCount;
-    document.getElementById("statLastGov").textContent   = lastGov || "-";
-    document.getElementById("statViews").textContent      = views;
-  }
-
-  // --------- إدارة الموديلات / الألوان (شكل أحسن)---------
-  function renderModelsManagement() {
-    const container = document.getElementById("modelsManagement");
-    container.innerHTML = "";
-    const disabledMap = loadDisabledColors();
-
-    Object.keys(PRODUCT_MODELS).forEach(pid => {
-      const model = PRODUCT_MODELS[pid];
-      const card = document.createElement("div");
-      card.className = "border rounded-2xl p-3";
-
-      const title = document.createElement("h3");
-      title.className = "font-bold mb-2";
-      title.textContent = model.name;
-      card.appendChild(title);
-
-      const colorsWrap = document.createElement("div");
-      colorsWrap.className = "flex flex-wrap gap-2";
-
-      model.colors.forEach(col => {
-        const isDisabled = !!(disabledMap[pid] && disabledMap[pid][col.label]);
-
-        const wrapper = document.createElement("div");
-        wrapper.className =
-          "flex items-center gap-1 text-xs px-2 py-1 rounded-full border cursor-pointer " +
-          (isDisabled ? "bg-gray-100 opacity-50 border-gray-300" : "bg-green-50 border-green-400");
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "accent-black";
-        checkbox.checked = !isDisabled;
-
-        const dot = document.createElement("span");
-        dot.className = "w-4 h-4 rounded-full border";
-        if (col.hex) dot.style.backgroundColor = col.hex;
-
-        const text = document.createElement("span");
-        text.textContent = col.label;
-
-        function toggle(val) {
-          const map = loadDisabledColors();
-          if (!map[pid]) map[pid] = {};
-          map[pid][col.label] = !val; // لو متعلم => نشط
-          saveDisabledColors(map);
-          renderModelsManagement();   // إعادة رسم الكروت
-        }
-
-        checkbox.addEventListener("change", () => toggle(checkbox.checked));
-        wrapper.addEventListener("click", (e) => {
-          if (e.target !== checkbox) {
-            checkbox.checked = !checkbox.checked;
-            toggle(checkbox.checked);
-          }
-        });
-
-        wrapper.appendChild(checkbox);
-        wrapper.appendChild(dot);
-        wrapper.appendChild(text);
-        colorsWrap.appendChild(wrapper);
-      });
-
-      card.appendChild(colorsWrap);
-      container.appendChild(card);
-    });
-  }
-
-  // --------- قائمة الموديلات المضافة للرئيسية ---------
-  function renderHomeModelsList() {
-    const listEl = document.getElementById("homeModelsList");
-    const models = loadHomeModels();
-
-    listEl.innerHTML = "";
-
-    if (!models.length) {
-      listEl.textContent = "لا توجد موديلات مضافة من لوحة التحكم.";
-      return;
-    }
-
-    models.forEach((m, idx) => {
-      const row = document.createElement("div");
-      row.className = "flex justify-between items-center border rounded-xl px-3 py-2";
-
-      const left = document.createElement("div");
-      left.innerHTML = `
-        <div class="font-bold text-sm">${m.name}</div>
-        <div class="text-xs text-gray-500">
-          السعر: ${m.price} ج
-          ${m.oldPrice ? ` | قبل الخصم: ${m.oldPrice} ج` : ""}
-          ${m.id ? ` | ID: ${m.id}` : ""}
-          ${m.img ? ` | صورة: ${m.img}` : ""}
-        </div>
-      `;
-
-      const delBtn = document.createElement("button");
-      delBtn.className = "text-red-600 text-xs font-bold";
-      delBtn.textContent = "حذف";
-      delBtn.addEventListener("click", () => {
-        const arr = loadHomeModels();
-        arr.splice(idx, 1);
-        saveHomeModels(arr);
-        renderHomeModelsList();
-      });
-
-      row.appendChild(left);
-      row.appendChild(delBtn);
-      listEl.appendChild(row);
-    });
-  }
-
-  // إضافة موديل جديد
-  document.getElementById("addModelBtn").addEventListener("click", () => {
-    const name  = document.getElementById("newModelName").value.trim();
-    const id    = document.getElementById("newModelId").value.trim();
-    const price = parseInt(document.getElementById("newModelPrice").value.trim(), 10);
-    const oldP  = parseInt(document.getElementById("newModelOldPrice").value.trim(), 10);
-    const img   = document.getElementById("newModelImg").value.trim();
-    const desc  = document.getElementById("newModelDesc").value.trim();
-    const colorImgsRaw = document.getElementById("newModelColorImgs").value.trim();
-
-    if (!name || !price || !img) {
-      alert("من فضلك أدخل على الأقل: اسم الموديل، السعر، واسم الصورة الأساسية.");
-      return;
-    }
-
-    const colorImages = colorImgsRaw
-      ? colorImgsRaw.split("\n").map(s => s.trim()).filter(Boolean)
-      : [];
-
-    const models = loadHomeModels();
-    models.push({
-      id: id || null,
-      name,
-      price,
-      oldPrice: isNaN(oldP) ? null : oldP,
-      img,
-      desc,
-      colorImages
-    });
-    saveHomeModels(models);
-
-    document.getElementById("newModelName").value = "";
-    document.getElementById("newModelId").value = "";
-    document.getElementById("newModelPrice").value = "";
-    document.getElementById("newModelOldPrice").value = "";
-    document.getElementById("newModelImg").value = "";
-    document.getElementById("newModelDesc").value = "";
-    document.getElementById("newModelColorImgs").value = "";
-
-    renderHomeModelsList();
-    alert("تم إضافة الموديل للصفحة الرئيسية ✅\nلا تنسَ رفع الصور على GitHub بنفس الأسماء.");
-  });
-
-  // --------- حذف أوردر حسب الـ index الأصلي ---------
-  window.deleteOrderByIndex = function (originalIndex) {
-    const orders = loadOrders();
-    if (originalIndex < 0 || originalIndex >= orders.length) return;
-    if (!confirm("هل أنت متأكد من حذف هذا الأوردر؟")) return;
-    orders.splice(originalIndex, 1);
-    saveOrders(orders);
-    renderStats();
-    renderOrdersTable();
-  };
-
-  // --------- جدول الطلبات + زر حذف ---------
-  function renderOrdersTable() {
-    const orders       = loadOrders();
-    const tbody        = document.getElementById("ordersTableBody");
-    const summaryEl    = document.getElementById("ordersSummary");
-    const filterGovSel = document.getElementById("filterGov");
-
-    tbody.innerHTML = "";
-
-    const govSet = new Set();
-    orders.forEach(o => { if (o.governorate) govSet.add(o.governorate); });
-    filterGovSel.innerHTML = '<option value="">كل المحافظات</option>';
-    [...govSet].forEach(g => {
-      const op = document.createElement("option");
-      op.value = g;
-      op.textContent = g;
-      filterGovSel.appendChild(op);
-    });
-
-    function applyFilters() {
-      const search = document.getElementById("searchInput").value.trim().toLowerCase();
-      const gov    = filterGovSel.value;
-      const dateF  = document.getElementById("filterDate").value;
-
-      const today = new Date();
-      today.setHours(0,0,0,0);
-
-      let indexed = orders.map((o, idx) => ({ order: o, index: idx }));
-
-      if (search) {
-        indexed = indexed.filter(x =>
-          (x.order.name && x.order.name.toLowerCase().includes(search)) ||
-          (x.order.phone && String(x.order.phone).includes(search))
-        );
-      }
-
-      if (gov) {
-        indexed = indexed.filter(x => x.order.governorate === gov);
-      }
-
-      if (dateF === "today") {
-        indexed = indexed.filter(x => {
-          const o = x.order;
-          if (!o.createdAt) return false;
-          const d = new Date(o.createdAt);
-          if (isNaN(d)) return false;
-          d.setHours(0,0,0,0);
-          return d.getTime() === today.getTime();
-        });
-      }
-
-      tbody.innerHTML = "";
-      indexed.forEach((item, displayIdx) => {
-        const o   = item.order;
-        const idx = item.index;
-
-        co
+</body>
+</html>
