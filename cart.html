@@ -54,8 +54,8 @@
 
     <div id="cart-wrapper" class="grid gap-6 lg:grid-cols-3">
       <!-- قائمة المنتجات -->
-      <section class="lg:col-span-2 space-y-3" id="cart-items">
-        <!-- العناصر بتتحط هنا من جافاسكريبت -->
+      <section class="lg:col-span-2 space-y-3">
+        <div id="cart-items"></div>
       </section>
 
       <!-- ملخص الطلب + نموذج البيانات -->
@@ -184,7 +184,7 @@
 
           <div class="space-y-1">
             <label class="text-sm font-semibold">كود الخصم</label>
-            <input type="text" id="coupon" value="TEFA4434"
+            <input type="text" id="coupon" placeholder="TEFA4434 لأول أوردر"
                    class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
           </div>
 
@@ -203,28 +203,74 @@
     </div>
   </main>
 
-  <!-- صوت بسيط عند نجاح الطلب -->
-  <audio id="success-sound">
-    <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
-  </audio>
-
-  <!-- سكربت السلة -->
   <script>
-    const CART_KEY = "tefa_cart";
+    // رابط Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDCEny0w1V8EVpFix56-7v_e930qLEWqz1aXKt5HOaDafo9NJJn8-k-RvGfjbzg-AN/exec";
 
     let cart = [];
+    let cartKey = null;
 
-    function loadCart() {
-      try {
-        cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      } catch (e) {
-        cart = [];
+    // محاولة اكتشاف السلة من localStorage بأي مفتاح
+    function detectCart() {
+      const preferred = ["tefa_cart", "cart", "cartItems"];
+      // أولاً نجرب المفاتيح المشهورة
+      for (const key of preferred) {
+        const data = parseCartKey(key);
+        if (data.found) {
+          cartKey = key;
+          return data.items;
+        }
       }
+      // ثانياً نمسح كل localStorage لو المفتاح مختلف
+      for (const key in localStorage) {
+        const data = parseCartKey(key);
+        if (data.found) {
+          cartKey = key;
+          return data.items;
+        }
+      }
+      cartKey = null;
+      return [];
+    }
+
+    function parseCartKey(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return { found: false, items: [] };
+        const obj = JSON.parse(raw);
+
+        // لو Array مباشرة
+        if (Array.isArray(obj) && obj.length && typeof obj[0] === "object") {
+          const f = obj[0];
+          if ("name" in f || "productName" in f || "price" in f || "color" in f || "colorName" in f) {
+            return { found: true, items: obj };
+          }
+        }
+        // لو object فيه items[]
+        if (obj && Array.isArray(obj.items) && obj.items.length && typeof obj.items[0] === "object") {
+          const f = obj.items[0];
+          if ("name" in f || "productName" in f || "price" in f || "color" in f || "colorName" in f) {
+            return { found: true, items: obj.items };
+          }
+        }
+      } catch (e) {}
+      return { found: false, items: [] };
     }
 
     function saveCart() {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      if (!cartKey) cartKey = "tefa_cart";
+      if (!cart.length) {
+        localStorage.removeItem(cartKey);
+        localStorage.removeItem("tefa_cart");
+        localStorage.removeItem("cart");
+        localStorage.removeItem("cartItems");
+      } else {
+        const str = JSON.stringify(cart);
+        localStorage.setItem(cartKey, str);
+        // نعمل نسخ احتياطية عشان الصفحات التانية
+        localStorage.setItem("tefa_cart", str);
+        localStorage.setItem("cart", str);
+      }
     }
 
     function getItemFields(item) {
@@ -234,7 +280,12 @@
         quantity: Number(item.quantity || item.qty || 1),
         colorName: item.colorName || item.color || "",
         colorHex: item.colorHex || item.hex || "#111",
+        image: item.image || item.img || ""
       };
+    }
+
+    function formatPrice(num) {
+      return `${num.toFixed(0)} ج`;
     }
 
     function updateCartBadge() {
@@ -247,8 +298,51 @@
       badge.classList.toggle("hidden", totalPieces === 0);
     }
 
-    function formatPrice(num) {
-      return `${num.toFixed(0)} ج`;
+    function getSubtotal() {
+      return cart.reduce((sum, item) => {
+        const { price, quantity } = getItemFields(item);
+        return sum + price * quantity;
+      }, 0);
+    }
+
+    function getShipping(governorate) {
+      const highCost = [
+        "شرم الشيخ",
+        "الغردقة",
+        "مرسى مطروح",
+        "شمال سيناء",
+        "جنوب سيناء",
+        "الوادي الجديد"
+      ];
+      if (!governorate) return 0;
+      if (governorate === "القاهرة" || governorate === "الجيزة") return 60;
+      if (highCost.includes(governorate)) return 120;
+      return 70;
+    }
+
+    function getDiscount(subtotalPlusShipping, coupon, phone) {
+      if (!coupon) return 0;
+      coupon = coupon.trim().toUpperCase();
+      if (coupon !== "TEFA4434") return 0;
+      if (!phone) return 0;
+      const usedKey = `discount_used_${phone}`;
+      if (localStorage.getItem(usedKey)) return 0; // نفس الرقم استخدم الخصم قبل كدا
+      return subtotalPlusShipping * 0.10;
+    }
+
+    function updateSummary() {
+      const subtotal = getSubtotal();
+      const gov = document.getElementById("governorate").value;
+      const shipping = getShipping(gov);
+      const coupon = document.getElementById("coupon").value || "";
+      const phone = document.getElementById("phone").value || "";
+      const discount = getDiscount(subtotal + shipping, coupon, phone);
+      const total = subtotal + shipping - discount;
+
+      document.getElementById("summary-subtotal").textContent = formatPrice(subtotal);
+      document.getElementById("summary-shipping").textContent = shipping ? formatPrice(shipping) : "حددي المحافظة";
+      document.getElementById("summary-discount").textContent = discount ? `- ${formatPrice(discount)}` : "0 ج";
+      document.getElementById("summary-total").textContent = formatPrice(Math.max(total, 0));
     }
 
     function renderCart() {
@@ -269,7 +363,7 @@
 
       itemsContainer.innerHTML = "";
       cart.forEach((item, index) => {
-        const { name, price, quantity, colorName, colorHex } = getItemFields(item);
+        const { name, price, quantity, colorName, colorHex, image } = getItemFields(item);
         const lineTotal = price * quantity;
 
         const div = document.createElement("div");
@@ -277,7 +371,7 @@
 
         div.innerHTML = `
           <div class="w-16 h-20 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
-            ${item.image ? `<img src="${item.image}" class="w-full h-full object-cover" alt="${name}">` :
+            ${image ? `<img src="${image}" class="w-full h-full object-cover" alt="${name}">` :
               `<div class="w-full h-full flex items-center justify-center text-[11px] text-gray-400">بدون صورة</div>`}
           </div>
 
@@ -313,12 +407,12 @@
         itemsContainer.appendChild(div);
       });
 
-      itemsContainer.addEventListener("click", handleCartButtons);
       updateCartBadge();
       updateSummary();
     }
 
-    function handleCartButtons(e) {
+    // التعامل مع الأزرار (+ / - / حذف) بتفويض الحدث من الكونتينر
+    document.addEventListener("click", (e) => {
       const decIndex = e.target.getAttribute("data-dec");
       const incIndex = e.target.getAttribute("data-inc");
       const removeIndex = e.target.getAttribute("data-remove");
@@ -328,9 +422,9 @@
         const { quantity } = getItemFields(cart[i]);
         if (quantity > 1) {
           cart[i].quantity = quantity - 1;
+          saveCart();
+          renderCart();
         }
-        saveCart();
-        rerender();
       }
 
       if (incIndex !== null) {
@@ -338,80 +432,19 @@
         const { quantity } = getItemFields(cart[i]);
         cart[i].quantity = quantity + 1;
         saveCart();
-        rerender();
+        renderCart();
       }
 
       if (removeIndex !== null) {
         const i = Number(removeIndex);
         cart.splice(i, 1);
         saveCart();
-        rerender();
+        renderCart();
       }
-    }
-
-    function getSubtotal() {
-      return cart.reduce((sum, item) => {
-        const { price, quantity } = getItemFields(item);
-        return sum + price * quantity;
-      }, 0);
-    }
-
-    function getShipping(governorate) {
-      const highCost = [
-        "شرم الشيخ",
-        "الغردقة",
-        "مرسى مطروح",
-        "شمال سيناء",
-        "جنوب سيناء",
-        "الوادي الجديد"
-      ];
-      if (!governorate) return 0;
-      if (governorate === "القاهرة" || governorate === "الجيزة") return 60;
-      if (highCost.includes(governorate)) return 120;
-      return 70;
-    }
-
-    function getDiscount(subtotal, coupon, phone) {
-      if (!coupon) return 0;
-      coupon = coupon.trim().toUpperCase();
-      if (coupon !== "TEFA4434") return 0;
-
-      const flagKey = `discount_used_${phone}`;
-      if (localStorage.getItem(flagKey)) {
-        // نفس الرقم استخدم الخصم قبل كده على هذا الجهاز
-        return 0;
-      }
-      return subtotal * 0.10; // 10%
-    }
-
-    function updateSummary() {
-      const subtotal = getSubtotal();
-      const gov = document.getElementById("governorate").value;
-      const shipping = getShipping(gov);
-      const coupon = document.getElementById("coupon").value || "";
-      const phone = document.getElementById("phone").value || "";
-      const discount = getDiscount(subtotal, coupon, phone);
-      const total = subtotal + shipping - discount;
-
-      document.getElementById("summary-subtotal").textContent = formatPrice(subtotal);
-      document.getElementById("summary-shipping").textContent = shipping ? formatPrice(shipping) : "حددي المحافظة";
-      document.getElementById("summary-discount").textContent = discount ? `- ${formatPrice(discount)}` : "0 ج";
-      document.getElementById("summary-total").textContent = formatPrice(Math.max(total, 0));
-    }
-
-    function rerender() {
-      // remove old handlers to avoid duplication
-      const itemsContainer = document.getElementById("cart-items");
-      const newContainer = itemsContainer.cloneNode(false);
-      itemsContainer.parentNode.replaceChild(newContainer, itemsContainer);
-      renderCart();
-    }
+    });
 
     document.getElementById("governorate").addEventListener("change", updateSummary);
-    document.getElementById("coupon").addEventListener("input", () => {
-      // مع تغير الكود يعاد حساب الخصم
-      updateSummary();
-    });
+    document.getElementById("coupon").addEventListener("input", updateSummary);
     document.getElementById("phone").addEventListener("input", updateSummary);
 
     // إرسال الطلب
@@ -440,7 +473,7 @@
 
       const subtotal = getSubtotal();
       const shipping = getShipping(governorate);
-      const discount = getDiscount(subtotal, coupon, phone);
+      const discount = getDiscount(subtotal + shipping, coupon, phone);
       const total = subtotal + shipping - discount;
 
       if (!shipping) {
@@ -477,49 +510,4 @@
       spinner.classList.remove("hidden");
       textSpan.textContent = "جاري تأكيد الطلب...";
 
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(orderData)
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || data.status === "error") {
-          throw new Error(data.message || "خطأ غير معروف");
-        }
-
-        // حفظ إن الكود اتستخدم لهذا الرقم على هذا الجهاز
-        if (coupon === "TEFA4434" && discount > 0) {
-          localStorage.setItem(`discount_used_${phone}`, "1");
-        }
-
-        // تفريغ السلة
-        cart = [];
-        saveCart();
-        rerender();
-
-        // صوت نجاح
-        const sound = document.getElementById("success-sound");
-        if (sound) sound.play().catch(() => {});
-
-        alert("تم تسجيل طلبك بنجاح ❤️ فريق TEFA STORE هيتواصل معاكي لتأكيد الأوردر.");
-
-      } catch (error) {
-        console.error(error);
-        alert("حدث خطأ أثناء تسجيل الطلب، لو استمرت المشكلة تواصلي معانا على الواتساب.");
-      } finally {
-        btn.disabled = false;
-        btn.classList.remove("opacity-75");
-        spinner.classList.add("hidden");
-        textSpan.textContent = "تأكيد الطلب الآن";
-      }
-    });
-
-    // تحميل السلة عند فتح الصفحة
-    document.addEventListener("DOMContentLoaded", () => {
-      loadCart();
-   
+  
