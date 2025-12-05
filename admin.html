@@ -2,328 +2,302 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة التحكم - TEFA STORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة تحكم TEFA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-5">
+<body class="bg-gray-100 font-sans">
 
 <!-- شاشة تسجيل الدخول -->
-<div id="loginBox" class="max-w-sm mx-auto bg-white p-6 rounded-xl shadow">
-  <h2 class="text-xl font-bold mb-4 text-center">🔐 تسجيل الدخول</h2>
-  <input id="username" placeholder="اسم المستخدم" class="w-full border p-2 rounded mb-3">
-  <input id="password" type="password" placeholder="كلمة المرور" class="w-full border p-2 rounded mb-4">
-  <button onclick="login()" class="bg-black text-white w-full py-2 rounded">دخول</button>
-  <p id="loginError" class="text-red-500 text-center mt-3 hidden">بيانات الدخول غير صحيحة</p>
-</div>
+<section id="loginSection" class="min-h-screen flex items-center justify-center">
+  <div class="bg-white rounded-2xl shadow p-6 w-full max-w-sm text-center">
+    <h1 class="text-2xl font-extrabold mb-1">لوحة تحكم TEFA STORE</h1>
+    <p class="text-sm text-gray-600 mb-4">دخول الأدمن</p>
+
+    <form id="loginForm" class="space-y-3 text-right">
+      <div>
+        <label class="block text-sm mb-1">اسم المستخدم</label>
+        <input id="username" class="w-full border rounded-lg p-2 text-sm" placeholder="admin">
+      </div>
+      <div>
+        <label class="block text-sm mb-1">كلمة السر</label>
+        <input id="password" type="password" class="w-full border rounded-lg p-2 text-sm" placeholder="••••••">
+      </div>
+      <p id="loginError" class="text-xs text-red-600 h-4"></p>
+      <button class="w-full bg-black text-white py-2 rounded-lg font-semibold text-sm">
+        دخول
+      </button>
+    </form>
+  </div>
+</section>
 
 <!-- لوحة التحكم -->
-<div id="dashboard" class="hidden">
+<section id="dashboardSection" class="hidden min-h-screen">
 
-  <!-- العنوان + تسجيل خروج -->
-  <div class="flex justify-between items-center mb-5">
-    <h1 class="text-2xl font-bold">📦 جميع الطلبات</h1>
-    <button onclick="logout()" class="bg-red-600 text-white px-4 py-1 rounded">تسجيل خروج</button>
-  </div>
-
-  <!-- إحصائيات سريعة -->
-  <div class="bg-white p-4 rounded-xl shadow mb-6 flex flex-wrap gap-4">
+  <!-- هيدر -->
+  <header class="bg-black text-white p-4 flex justify-between items-center">
     <div>
-      <p class="text-sm text-gray-500">إجمالي عدد الطلبات</p>
-      <p id="totalOrders" class="text-xl font-bold">0</p>
+      <h1 class="text-xl font-extrabold">لوحة تحكم TEFA STORE</h1>
+      <p class="text-xs text-gray-300">متابعة الطلبات وترتيب الموديلات</p>
     </div>
-    <div>
-      <p class="text-sm text-gray-500">عدد طلبات اليوم</p>
-      <p id="todayOrders" class="text-xl font-bold text-green-700">0</p>
-    </div>
-  </div>
+    <button id="logoutBtn" class="text-xs bg-red-600 px-3 py-1 rounded-lg">
+      تسجيل خروج
+    </button>
+  </header>
 
-  <!-- إدارة الألوان -->
-  <div class="bg-white p-4 rounded-xl shadow mb-6">
-    <h2 class="font-bold mb-3">🎨 إدارة ألوان المنتج</h2>
-    <div id="colorsContainer" class="mb-3 flex flex-wrap gap-2"></div>
-    <div class="flex gap-2">
-      <input id="newColor" placeholder="إضافة لون جديد" class="flex-1 border p-2 rounded">
-      <button onclick="addColor()" class="bg-black text-white px-4 py-2 rounded">إضافة</button>
-    </div>
-    <p class="text-sm text-gray-500 mt-2">أي لون يتم حذفه من هنا لن يظهر للعميل في صفحة الطلب.</p>
-  </div>
+  <main class="max-w-5xl mx-auto p-4 space-y-4">
 
-  <!-- فلاتر + بحث -->
-  <div class="bg-white p-4 rounded-xl shadow mb-4 space-y-3">
-
-    <input id="searchBox" placeholder="بحث بالاسم / الهاتف / المنتج / المحافظة"
-           class="w-full border p-2 rounded">
-
-    <div class="flex flex-wrap gap-3 items-center">
-      <div class="flex flex-col text-sm">
-        <label class="mb-1">من تاريخ:</label>
-        <input type="date" id="dateFrom" class="border p-2 rounded">
+    <!-- كروت ملخص -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="bg-white rounded-xl shadow p-3 text-center">
+        <p class="text-xs text-gray-500">إجمالي الطلبات</p>
+        <p id="totalOrders" class="text-2xl font-extrabold">0</p>
       </div>
-      <div class="flex flex-col text-sm">
-        <label class="mb-1">إلى تاريخ:</label>
-        <input type="date" id="dateTo" class="border p-2 rounded">
+      <div class="bg-white rounded-xl shadow p-3 text-center">
+        <p class="text-xs text-gray-500">طلبات اليوم</p>
+        <p id="todayOrders" class="text-2xl font-extrabold">0</p>
       </div>
-      <div class="flex flex-col text-sm">
-        <label class="mb-1">المحافظة:</label>
-        <select id="filterGovernorate" class="border p-2 rounded">
-          <option value="">كل المحافظات</option>
-          <option>القاهرة</option>
-          <option>الجيزة</option>
-          <option>الإسكندرية</option>
-          <option>الدقهلية</option>
-          <option>الشرقية</option>
-          <option>الغربية</option>
-          <option>المنوفية</option>
-          <option>القليوبية</option>
-          <option>كفر الشيخ</option>
-          <option>دمياط</option>
-          <option>بور سعيد</option>
-          <option>الإسماعيلية</option>
-          <option>السويس</option>
-          <option>البحيرة</option>
-          <option>الفيوم</option>
-          <option>بني سويف</option>
-          <option>المنيا</option>
-          <option>أسيوط</option>
-          <option>سوهاج</option>
-          <option>قنا</option>
-          <option>الأقصر</option>
-          <option>أسوان</option>
-          <option>البحر الأحمر</option>
-          <option>الوادي الجديد</option>
-          <option>مطروح</option>
-          <option>شمال سيناء</option>
-          <option>جنوب سيناء</option>
-        </select>
+      <div class="bg-white rounded-xl shadow p-3 text-center">
+        <p class="text-xs text-gray-500">آخر محافظة</p>
+        <p id="lastGov" class="text-sm font-semibold">–</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-3 text-center">
+        <p class="text-xs text-gray-500">آخر تحديث</p>
+        <p id="lastTime" class="text-xs">–</p>
       </div>
     </div>
 
-  </div>
+    <!-- قسم الموديلات وترتيبها -->
+    <section class="bg-white rounded-2xl shadow p-4">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-bold">الموديلات الموجودة في الموقع</h2>
+        <p class="text-xs text-gray-500">مرتبة حسب أفضل ترتيب مقترح</p>
+      </div>
 
-  <!-- الطلبات -->
-  <div id="ordersContainer" class="space-y-4"></div>
+      <div id="modelsList" class="grid md:grid-cols-4 gap-3 text-center text-sm"></div>
+    </section>
 
-</div>
+    <!-- جدول الطلبات -->
+    <section class="bg-white rounded-2xl shadow p-4">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-bold">قائمة الطلبات</h2>
+        <input id="searchInput" placeholder="بحث بالاسم أو التليفون..."
+               class="border rounded-lg px-3 py-1 text-xs w-40 md:w-64">
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs md:text-sm">
+          <thead>
+            <tr class="border-b bg-gray-100">
+              <th class="p-2">#</th>
+              <th class="p-2">العميل</th>
+              <th class="p-2">التليفون</th>
+              <th class="p-2">المحافظة</th>
+              <th class="p-2">الإجمالي</th>
+              <th class="p-2">المنتجات</th>
+              <th class="p-2">الوقت</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+
+      <p id="noOrdersMsg" class="text-center text-xs text-gray-500 mt-3 hidden">
+        لا يوجد طلبات محفوظة حتى الآن.
+      </p>
+    </section>
+
+  </main>
+</section>
 
 <script>
-const ADMIN_USER = "admin";    // اسم المستخدم للوحة التحكم
-const ADMIN_PASS = "123456";   // كلمة السر للوحة التحكم
+// بيانات الدخول (يمكن تغييرها)
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "tefa4434";
 
-const DEFAULT_COLORS = ["كافيه","بيج","موف","زيتي","أسود","سيمون"];
-let allOrders = [];
+// عناصر DOM
+const loginSection   = document.getElementById("loginSection");
+const dashboardSection = document.getElementById("dashboardSection");
+const loginForm      = document.getElementById("loginForm");
+const loginError     = document.getElementById("loginError");
+const logoutBtn      = document.getElementById("logoutBtn");
 
-// ألوان المنتج (نفسها اللي بيشوفها العميل في index.html)
-function getColors(){
-  let saved = localStorage.getItem("productColors");
-  if(!saved){
-    localStorage.setItem("productColors", JSON.stringify(DEFAULT_COLORS));
-    return DEFAULT_COLORS;
+const totalOrdersEl  = document.getElementById("totalOrders");
+const todayOrdersEl  = document.getElementById("todayOrders");
+const lastGovEl      = document.getElementById("lastGov");
+const lastTimeEl     = document.getElementById("lastTime");
+const modelsListEl   = document.getElementById("modelsList");
+const ordersBodyEl   = document.getElementById("ordersBody");
+const noOrdersMsgEl  = document.getElementById("noOrdersMsg");
+const searchInput    = document.getElementById("searchInput");
+
+// قائمة كل الموديلات + أفضل ترتيب
+const MODELS = [
+  {
+    id: "rozalin",
+    rank: 1,
+    name: "طقم روزالين 3 قطع",
+    price: 749,
+    img: "rozalin-main.jpg",
+    note: "أفضل موديل أساسي – مناسب لمعظم المقاسات"
+  },
+  {
+    id: "toonz",
+    rank: 2,
+    name: "تونز – قطعتين",
+    price: 799,
+    img: "toonz-main.jpg",
+    note: "موديل شبابي شمواه – ألوان قوية"
+  },
+  {
+    id: "abaya_btn",
+    rank: 3,
+    name: "عباية زراير كبس",
+    price: 749,
+    img: "abaya-btn-main.jpg",
+    note: "موديل شتوي أنيق – جوخ ليكرا"
+  },
+  {
+    id: "formal",
+    rank: 4,
+    name: "طقم فورمال 3 قطع",
+    price: 699,
+    img: "formal-main.jpg",
+    note: "للمناسبات الرسمية والخروجات"
   }
-  try{
-    const arr = JSON.parse(saved);
-    if(Array.isArray(arr) && arr.length > 0) return arr;
-    return DEFAULT_COLORS;
-  }catch(e){
-    return DEFAULT_COLORS;
-  }
+];
+
+// إظهار / إخفاء اللوحة حسب حالة الدخول
+function showDashboard() {
+  loginSection.classList.add("hidden");
+  dashboardSection.classList.remove("hidden");
+  renderModels();
+  loadOrders();
 }
 
-function saveColors(colors){
-  localStorage.setItem("productColors", JSON.stringify(colors));
+function showLogin() {
+  loginSection.classList.remove("hidden");
+  dashboardSection.classList.add("hidden");
 }
 
-function renderColorsAdmin(){
-  const colors = getColors();
-  const container = document.getElementById("colorsContainer");
-  container.innerHTML = "";
-  if(colors.length === 0){
-    container.innerHTML = "<p class='text-gray-500 text-sm'>لا توجد ألوان متاحة حاليًا.</p>";
-    return;
-  }
-  colors.forEach((color, index) => {
-    const span = document.createElement("span");
-    span.className = "inline-flex items-center gap-2 bg-gray-200 px-3 py-1 rounded-full text-sm";
-    span.innerHTML = `
-      <span>${color}</span>
-      <button onclick="deleteColor(${index})" class="text-red-600 font-bold">×</button>
-    `;
-    container.appendChild(span);
-  });
-}
-
-function deleteColor(index){
-  const colors = getColors();
-  colors.splice(index, 1);
-  saveColors(colors);
-  renderColorsAdmin();
-  alert("✅ تم حذف اللون بنجاح");
-}
-
-function addColor(){
-  const input = document.getElementById("newColor");
-  const val = input.value.trim();
-  if(!val) return;
-  const colors = getColors();
-  if(!colors.includes(val)){
-    colors.push(val);
-    saveColors(colors);
-    renderColorsAdmin();
-  }
-  input.value = "";
-}
-
-// تسجيل الدخول
-function login(){
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
-
-  if(user === ADMIN_USER && pass === ADMIN_PASS){
-    localStorage.setItem("adminLogged", "true");
-    showDashboard();
-  } else {
-    document.getElementById("loginError").classList.remove("hidden");
-  }
-}
-
-function logout(){
-  localStorage.removeItem("adminLogged");
-  location.reload();
-}
-
-// إلغاء الطلب
-function deleteOrder(origIndex){
-  let orders = JSON.parse(localStorage.getItem("orders")) || [];
-  if(!orders.length) return;
-  if(!confirm("هل أنت متأكد من إلغاء هذا الطلب؟")) return;
-  orders.splice(origIndex, 1);
-  localStorage.setItem("orders", JSON.stringify(orders));
-  location.reload();
-}
-
-// عرض الطلبات في الصفحة
-function renderOrders(list){
-  const container = document.getElementById("ordersContainer");
-  container.innerHTML = "";
-  if(list.length === 0){
-    container.innerHTML = "<p class='text-center text-gray-500'>لا توجد طلبات مطابقة لنتيجة التصفية/البحث</p>";
-    return;
-  }
-
-  list.forEach(order => {
-    const i = order._index;
-    const card = document.createElement("div");
-    card.className = "bg-white p-4 rounded-xl shadow";
-    card.innerHTML = `
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="font-bold">🧾 طلب رقم ${i + 1}</h2>
-        <button onclick="deleteOrder(${i})"
-                class="bg-red-600 text-white px-3 py-1 rounded text-sm">إلغاء الطلب</button>
-      </div>
-      <p><strong>المنتج:</strong> <pre class="whitespace-pre-wrap inline">${order.product}</pre></p>
-      <p><strong>الاسم:</strong> ${order.name}</p>
-      <p><strong>هاتف:</strong> ${order.phone1}</p>
-      <p><strong>هاتف 2:</strong> ${order.phone2 || "—"}</p>
-      <p><strong>العنوان:</strong> ${order.address}</p>
-      <p><strong>المحافظة:</strong> ${order.governorate}</p>
-      <p><strong>الشحن:</strong> ${order.shipping} جنيه</p>
-      <p class="font-bold"><strong>الإجمالي:</strong> ${order.total} جنيه</p>
-      <p class="text-sm text-gray-500 mt-2">⏱ ${order.time}</p>
-      <p class="mt-2"><strong>ملاحظات:</strong> ${order.notes || "—"}</p>
-    `;
-    container.appendChild(card);
-  });
-}
-
-// تطبيق الفلاتر (بحث + تاريخ + محافظة)
-function applyFilters(){
-  const q = document.getElementById("searchBox").value.trim().toLowerCase();
-  const govFilter = document.getElementById("filterGovernorate").value;
-  const dateFromVal = document.getElementById("dateFrom").value;
-  const dateToVal = document.getElementById("dateTo").value;
-
-  let fromTs = null;
-  let toTs = null;
-
-  if(dateFromVal){
-    fromTs = new Date(dateFromVal + "T00:00:00").getTime();
-  }
-  if(dateToVal){
-    toTs = new Date(dateToVal + "T23:59:59").getTime();
-  }
-
-  const filtered = allOrders.filter(o => {
-    // بحث نصي
-    if(q){
-      const data = (o.name + " " + o.phone1 + " " + (o.phone2 || "") + " " +
-                    o.product + " " + o.governorate).toLowerCase();
-      if(!data.includes(q)) return false;
-    }
-    // فلتر محافظة
-    if(govFilter && o.governorate !== govFilter) return false;
-
-    // فلتر تاريخ
-    if(typeof o.timestamp === "number"){
-      if(fromTs !== null && o.timestamp < fromTs) return false;
-      if(toTs !== null && o.timestamp > toTs) return false;
-    }
-    return true;
-  });
-
-  renderOrders(filtered);
-}
-
-// إحصائيات (إجمالي + عدد طلبات اليوم)
-function calcStats(){
-  const total = allOrders.length;
-  document.getElementById("totalOrders").textContent = total;
-
-  const today = new Date();
-  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0,0).getTime();
-  const end   = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23,59,59,999).getTime();
-
-  let countToday = 0;
-  allOrders.forEach(o => {
-    if(typeof o.timestamp === "number" && o.timestamp >= start && o.timestamp <= end){
-      countToday += 1;
-    }
-  });
-
-  document.getElementById("todayOrders").textContent = countToday;
-}
-
-// تشغيل لوحة التحكم
-function showDashboard(){
-  document.getElementById("loginBox").classList.add("hidden");
-  document.getElementById("dashboard").classList.remove("hidden");
-
-  renderColorsAdmin();
-
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
-  allOrders = orders.map((o, idx) => ({...o, _index: idx}));
-
-  // تنبيه طلبات جديدة
-  const lastCount = Number(localStorage.getItem("adminLastOrdersCount") || 0);
-  if(orders.length > lastCount){
-    const diff = orders.length - lastCount;
-    alert("📢 لديك " + diff + " طلب جديد");
-  }
-  localStorage.setItem("adminLastOrdersCount", String(orders.length));
-
-  calcStats();
-  renderOrders(allOrders);
-
-  document.getElementById("searchBox").addEventListener("input", applyFilters);
-  document.getElementById("filterGovernorate").addEventListener("change", applyFilters);
-  document.getElementById("dateFrom").addEventListener("change", applyFilters);
-  document.getElementById("dateTo").addEventListener("change", applyFilters);
-}
-
-// لو الأدمن كان مسجّل دخول قبل كده
-if(localStorage.getItem("adminLogged") === "true"){
+// تحقق من حالة دخول محفوظة
+if (localStorage.getItem("tefa_admin_logged") === "1") {
   showDashboard();
 }
+
+// معالجة تسجيل الدخول
+loginForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    localStorage.setItem("tefa_admin_logged", "1");
+    loginError.textContent = "";
+    showDashboard();
+  } else {
+    loginError.textContent = "اسم المستخدم أو كلمة السر غير صحيحة.";
+  }
+});
+
+// تسجيل خروج
+logoutBtn.addEventListener("click", function () {
+  localStorage.removeItem("tefa_admin_logged");
+  showLogin();
+});
+
+// عرض الموديلات في لوحة التحكم
+function renderModels() {
+  modelsListEl.innerHTML = "";
+  MODELS.sort((a,b) => a.rank - b.rank).forEach(m => {
+    const card = document.createElement("div");
+    card.className = "bg-gray-50 rounded-xl border shadow-sm p-3 flex flex-col items-center";
+    card.innerHTML = `
+      <span class="text-[11px] bg-black text-white px-2 py-0.5 rounded-full mb-1">
+        ترتيب #${m.rank}
+      </span>
+      <img src="${m.img}" alt="${m.name}"
+           class="w-full aspect-[3/4] object-cover rounded-lg mb-2">
+      <h3 class="text-sm font-bold mb-1">${m.name}</h3>
+      <p class="text-xs text-gray-600 mb-1">${m.note}</p>
+      <p class="text-sm font-extrabold">${m.price} ج</p>
+    `;
+    modelsListEl.appendChild(card);
+  });
+}
+
+// تحميل الطلبات من localStorage
+function loadOrders(filterText = "") {
+  let orders = [];
+  try {
+    orders = JSON.parse(localStorage.getItem("orders") || "[]");
+  } catch (e) {
+    orders = [];
+  }
+
+  // ترتيب من الأحدث للأقدم
+  orders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+  // بحث
+  const f = filterText.trim();
+  if (f) {
+    const fLower = f.toLowerCase();
+    orders = orders.filter(o =>
+      (o.name || "").toLowerCase().includes(fLower) ||
+      (o.phone1 || "").includes(f) ||
+      (o.phone2 || "").includes(f)
+    );
+  }
+
+  // ملخص
+  totalOrdersEl.textContent = orders.length;
+
+  const todayStart = new Date();
+  todayStart.setHours(0,0,0,0);
+  const todayTs = todayStart.getTime();
+  const todayCount = orders.filter(o => (o.timestamp || 0) >= todayTs).length;
+  todayOrdersEl.textContent = todayCount;
+
+  if (orders.length > 0) {
+    const last = orders[0];
+    lastGovEl.textContent = last.governorate || "غير محدد";
+    lastTimeEl.textContent = last.time || "غير معروف";
+  } else {
+    lastGovEl.textContent = "–";
+    lastTimeEl.textContent = "–";
+  }
+
+  // عرض في الجدول
+  ordersBodyEl.innerHTML = "";
+  if (orders.length === 0) {
+    noOrdersMsgEl.classList.remove("hidden");
+    return;
+  }
+  noOrdersMsgEl.classList.add("hidden");
+
+  orders.forEach((o, idx) => {
+    const tr = document.createElement("tr");
+    tr.className = "border-b hover:bg-gray-50";
+    tr.innerHTML = `
+      <td class="p-2 text-center">${idx + 1}</td>
+      <td class="p-2">${o.name || ""}</td>
+      <td class="p-2">
+        ${(o.phone1 || "")}${o.phone2 ? "<br>"+o.phone2 : ""}
+      </td>
+      <td class="p-2">${o.governorate || ""}</td>
+      <td class="p-2 text-center">${o.total || ""}</td>
+      <td class="p-2 text-[11px] whitespace-pre-line">${o.product || ""}</td>
+      <td class="p-2 text-[11px]">${o.time || ""}</td>
+    `;
+    ordersBodyEl.appendChild(tr);
+  });
+}
+
+// البحث في الطلبات
+searchInput.addEventListener("input", () => {
+  loadOrders(searchInput.value);
+});
 </script>
 
 </body>
