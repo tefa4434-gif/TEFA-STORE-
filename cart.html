@@ -111,7 +111,7 @@
               <option value="الأقصر">الأقصر</option>
               <option value="أسوان">أسوان</option>
               <option value="الوادي الجديد">الوادي الجديد</option>
-              <option value="مطروح">مطروح</option>
+              <option value="مطروح">مرسى مطروح / مطروح</option>
               <option value="البحر الأحمر">الغردقة / البحر الأحمر</option>
             </select>
           </div>
@@ -166,7 +166,7 @@
 
     let cart = [];
 
-    // قراءة السلة بأي فورمات قديم/جديد
+    // قراءة السلة من localStorage (مفتاح قديم/جديد)
     function getStoredCart() {
       let raw = localStorage.getItem("tefa_cart") || localStorage.getItem("cart");
       if (!raw) return [];
@@ -177,6 +177,17 @@
         return [];
       } catch {
         return [];
+      }
+    }
+
+    function saveCart() {
+      if (cart.length === 0) {
+        localStorage.removeItem("tefa_cart");
+        localStorage.removeItem("cart");
+      } else {
+        const str = JSON.stringify(cart);
+        localStorage.setItem("tefa_cart", str);
+        localStorage.setItem("cart", str);
       }
     }
 
@@ -200,22 +211,29 @@
       return item.quantity ?? item.qty ?? 1;
     }
 
+    function updateBadge() {
+      const badge = document.getElementById("cart-count-badge");
+      const totalQty = cart.reduce((sum, item) => sum + getItemQty(item), 0);
+      if (totalQty > 0) {
+        badge.textContent = totalQty;
+        badge.classList.remove("hidden");
+      } else {
+        badge.textContent = "0";
+        badge.classList.add("hidden");
+      }
+    }
+
     function loadCart() {
       cart = getStoredCart();
       const container = document.getElementById("cart-items");
-      const badge = document.getElementById("cart-count-badge");
       container.innerHTML = "";
 
       if (!cart.length) {
         container.innerHTML = "<p class='text-gray-500 text-sm'>السلة فاضية حالياً.</p>";
-        badge.classList.add("hidden");
+        updateBadge();
         updateTotals();
         return;
       }
-
-      const totalQty = cart.reduce((sum, item) => sum + getItemQty(item), 0);
-      badge.textContent = totalQty;
-      badge.classList.remove("hidden");
 
       cart.forEach((item, index) => {
         const name = getItemName(item);
@@ -241,15 +259,17 @@
         container.appendChild(row);
       });
 
+      // أزرار الحذف
       container.querySelectorAll("[data-remove]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-remove"));
           cart.splice(i, 1);
-          localStorage.setItem("tefa_cart", JSON.stringify(cart));
+          saveCart();
           loadCart();
         });
       });
 
+      updateBadge();
       updateTotals();
     }
 
@@ -292,6 +312,7 @@
     document.getElementById("governorate").addEventListener("change", updateTotals);
     document.getElementById("coupon").addEventListener("input", updateTotals);
 
+    // إرسال الطلب لـ Google Sheet
     document.getElementById("order-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = document.getElementById("form-message");
@@ -339,23 +360,20 @@
       msg.classList.add("text-gray-600");
 
       try {
-        const res = await fetch(SCRIPT_URL, {
+        await fetch(SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors", // نتجاهل CORS ومش هنقرأ الاستجابة
           body: JSON.stringify(orderData)
         });
-        const data = await res.json();
 
-        if (data && data.result === "success") {
-          msg.textContent = "تم تسجيل الطلب بنجاح ❤️ سيتم التواصل معك لتأكيد الشحن.";
-          msg.classList.remove("text-gray-600");
-          msg.classList.add("text-green-600");
+        // لو وصلنا هنا نعتبره نجاح
+        msg.textContent = "تم تسجيل الطلب بنجاح ❤️ سيتم التواصل معك لتأكيد الشحن.";
+        msg.classList.remove("text-gray-600");
+        msg.classList.add("text-green-600");
 
-          localStorage.removeItem("tefa_cart");
-          cart = [];
-          loadCart();
-        } else {
-          throw new Error("خطأ في الاستجابة");
-        }
+        cart = [];
+        saveCart();
+        loadCart();
       } catch (err) {
         console.error(err);
         msg.textContent = "حصل خطأ أثناء إرسال الطلب، حاولي تاني أو تواصلي على واتساب.";
@@ -364,6 +382,7 @@
       }
     });
 
+    // تحميل السلة عند فتح الصفحة
     loadCart();
   </script>
 
