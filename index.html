@@ -2,36 +2,82 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>TEFA STORE</title>
+  <title>TEFA STORE | أطقم حريمي جاهزة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 font-sans">
 
+<!-- الهيدر -->
 <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-50">
   <h1 class="text-2xl font-extrabold">TEFA STORE</h1>
-  <span class="text-2xl">🛒</span>
+  <a href="cart.html" class="relative text-3xl">
+    🛒
+  </a>
 </header>
 
+<!-- البانر الرئيسي + العداد التنازلي -->
 <section class="bg-white p-6 text-center">
   <p class="text-lg text-gray-600 mb-2">
     متجر أطقم حريمي روزالين و فورمال
   </p>
 
-  <h2 class="text-4xl font-extrabold mb-4">
-    أطقم حريمي جاهزة للخروجات والمناسبات
+  <h2 class="text-4xl font-extrabold mb-4 leading-snug">
+    أطقم حريمي جاهزة للخروجات<br>والمناسبات
   </h2>
 
-  <p class="text-xl font-semibold mb-4">
+  <p class="text-xl font-semibold mb-3">
     اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️
   </p>
 
-  <span class="inline-block bg-red-600 text-white px-5 py-2 rounded-full font-bold">
-    🔥 خصم لفترة محدودة
-  </span>
+  <!-- شريط العرض المحدود + العداد -->
+  <div class="mt-4 inline-flex flex-col items-center gap-2">
+    <span class="inline-flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm">
+      🔥 خصم كبير لفترة محدودة
+    </span>
+
+    <div class="bg-black text-white rounded-2xl px-5 py-3 mt-2 inline-flex items-center gap-4 text-sm">
+      <span class="font-semibold">ينتهي العرض خلال:</span>
+      <div class="flex gap-3">
+        <div class="text-center">
+          <div id="cd-days" class="text-xl font-extrabold">0</div>
+          <div class="text-[11px]">يوم</div>
+        </div>
+        <div class="text-center">
+          <div id="cd-hours" class="text-xl font-extrabold">0</div>
+          <div class="text-[11px]">ساعة</div>
+        </div>
+        <div class="text-center">
+          <div id="cd-minutes" class="text-xl font-extrabold">0</div>
+          <div class="text-[11px]">دقيقة</div>
+        </div>
+        <div class="text-center">
+          <div id="cd-seconds" class="text-xl font-extrabold">0</div>
+          <div class="text-[11px]">ثانية</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- مميزات سريعة -->
+<section class="p-4 grid grid-cols-3 gap-3 text-center">
+  <div class="bg-white p-3 rounded-xl shadow">
+    ✨<br>
+    <span class="font-bold text-xs md:text-sm">خامات عالية الجودة</span>
+  </div>
+  <div class="bg-white p-3 rounded-xl shadow">
+    💳<br>
+    <span class="font-bold text-xs md:text-sm">دفع عند الاستلام</span>
+  </div>
+  <div class="bg-white p-3 rounded-xl shadow">
+    🚚<br>
+    <span class="font-bold text-xs md:text-sm">شحن لكل المحافظات</span>
+  </div>
+</section>
+
+<!-- المنتجات -->
 <section class="p-4">
   <h3 class="text-3xl font-extrabold text-center mb-6">
     اختاري الطقم المناسب لك ✨
@@ -40,43 +86,123 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
     <!-- روزالين -->
-    <a href="product.html?id=rozalin" class="bg-white p-3 rounded-3xl shadow text-center">
-      <img src="rozalin-main.jpg" class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold">طقم روزالين 3 قطع</h4>
-      <p class="line-through text-gray-400">999 ج</p>
-      <span class="text-4xl font-extrabold">749 ج</span>
+    <a href="product.html?id=rozalin" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
+      <img src="rozalin-main.jpg"
+           alt="طقم روزالين"
+           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
+      <h4 class="text-xl font-semibold mb-1">طقم روزالين 3 قطع</h4>
+      <p class="text-sm text-gray-600 mb-1">خامة روزالين – وان سايز 60–95 ك</p>
+      <p class="line-through text-gray-400 text-sm">999 ج</p>
+      <span class="text-4xl font-extrabold text-black">749 ج</span>
     </a>
 
     <!-- فورمال -->
-    <a href="product.html?id=formal" class="bg-white p-3 rounded-3xl shadow text-center">
-      <img src="formal-main.jpg" class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold">طقم فورمال 3 قطع</h4>
-      <p class="line-through text-gray-400">949 ج</p>
-      <span class="text-4xl font-extrabold">699 ج</span>
+    <a href="product.html?id=formal" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
+      <img src="formal-main.jpg"
+           alt="طقم فورمال"
+           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
+      <h4 class="text-xl font-semibold mb-1">طقم فورمال 3 قطع</h4>
+      <p class="text-sm text-gray-600 mb-1">ستايل فورمال أنيق</p>
+      <p class="line-through text-gray-400 text-sm">949 ج</p>
+      <span class="text-4xl font-extrabold text-black">699 ج</span>
     </a>
 
     <!-- تونز -->
-    <a href="product.html?id=toonz" class="bg-white p-3 rounded-3xl shadow text-center">
-      <img src="toonz-main.jpg" class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold">تونز – قطعتين</h4>
-      <p class="line-through text-gray-400">1199 ج</p>
-      <span class="text-4xl font-extrabold">799 ج</span>
+    <a href="product.html?id=toonz" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
+      <img src="toonz-main.jpg"
+           alt="تونز قطعتين"
+           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
+      <h4 class="text-xl font-semibold mb-1">تونز – قطعتين</h4>
+      <p class="text-sm text-gray-600 mb-1">شمواه × شمواه – شتوي شيك</p>
+      <p class="line-through text-gray-400 text-sm">1199 ج</p>
+      <span class="text-4xl font-extrabold text-black">799 ج</span>
     </a>
 
-    <!-- عباية -->
-    <a href="product.html?id=abaya_btn" class="bg-white p-3 rounded-3xl shadow text-center">
-      <img src="abaya-btn-main.jpg" class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold">عباية زراير كبس</h4>
-      <p class="line-through text-gray-400">1049 ج</p>
-      <span class="text-4xl font-extrabold">749 ج</span>
+    <!-- عباية زراير كبس -->
+    <a href="product.html?id=abaya_btn" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
+      <img src="abaya-btn-main.jpg"
+           alt="عباية زراير كبس"
+           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
+      <h4 class="text-xl font-semibold mb-1">عباية زراير كبس</h4>
+      <p class="text-sm text-gray-600 mb-1">جوخ ليكرا – شتوي أنيق</p>
+      <p class="line-through text-gray-400 text-sm">1049 ج</p>
+      <span class="text-4xl font-extrabold text-black">749 ج</span>
     </a>
 
   </div>
 </section>
 
-<footer class="bg-black text-white text-center p-4 mt-6">
-  جميع الحقوق محفوظة © TEFA STORE
+<!-- فوتر بسيط -->
+<footer class="bg-black text-white text-center p-4 mt-6 text-sm">
+  <p class="font-bold mb-1">TEFA STORE</p>
+  <p>جميع الحقوق محفوظة © 2025</p>
 </footer>
+
+<!-- سكربت: عداد الزوار + العداد التنازلي -->
+<script>
+  (function () {
+    // ====== عداد الزوار (يُستخدم في لوحة التحكم) ======
+    const viewsKey = "store_total_views";
+    let v = parseInt(localStorage.getItem(viewsKey) || "0", 10) || 0;
+    v++;
+    localStorage.setItem(viewsKey, v);
+
+    // ====== العداد التنازلي ======
+    // نخلي نهاية العرض بعد 3 أيام من أول زيارة، ونحفظها في localStorage
+    const saleKey = "store_sale_end";
+    let end = localStorage.getItem(saleKey);
+
+    if (!end) {
+      const now = new Date();
+      now.setDate(now.getDate() + 3); // 3 أيام من الآن
+      end = now.getTime();
+      localStorage.setItem(saleKey, String(end));
+    } else {
+      end = parseInt(end, 10);
+    }
+
+    const endTime = end;
+
+    const daysEl    = document.getElementById("cd-days");
+    const hoursEl   = document.getElementById("cd-hours");
+    const minsEl    = document.getElementById("cd-minutes");
+    const secsEl    = document.getElementById("cd-seconds");
+
+    function updateCountdown() {
+      const now = Date.now();
+      let diff = endTime - now;
+
+      if (diff <= 0) {
+        daysEl.textContent  = "0";
+        hoursEl.textContent = "0";
+        minsEl.textContent  = "0";
+        secsEl.textContent  = "0";
+        return;
+      }
+
+      const sec  = 1000;
+      const min  = sec * 60;
+      const hour = min * 60;
+      const day  = hour * 24;
+
+      const d = Math.floor(diff / day);
+      diff   %= day;
+      const h = Math.floor(diff / hour);
+      diff   %= hour;
+      const m = Math.floor(diff / min);
+      diff   %= min;
+      const s = Math.floor(diff / sec);
+
+      daysEl.textContent  = d;
+      hoursEl.textContent = h.toString().padStart(2, "0");
+      minsEl.textContent  = m.toString().padStart(2, "0");
+      secsEl.textContent  = s.toString().padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  })();
+</script>
 
 </body>
 </html>

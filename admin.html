@@ -39,14 +39,14 @@
   <header class="bg-black text-white p-4 flex justify-between items-center">
     <div>
       <h1 class="text-xl font-extrabold">لوحة تحكم TEFA STORE</h1>
-      <p class="text-xs text-gray-300">متابعة الطلبات وترتيب الموديلات</p>
+      <p class="text-xs text-gray-300">متابعة الطلبات وإدارة الألوان</p>
     </div>
     <button id="logoutBtn" class="text-xs bg-red-600 px-3 py-1 rounded-lg">
       تسجيل خروج
     </button>
   </header>
 
-  <main class="max-w-5xl mx-auto p-4 space-y-4">
+  <main class="max-w-6xl mx-auto p-4 space-y-4">
 
     <!-- كروت ملخص -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -59,34 +59,36 @@
         <p id="todayOrders" class="text-2xl font-extrabold">0</p>
       </div>
       <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">آخر محافظة</p>
-        <p id="lastGov" class="text-sm font-semibold">–</p>
+        <p class="text-xs text-gray-500">عدد زوار الموقع (هذا المتصفح)</p>
+        <p id="visitsCount" class="text-2xl font-extrabold">0</p>
       </div>
       <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">آخر تحديث</p>
-        <p id="lastTime" class="text-xs">–</p>
+        <p class="text-xs text-gray-500">آخر محافظة في الطلبات</p>
+        <p id="lastGov" class="text-sm font-semibold">–</p>
       </div>
     </div>
 
-    <!-- قسم الموديلات وترتيبها -->
+    <!-- إدارة الموديلات والألوان -->
     <section class="bg-white rounded-2xl shadow p-4">
-      <div class="flex justify-between items-center mb-3">
-        <h2 class="text-lg font-bold">الموديلات الموجودة في الموقع</h2>
-        <p class="text-xs text-gray-500">مرتبة حسب أفضل ترتيب مقترح</p>
-      </div>
-
-      <div id="modelsList" class="grid md:grid-cols-4 gap-3 text-center text-sm"></div>
+      <h2 class="text-lg font-bold mb-3">إدارة الموديلات و إيقاف الألوان</h2>
+      <p class="text-xs text-gray-500 mb-3">
+        لو عايز توقف لون معيّن، شيّل علامة ✓ من أمامه. اللون الموقوف هيظهر عند العميل باهت و مش هيقدر يطلبه.
+      </p>
+      <div id="modelsColors" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
     </section>
 
-    <!-- جدول الطلبات -->
+    <!-- جدول الطلبات + إحصائيات المحافظات -->
     <section class="bg-white rounded-2xl shadow p-4">
-      <div class="flex justify-between items-center mb-3">
-        <h2 class="text-lg font-bold">قائمة الطلبات</h2>
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+        <div>
+          <h2 class="text-lg font-bold">قائمة الطلبات</h2>
+          <p class="text-xs text-gray-500">مصنفة من LocalStorage (على هذا المتصفح).</p>
+        </div>
         <input id="searchInput" placeholder="بحث بالاسم أو التليفون..."
-               class="border rounded-lg px-3 py-1 text-xs w-40 md:w-64">
+               class="border rounded-lg px-3 py-1 text-xs w-full md:w-64">
       </div>
 
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto mb-4">
         <table class="w-full text-xs md:text-sm">
           <thead>
             <tr class="border-b bg-gray-100">
@@ -104,19 +106,23 @@
       </div>
 
       <p id="noOrdersMsg" class="text-center text-xs text-gray-500 mt-3 hidden">
-        لا يوجد طلبات محفوظة حتى الآن.
+        لا يوجد طلبات محفوظة حتى الآن على هذا المتصفح.
       </p>
+
+      <div id="govStatsBox" class="mt-4">
+        <h3 class="text-sm font-bold mb-2">تصنيف الطلبات حسب المحافظة</h3>
+        <div id="govStats" class="flex flex-wrap gap-2 text-xs"></div>
+      </div>
     </section>
 
   </main>
 </section>
 
 <script>
-// بيانات الدخول (يمكن تغييرها)
+// ---------------- إعداد الدخول ----------------
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "tefa4434";
 
-// عناصر DOM
 const loginSection   = document.getElementById("loginSection");
 const dashboardSection = document.getElementById("dashboardSection");
 const loginForm      = document.getElementById("loginForm");
@@ -125,73 +131,34 @@ const logoutBtn      = document.getElementById("logoutBtn");
 
 const totalOrdersEl  = document.getElementById("totalOrders");
 const todayOrdersEl  = document.getElementById("todayOrders");
+const visitsCountEl  = document.getElementById("visitsCount");
 const lastGovEl      = document.getElementById("lastGov");
-const lastTimeEl     = document.getElementById("lastTime");
-const modelsListEl   = document.getElementById("modelsList");
 const ordersBodyEl   = document.getElementById("ordersBody");
 const noOrdersMsgEl  = document.getElementById("noOrdersMsg");
 const searchInput    = document.getElementById("searchInput");
+const govStatsEl     = document.getElementById("govStats");
+const modelsColorsEl = document.getElementById("modelsColors");
 
-// قائمة كل الموديلات + أفضل ترتيب
-const MODELS = [
-  {
-    id: "rozalin",
-    rank: 1,
-    name: "طقم روزالين 3 قطع",
-    price: 749,
-    img: "rozalin-main.jpg",
-    note: "أفضل موديل أساسي – مناسب لمعظم المقاسات"
-  },
-  {
-    id: "toonz",
-    rank: 2,
-    name: "تونز – قطعتين",
-    price: 799,
-    img: "toonz-main.jpg",
-    note: "موديل شبابي شمواه – ألوان قوية"
-  },
-  {
-    id: "abaya_btn",
-    rank: 3,
-    name: "عباية زراير كبس",
-    price: 749,
-    img: "abaya-btn-main.jpg",
-    note: "موديل شتوي أنيق – جوخ ليكرا"
-  },
-  {
-    id: "formal",
-    rank: 4,
-    name: "طقم فورمال 3 قطع",
-    price: 699,
-    img: "formal-main.jpg",
-    note: "للمناسبات الرسمية والخروجات"
-  }
-];
-
-// إظهار / إخفاء اللوحة حسب حالة الدخول
 function showDashboard() {
   loginSection.classList.add("hidden");
   dashboardSection.classList.remove("hidden");
-  renderModels();
+  renderModelsColors();
   loadOrders();
+  loadVisits();
 }
-
 function showLogin() {
   loginSection.classList.remove("hidden");
   dashboardSection.classList.add("hidden");
 }
 
-// تحقق من حالة دخول محفوظة
 if (localStorage.getItem("tefa_admin_logged") === "1") {
   showDashboard();
 }
 
-// معالجة تسجيل الدخول
-loginForm.addEventListener("submit", function (e) {
+loginForm.addEventListener("submit", e => {
   e.preventDefault();
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
-
   if (user === ADMIN_USER && pass === ADMIN_PASS) {
     localStorage.setItem("tefa_admin_logged", "1");
     loginError.textContent = "";
@@ -201,33 +168,97 @@ loginForm.addEventListener("submit", function (e) {
   }
 });
 
-// تسجيل خروج
-logoutBtn.addEventListener("click", function () {
+logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("tefa_admin_logged");
   showLogin();
 });
 
-// عرض الموديلات في لوحة التحكم
-function renderModels() {
-  modelsListEl.innerHTML = "";
-  MODELS.sort((a,b) => a.rank - b.rank).forEach(m => {
+// ---------------- بيانات الموديلات و الألوان (نفس labels الموجودة في product.html) ----------------
+const PRODUCTS_META = {
+  rozalin: {
+    name: "طقم روزالين 3 قطع",
+    img: "rozalin-main.jpg",
+    colors: ["كافيه","بيج","موف","زيتي","أسود","سيمون"]
+  },
+  formal: {
+    name: "طقم فورمال 3 قطع",
+    img: "formal-main.jpg",
+    colors: ["منت","بيبي بلو","بيج","هافان","أسود"]
+  },
+  toonz: {
+    name: "تونز – قطعتين",
+    img: "toonz-main.jpg",
+    colors: ["أزرق","بينك","بيج","زيتي","نبيتي","موف"]
+  },
+  abaya_btn: {
+    name: "عباية زراير كبس",
+    img: "abaya-btn-main.jpg",
+    colors: ["كراميل","نبيتي","رمادي فاتح","زيتي","أسود","رمادي غامق"]
+  }
+};
+
+// ---------------- حالة الألوان الموقوفة ----------------
+function loadDisabledColors() {
+  try {
+    return JSON.parse(localStorage.getItem("disabledColors") || "{}");
+  } catch(e) {
+    return {};
+  }
+}
+function saveDisabledColors(obj) {
+  localStorage.setItem("disabledColors", JSON.stringify(obj));
+}
+let disabledColors = loadDisabledColors();
+
+// رسم كروت الموديلات و الألوان
+function renderModelsColors() {
+  modelsColorsEl.innerHTML = "";
+  Object.entries(PRODUCTS_META).forEach(([pid, meta]) => {
     const card = document.createElement("div");
-    card.className = "bg-gray-50 rounded-xl border shadow-sm p-3 flex flex-col items-center";
+    card.className = "border rounded-xl p-3 bg-gray-50 flex flex-col gap-2";
     card.innerHTML = `
-      <span class="text-[11px] bg-black text-white px-2 py-0.5 rounded-full mb-1">
-        ترتيب #${m.rank}
-      </span>
-      <img src="${m.img}" alt="${m.name}"
-           class="w-full aspect-[3/4] object-cover rounded-lg mb-2">
-      <h3 class="text-sm font-bold mb-1">${m.name}</h3>
-      <p class="text-xs text-gray-600 mb-1">${m.note}</p>
-      <p class="text-sm font-extrabold">${m.price} ج</p>
+      <div class="flex items-center gap-2 mb-1">
+        <img src="${meta.img}" class="w-10 h-10 rounded-lg object-cover">
+        <div>
+          <p class="text-sm font-bold">${meta.name}</p>
+          <p class="text-[11px] text-gray-500">${pid}</p>
+        </div>
+      </div>
+      <div class="space-y-1 text-[11px]"></div>
     `;
-    modelsListEl.appendChild(card);
+    const colorsWrap = card.querySelector("div.space-y-1");
+    meta.colors.forEach(colorLabel => {
+      const pidState = disabledColors[pid] || {};
+      const enabled = pidState[colorLabel] !== false; // الافتراضي شغال
+      const row = document.createElement("div");
+      row.className = "flex items-center justify-between gap-2";
+      row.innerHTML = `
+        <span>${colorLabel}</span>
+        <label class="flex items-center gap-1 text-[11px]">
+          <span class="${enabled ? 'text-green-600' : 'text-red-600'} status-text">
+            ${enabled ? 'مسموح' : 'موقوف'}
+          </span>
+          <input type="checkbox" class="color-toggle" ${enabled ? 'checked' : ''}>
+        </label>
+      `;
+      const checkbox = row.querySelector("input.color-toggle");
+      const statusText = row.querySelector(".status-text");
+      checkbox.addEventListener("change", () => {
+        disabledColors = loadDisabledColors();
+        if (!disabledColors[pid]) disabledColors[pid] = {};
+        disabledColors[pid][colorLabel] = checkbox.checked; // true = شغال, false = موقوف
+        saveDisabledColors(disabledColors);
+        statusText.textContent = checkbox.checked ? "مسموح" : "موقوف";
+        statusText.className =
+          "status-text " + (checkbox.checked ? "text-green-600" : "text-red-600");
+      });
+      colorsWrap.appendChild(row);
+    });
+    modelsColorsEl.appendChild(card);
   });
 }
 
-// تحميل الطلبات من localStorage
+// ---------------- الطلبات و المحافظات ----------------
 function loadOrders(filterText = "") {
   let orders = [];
   try {
@@ -236,10 +267,8 @@ function loadOrders(filterText = "") {
     orders = [];
   }
 
-  // ترتيب من الأحدث للأقدم
-  orders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+  orders.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
 
-  // بحث
   const f = filterText.trim();
   if (f) {
     const fLower = f.toLowerCase();
@@ -250,31 +279,27 @@ function loadOrders(filterText = "") {
     );
   }
 
-  // ملخص
   totalOrdersEl.textContent = orders.length;
 
-  const todayStart = new Date();
-  todayStart.setHours(0,0,0,0);
+  const todayStart = new Date(); todayStart.setHours(0,0,0,0);
   const todayTs = todayStart.getTime();
-  const todayCount = orders.filter(o => (o.timestamp || 0) >= todayTs).length;
-  todayOrdersEl.textContent = todayCount;
+  todayOrdersEl.textContent = orders.filter(o => (o.timestamp || 0) >= todayTs).length;
 
   if (orders.length > 0) {
     const last = orders[0];
     lastGovEl.textContent = last.governorate || "غير محدد";
-    lastTimeEl.textContent = last.time || "غير معروف";
   } else {
     lastGovEl.textContent = "–";
-    lastTimeEl.textContent = "–";
   }
 
-  // عرض في الجدول
   ordersBodyEl.innerHTML = "";
   if (orders.length === 0) {
     noOrdersMsgEl.classList.remove("hidden");
-    return;
+  } else {
+    noOrdersMsgEl.classList.add("hidden");
   }
-  noOrdersMsgEl.classList.add("hidden");
+
+  const govCounts = {};
 
   orders.forEach((o, idx) => {
     const tr = document.createElement("tr");
@@ -291,13 +316,30 @@ function loadOrders(filterText = "") {
       <td class="p-2 text-[11px]">${o.time || ""}</td>
     `;
     ordersBodyEl.appendChild(tr);
+
+    const gov = (o.governorate || "غير محدد").trim();
+    govCounts[gov] = (govCounts[gov] || 0) + 1;
+  });
+
+  // عرض إحصائية المحافظات
+  govStatsEl.innerHTML = "";
+  Object.entries(govCounts).sort((a,b) => b[1] - a[1]).forEach(([gov, count]) => {
+    const chip = document.createElement("span");
+    chip.className = "px-2 py-1 rounded-full bg-gray-100 border text-[11px]";
+    chip.textContent = `${gov}: ${count} طلب`;
+    govStatsEl.appendChild(chip);
   });
 }
 
-// البحث في الطلبات
 searchInput.addEventListener("input", () => {
   loadOrders(searchInput.value);
 });
+
+// ---------------- عدد الزوار (على هذا المتصفح) ----------------
+function loadVisits() {
+  const v = parseInt(localStorage.getItem("store_total_views") || "0", 10) || 0;
+  visitsCountEl.textContent = v;
+}
 </script>
 
 </body>

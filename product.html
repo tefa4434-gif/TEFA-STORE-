@@ -9,20 +9,22 @@
 
 <body class="bg-gray-100 font-sans">
 
-<!-- هيدر بسيط -->
+<!-- هيدر -->
 <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-40">
   <a href="index.html" class="text-sm">⬅ الرجوع للمتجر</a>
   <span class="font-bold text-lg">TEFA STORE</span>
   <a href="cart.html" class="text-2xl">🛒</a>
 </header>
 
-<!-- محتوى المنتج -->
 <main class="max-w-md mx-auto p-4">
   <div id="productContainer"></div>
 </main>
 
+<!-- صوت إضافة للسلة (ارفع ملف add-to-cart.mp3 في جت هب) -->
+<audio id="addSound" src="add-to-cart.mp3" preload="auto"></audio>
+
 <script>
-// ======================= بيانات المنتجات =======================
+// ======================= بيانات المنتجات (مطابقة لأسماء الصور عندك) =======================
 const PRODUCTS = {
   rozalin: {
     name: "طقم روزالين 3 قطع",
@@ -31,12 +33,12 @@ const PRODUCTS = {
     mainImg: "rozalin-main.jpg",
     desc: "خامة روزالين مستوردة – وان سايز من 60 لـ 95 ك.",
     colors: [
-      { label: "سيمون", hex: "#f4a6a6" },
-      { label: "موف",   hex: "#7c3aed" },   // ✅ اللون الجديد
-      { label: "أسود", hex: "#000000" },
-      { label: "زيتي", hex: "#4b7351" },
-      { label: "بيج",  hex: "#ead7b7" },
-      { label: "بني",  hex: "#8b5a2b" }
+      { label: "كافيه", hex: "#8b6a4f", img: "rozalin-kafeh.jpg" },
+      { label: "بيج",   hex: "#ead7b7", img: "rozalin-beige.jpg" },
+      { label: "موف",   hex: "#7c3aed", img: "rozalin-mov.jpg" },
+      { label: "زيتي",  hex: "#4b7351", img: "rozalin-zyti.jpg" },
+      { label: "أسود",  hex: "#000000", img: "rozalin-black.jpg" },
+      { label: "سيمون", hex: "#f4a6a6", img: "rozalin-simon.jpg" }
     ]
   },
 
@@ -47,11 +49,11 @@ const PRODUCTS = {
     mainImg: "formal-main.jpg",
     desc: "خامة روزالين مستوردة – وان سايز تقريبًا من 65 لـ 85 ك.",
     colors: [
-      { label: "منت",      hex: "#98ff98" },
-      { label: "بيبي بلو", hex: "#a7c7ff" },
-      { label: "بيج",      hex: "#ead7b7" },
-      { label: "هافان",    hex: "#8b5a2b" },
-      { label: "أسود",     hex: "#000000" }
+      { label: "منت",      hex: "#98ff98", img: "formal-ment.jpg" },
+      { label: "بيبي بلو", hex: "#a7c7ff", img: "formal-babyblue.jpg" },
+      { label: "بيج",      hex: "#ead7b7", img: "formal-beige.jpg" },
+      { label: "هافان",    hex: "#8b5a2b", img: "formal-havan.jpg" },
+      { label: "أسود",     hex: "#000000", img: "formal-black.jpg" }
     ]
   },
 
@@ -62,12 +64,12 @@ const PRODUCTS = {
     mainImg: "toonz-main.jpg",
     desc: "شمواه × شمواه – وان سايز من 60 لـ 90 ك.",
     colors: [
-      { label: "أزرق",  hex: "#1e3a8a" },
-      { label: "بينك",  hex: "#ec4899" },
-      { label: "بيج",   hex: "#ead7b7" },
-      { label: "زيتي",  hex: "#6b8f71" },
-      { label: "نبيتي", hex: "#6d1b1b" },
-      { label: "موف",   hex: "#7c3aed" }
+      { label: "أزرق",  hex: "#1e3a8a", img: "toonz-main.jpg" }, // مفيش صورة منفصلة، نستخدم الكولاج
+      { label: "بينك",  hex: "#ec4899", img: "toonz-pink.jpg" },
+      { label: "بيج",   hex: "#ead7b7", img: "toonz-beige.jpg" },
+      { label: "زيتي",  hex: "#6b8f71", img: "toonz-olive.jpg" },
+      { label: "نبيتي", hex: "#6d1b1b", img: "toonz-wine.jpg" },
+      { label: "موف",   hex: "#7c3aed", img: "toonz-purple.jpg" }
     ]
   },
 
@@ -75,31 +77,46 @@ const PRODUCTS = {
     name: "عباية زراير كبس",
     price: 749,
     oldPrice: 1049,
-    // تأكد إن صورة الكولاج مرفوعة بهذا الاسم
     mainImg: "abaya-btn-main.jpg",
     desc: "جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80ك.",
     colors: [
-      { label: "كراميل",     hex: "#c19a6b" },
-      { label: "نبيتي",      hex: "#6b1b1b" },
-      { label: "رمادي فاتح", hex: "#d1d5db" },
-      { label: "زيتي",       hex: "#6b8f71" },
-      { label: "أسود",       hex: "#000000" },
-      { label: "رمادي غامق", hex: "#374151" }
+      { label: "كراميل",     hex: "#c19a6b", img: "abaya-caramel.jpg" },
+      { label: "نبيتي",      hex: "#6b1b1b", img: "abaya-burgundy.jpg" },
+      { label: "رمادي فاتح", hex: "#d1d5db", img: "abaya-lightgray.jpg" },
+      { label: "زيتي",       hex: "#6b8f71", img: "abaya-green.jpg" },
+      { label: "أسود",       hex: "#000000", img: "abaya-black.jpg" },
+      { label: "رمادي غامق", hex: "#374151", img: "abaya-darkgray.jpg" }
     ]
   }
 };
+
+// ======================= ألوان موقوفة من لوحة التحكم =======================
+function loadDisabledColors() {
+  try {
+    return JSON.parse(localStorage.getItem("disabledColors") || "{}");
+  } catch (e) {
+    return {};
+  }
+}
+const disabledColors = loadDisabledColors();
+
+function isColorDisabled(pid, label) {
+  return disabledColors[pid] && disabledColors[pid][label] === false;
+}
 
 // ======================= تحميل المنتج من الـ URL =======================
 const params = new URLSearchParams(location.search);
 const productId = params.get("id") || "rozalin";
 const product = PRODUCTS[productId] || PRODUCTS.rozalin;
 
-let selectedColorIndex = 0;
 let qty = 1;
+
+// أول لون شغّال (مش موقوف)
+let selectedColorIndex = product.colors.findIndex(c => !isColorDisabled(productId, c.label));
+if (selectedColorIndex === -1) selectedColorIndex = 0;
 
 // ======================= رسم صفحة المنتج =======================
 const container = document.getElementById("productContainer");
-
 container.innerHTML = `
   <div class="bg-white rounded-3xl shadow p-4">
     <img id="mainImg"
@@ -126,7 +143,7 @@ container.innerHTML = `
     <div class="flex justify-between items-center mb-2">
       <span class="text-sm text-gray-700 font-semibold">الكمية</span>
     </div>
-    <div class="flex items-center justify-start gap-4 mb-6">
+    <div class="flex items-center justify-start gap-4 mb-4">
       <button id="decQty"
         class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">-</button>
       <span id="qtyValue" class="text-xl font-bold">1</span>
@@ -138,49 +155,80 @@ container.innerHTML = `
       class="bg-black text-white w-full py-4 rounded-2xl text-xl font-extrabold">
       إضافة إلى السلة
     </button>
+
+    <!-- رسالة نجاح عند إضافة اللون -->
+    <p id="successMsg"
+       class="hidden text-center mt-3 font-bold text-sm rounded-2xl px-3 py-2">
+      ✅ تمت إضافة اللون بنجاح 🥰
+    </p>
   </div>
 `;
 
 // ======================= تهيئة دوائر الألوان =======================
-const colorsRow = document.getElementById("colorsRow");
-const mainImg   = document.getElementById("mainImg");
-const qtyValue  = document.getElementById("qtyValue");
-const incQtyBtn = document.getElementById("incQty");
-const decQtyBtn = document.getElementById("decQty");
-const addBtn    = document.getElementById("addToCartBtn");
+const colorsRow  = document.getElementById("colorsRow");
+const mainImg    = document.getElementById("mainImg");
+const qtyValue   = document.getElementById("qtyValue");
+const incQtyBtn  = document.getElementById("incQty");
+const decQtyBtn  = document.getElementById("decQty");
+const addBtn     = document.getElementById("addToCartBtn");
+const successMsg = document.getElementById("successMsg");
+const addSound   = document.getElementById("addSound");
+
+mainImg.dataset.main = product.mainImg;
+mainImg.onerror = function () {
+  this.onerror = null;
+  this.src = this.dataset.main;
+};
 
 const colorDots = [];
 
 product.colors.forEach((col, idx) => {
+  const disabled = isColorDisabled(productId, col.label);
+
   const dot = document.createElement("span");
   dot.className =
-    "w-10 h-10 rounded-full border border-gray-300 cursor-pointer transition";
+    "w-10 h-10 rounded-full border cursor-pointer transition";
   dot.style.backgroundColor = col.hex;
   dot.dataset.index = idx;
+  dot.dataset.disabled = disabled ? "1" : "0";
+
+  if (disabled) {
+    dot.classList.add("opacity-30", "cursor-not-allowed");
+  } else {
+    dot.classList.add("border-gray-300");
+  }
+
   colorsRow.appendChild(dot);
   colorDots.push(dot);
 });
 
-// تمييز اللون المختار
 function updateSelectedColor() {
   colorDots.forEach((dot, idx) => {
-    if (idx === selectedColorIndex) {
+    if (idx === selectedColorIndex && dot.dataset.disabled !== "1") {
       dot.classList.add("ring-2", "ring-black");
     } else {
       dot.classList.remove("ring-2", "ring-black");
     }
   });
 
-  // نرجع دايمًا للصورة الأساسية (مفيش صور منفصلة لكل لون حاليًا)
-  mainImg.src = product.mainImg;
+  const col = product.colors[selectedColorIndex];
+  if (col && col.img && colorDots[selectedColorIndex].dataset.disabled !== "1") {
+    mainImg.src = col.img;
+  } else {
+    mainImg.src = mainImg.dataset.main;
+  }
 }
 
-// أول لون مختار تلقائيًا
+// أول تحديث
 updateSelectedColor();
 
 colorsRow.addEventListener("click", (e) => {
   const dot = e.target.closest("span");
   if (!dot) return;
+  if (dot.dataset.disabled === "1") {
+    alert("هذا اللون موقوف حاليًا ❌");
+    return;
+  }
   const idx = parseInt(dot.dataset.index, 10);
   if (isNaN(idx)) return;
   selectedColorIndex = idx;
@@ -208,27 +256,61 @@ function loadCart() {
     return [];
   }
 }
-
 function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 addBtn.addEventListener("click", () => {
+  const col = product.colors[selectedColorIndex];
+
+  if (!col || isColorDisabled(productId, col.label)) {
+    alert("هذا اللون موقوف ولا يمكن طلبه حاليًا ❌");
+    return;
+  }
+
   const cart = loadCart();
-  const selectedColor = product.colors[selectedColorIndex];
 
   cart.push({
     productId: productId,
     name: product.name,
     price: product.price,
-    color: selectedColor.label,
-    colorHex: selectedColor.hex,
+    color: col.label,
+    colorHex: col.hex,
     qty: qty
   });
 
   saveCart(cart);
-  alert("✅ تم إضافة المنتج إلى السلة بنجاح");
+
+  // ✅ رسالة نجاح بنفس لون اللون
+  successMsg.style.backgroundColor = col.hex;
+  // لو اللون غامق نخلي الخط أبيض، لو فاتح نخليه أسود
+  successMsg.style.color = isDarkColor(col.hex) ? "#ffffff" : "#000000";
+
+  successMsg.classList.remove("hidden");
+  setTimeout(() => {
+    successMsg.classList.add("hidden");
+  }, 2000);
+
+  // 🔊 تشغيل الصوت
+  if (addSound) {
+    try {
+      addSound.currentTime = 0;
+      addSound.play().catch(() => {});
+    } catch(e) {}
+  }
 });
+
+// دالة بسيطة لتحديد إذا اللون غامق ولا لا
+function isDarkColor(hex) {
+  const h = hex.replace("#","");
+  if (h.length !== 6) return false;
+  const r = parseInt(h.substr(0,2), 16);
+  const g = parseInt(h.substr(2,2), 16);
+  const b = parseInt(h.substr(4,2), 16);
+  // معادلة تقريبية للسطوع
+  const brightness = (r*299 + g*587 + b*114) / 1000;
+  return brightness < 140;
+}
 </script>
 
 </body>
