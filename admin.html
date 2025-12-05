@@ -1,63 +1,404 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>تسجيل دخول لوحة التحكم | TEFA STORE</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <title>لوحة التحكم - TEFA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .wrap {
+      max-width: 1000px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+    .card {
+      background: #020617;
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      margin-bottom: 16px;
+      border: 1px solid #1e293b;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .tag {
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: #1d4ed8;
+      color: #e5e7eb;
+    }
+    .stat {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    th,
+    td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #1f2937;
+      text-align: right;
+    }
+    th {
+      font-weight: 600;
+      color: #9ca3af;
+    }
+    .color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      display: inline-block;
+      margin-left: 4px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #4b5563;
+      transition: 0.2s;
+      border-radius: 999px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: 0.2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #16a34a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .btn-save {
+      margin-top: 10px;
+      border-radius: 999px;
+      border: none;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #22c55e;
+      color: #022c22;
+    }
+    .save-status {
+      font-size: 12px;
+      color: #a5b4fc;
+      margin-top: 4px;
+    }
+    .top-links {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .top-link {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: #e5e7eb;
+      text-decoration: none;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
+<div class="wrap">
+  <h1>لوحة التحكم - ألوان الموديلات</h1>
+  <p class="subtitle">
+    هنا تقدر توقف أو تشغّل الألوان لكل موديل. لما توقف لون، بيختفي من صفحة
+    اختيار الألوان عند العميل 👗
+  </p>
 
-<div class="min-h-screen flex items-center justify-center">
-  <div class="bg-white rounded-3xl shadow p-6 w-full max-w-sm text-center">
-    <h1 class="text-2xl font-extrabold mb-4">تسجيل دخول لوحة التحكم</h1>
-    <p class="text-xs text-gray-500 mb-4">
-      من فضلك أدخل بيانات الدخول الخاصة بك.
-    </p>
-
-    <input id="adminUser"
-           type="text"
-           placeholder="اسم المستخدم"
-           class="w-full mb-3 p-2 border rounded-xl text-center">
-
-    <input id="adminPass"
-           type="password"
-           placeholder="كلمة المرور"
-           class="w-full mb-3 p-2 border rounded-xl text-center">
-
-    <button id="loginBtn"
-            class="w-full bg-black text-white py-2 rounded-2xl font-bold">
-      دخول
-    </button>
-
-    <p id="loginError" class="text-red-600 text-sm mt-2 hidden">
-      اسم المستخدم أو كلمة المرور غير صحيحة
-    </p>
+  <div class="top-links">
+    <a href="index.html" class="top-link">⬅ رجوع للمتجر</a>
+    <a href="product.html?product=rozalin" class="top-link">صفحة طقم روزالين</a>
+    <a href="product.html?product=formal" class="top-link">صفحة طقم فورمال</a>
+    <a href="product.html?product=abaya" class="top-link">صفحة العباية</a>
+    <a href="product.html?product=toonz" class="top-link">صفحة موديل تونز</a>
   </div>
+
+  <!-- كارت بسيط لإحصاء فتح لوحة التحكم من نفس الجهاز -->
+  <section class="card">
+    <div class="card-title">
+      <span>إحصائيات بسيطة</span>
+      <span class="tag">محلي على هذا الجهاز فقط</span>
+    </div>
+    <p class="stat">
+      عدد المرات اللي فتحت فيها لوحة التحكم من هذا الجهاز:
+      <strong id="visit-count">0</strong> مرة
+    </p>
+  </section>
+
+  <!-- إدارة ألوان الموديلات -->
+  <section class="card">
+    <div class="card-title">
+      <span>التحكم في ألوان الموديلات</span>
+      <span class="tag">دون لمس الأوردرات أو الشيت</span>
+    </div>
+    <p class="stat">
+      شيل علامة التفعيل من أي لون عشان يتوقف في صفحة المنتج، و احفظ التعديلات.
+    </p>
+
+    <div id="products-colors"></div>
+
+    <button class="btn-save" onclick="saveColors()">حفظ التعديلات</button>
+    <div class="save-status" id="save-status"></div>
+  </section>
 </div>
 
 <script>
-  const ADMIN_USERNAME = "tefa";
-  const ADMIN_PASSWORD = "4434";
+  const COLOR_STATUS_KEY = "tefa_color_status_v1";
 
-  // لو أصلاً عامل تسجيل دخول من قبل يدخل على طول
-  if (localStorage.getItem("admin_logged_in") === "1") {
-    window.location.href = "dashboard.html";
+  const PRODUCTS = {
+    rozalin: {
+      id: "rozalin",
+      title: "طقم روزالين 3 قطع",
+      colors: [
+        { name: "كافيه", code: "#c8a27a" },
+        { name: "بيج", code: "#e7d4b5" },
+        { name: "موف", code: "#c084fc" },
+        { name: "زيتي", code: "#4b7350" },
+        { name: "أسود", code: "#111827" },
+        { name: "سيمون", code: "#f9a8a8" },
+        { name: "موف غامق", code: "#7c3aed" }
+      ]
+    },
+    formal: {
+      id: "formal",
+      title: "طقم فورمال 3 قطع",
+      colors: [
+        { name: "منت", code: "#7cd3aa" },
+        { name: "بيبي بلو", code: "#93c5fd" },
+        { name: "بيج", code: "#e7d4b5" },
+        { name: "هافان", code: "#b45309" },
+        { name: "أسود", code: "#111827" }
+      ]
+    },
+    abaya: {
+      id: "abaya",
+      title: "عباية زراير كبس",
+      colors: [
+        { name: "أسود", code: "#111827" },
+        { name: "زيتي", code: "#4b7350" },
+        { name: "رمادي فاتح", code: "#d1d5db" },
+        { name: "نبيتي", code: "#7f1d1d" },
+        { name: "كاراميل", code: "#b45309" },
+        { name: "رمادي غامق", code: "#4b5563" }
+      ]
+    },
+    toonz: {
+      id: "toonz",
+      title: "موديل تونز قطعتين",
+      colors: [
+        { name: "أزرق", code: "#1d4ed8" },
+        { name: "بينك", code: "#f9a8d4" },
+        { name: "أوف وايت", code: "#fef9c3" },
+        { name: "زيتي", code: "#4b7350" },
+        { name: "نبيتي", code: "#7f1d1d" },
+        { name: "بنفسجي", code: "#7c3aed" }
+      ]
+    }
+  };
+
+  function loadColorStatus() {
+    try {
+      return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
+    } catch (e) {
+      return {};
+    }
   }
 
-  document.getElementById("loginBtn").addEventListener("click", function () {
-    const user = document.getElementById("adminUser").value.trim().toLowerCase();
-    const pass = document.getElementById("adminPass").value.trim();
+  function renderProductsColors() {
+    const container = document.getElementById("products-colors");
+    container.innerHTML = "";
 
-    if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-      localStorage.setItem("admin_logged_in", "1");
-      document.getElementById("loginError").classList.add("hidden");
-      window.location.href = "dashboard.html";
-    } else {
-      document.getElementById("loginError").classList.remove("hidden");
+    const status = loadColorStatus();
+
+    Object.values(PRODUCTS).forEach((product) => {
+      const box = document.createElement("div");
+      box.style.marginTop = "10px";
+
+      const titleRow = document.createElement("div");
+      titleRow.style.display = "flex";
+      titleRow.style.justifyContent = "space-between";
+      titleRow.style.alignItems = "center";
+      titleRow.style.marginBottom = "4px";
+
+      const title = document.createElement("div");
+      title.style.fontSize = "14px";
+      title.style.fontWeight = "700";
+      title.textContent = product.title;
+
+      const note = document.createElement("div");
+      note.style.fontSize = "11px";
+      note.style.color = "#9ca3af";
+      note.textContent = "تفعيل/إيقاف الألوان لهذا الموديل";
+
+      titleRow.appendChild(title);
+      titleRow.appendChild(note);
+      box.appendChild(titleRow);
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr><th>اللون</th><th>حالة اللون</th><th>تفعيل</th></tr>";
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+
+      const productStatus = status[product.id] || {};
+
+      product.colors.forEach((c, idx) => {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        tdName.innerHTML =
+          '<span class="color-dot" style="background:' +
+          c.code +
+          '"></span>' +
+          c.name;
+
+        const tdState = document.createElement("td");
+        const enabled =
+          typeof productStatus[c.name] === "undefined"
+            ? true
+            : !!productStatus[c.name];
+        tdState.textContent = enabled ? "شغال" : "متوقف";
+        tdState.style.color = enabled ? "#4ade80" : "#f97316";
+
+        const tdToggle = document.createElement("td");
+        tdToggle.style.textAlign = "center";
+
+        const label = document.createElement("label");
+        label.className = "switch";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = enabled;
+        input.dataset.productId = product.id;
+        input.dataset.colorName = c.name;
+
+        const slider = document.createElement("span");
+        slider.className = "slider";
+
+        label.appendChild(input);
+        label.appendChild(slider);
+        tdToggle.appendChild(label);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdState);
+        tr.appendChild(tdToggle);
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      box.appendChild(table);
+      container.appendChild(box);
+    });
+  }
+
+  function saveColors() {
+    const status = loadColorStatus();
+
+    Object.values(PRODUCTS).forEach((product) => {
+      if (!status[product.id]) status[product.id] = {};
+    });
+
+    document
+      .querySelectorAll('input[type="checkbox"][data-product-id]')
+      .forEach((input) => {
+        const pId = input.dataset.productId;
+        const colorName = input.dataset.colorName;
+        const enabled = input.checked;
+        status[pId][colorName] = enabled;
+      });
+
+    localStorage.setItem(COLOR_STATUS_KEY, JSON.stringify(status));
+
+    const s = document.getElementById("save-status");
+    s.textContent = "تم حفظ التعديلات بنجاح ✅";
+    setTimeout(() => {
+      s.textContent = "";
+    }, 2000);
+
+    renderProductsColors(); // نعيد الريندر عشان تحديث نص "شغال/متوقف"
+  }
+
+  function updateVisitCounter() {
+    const key = "tefa_admin_visits";
+    let v = 0;
+    try {
+      v = parseInt(localStorage.getItem(key) || "0", 10);
+    } catch (e) {
+      v = 0;
     }
-  });
-</script>
+    v++;
+    localStorage.setItem(key, String(v));
+    const el = document.getElementById("visit-count");
+    if (el) el.textContent = v;
+  }
 
+  updateVisitCounter();
+  renderProductsColors();
+</script>
 </body>
 </html>
