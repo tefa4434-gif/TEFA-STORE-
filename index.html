@@ -14,6 +14,10 @@
   <h1 class="text-2xl font-extrabold">TEFA STORE</h1>
   <a href="cart.html" class="relative text-3xl">
     🛒
+    <!-- شارة عدد القطع -->
+    <span id="cartCount"
+          class="hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
+    </span>
   </a>
 </header>
 
@@ -27,12 +31,17 @@
     أطقم حريمي جاهزة للخروجات<br>والمناسبات
   </h2>
 
-  <p class="text-xl font-semibold mb-3">
+  <p class="text-xl font-semibold mb-2">
     اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️
   </p>
 
+  <!-- كود الخصم للتشجيع -->
+  <p class="text-base md:text-lg text-green-700 font-bold mb-3">
+    خصم 10٪ على أول أوردر بكود: <span class="underline">TEFA4434</span> 🎁
+  </p>
+
   <!-- شريط العرض المحدود + العداد -->
-  <div class="mt-4 inline-flex flex-col items-center gap-2">
+  <div class="mt-2 inline-flex flex-col items-center gap-2">
     <span class="inline-flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm">
       🔥 خصم كبير لفترة محدودة
     </span>
@@ -126,7 +135,7 @@
       <h4 class="text-xl font-semibold mb-1">عباية زراير كبس</h4>
       <p class="text-sm text-gray-600 mb-1">جوخ ليكرا – شتوي أنيق</p>
       <p class="line-through text-gray-400 text-sm">1049 ج</p>
-      <span class="text-4xl font-extrabold text-black">749 ج</span>
+      <span class="text-4xl font-extrabولد text-black">749 ج</span>
     </a>
 
   </div>
@@ -138,7 +147,6 @@
   <p>جميع الحقوق محفوظة © 2025</p>
 </footer>
 
-<!-- سكربت: عداد الزوار + العداد التنازلي -->
 <script>
   (function () {
     // ====== عداد الزوار (يُستخدم في لوحة التحكم) ======
@@ -148,7 +156,6 @@
     localStorage.setItem(viewsKey, v);
 
     // ====== العداد التنازلي ======
-    // نخلي نهاية العرض بعد 3 أيام من أول زيارة، ونحفظها في localStorage
     const saleKey = "store_sale_end";
     let end = localStorage.getItem(saleKey);
 
@@ -201,6 +208,31 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    // ====== شارة عدد القطع في السلة ======
+    function updateCartCount() {
+      let count = 0;
+      try {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        cart.forEach(item => {
+          count += item.qty || 0;
+        });
+      } catch(e) {}
+      const badge = document.getElementById("cartCount");
+      if (!badge) return;
+      if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove("hidden");
+      } else {
+        badge.classList.add("hidden");
+      }
+    }
+
+    updateCartCount();
+    // لو فتحت صفحة جديدة وعدّلت السلة في صفحة تانية، storage event يحدث تحديث
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") updateCartCount();
+    });
   })();
 </script>
 

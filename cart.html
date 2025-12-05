@@ -143,7 +143,6 @@
 </main>
 
 <script>
-// ==== تحميل السلة من localStorage ====
 function loadCart() {
   try {
     return JSON.parse(localStorage.getItem("cart") || "[]");
@@ -156,6 +155,7 @@ function saveCart(cart) {
 }
 
 const cart = loadCart();
+
 const cartItemsEl   = document.getElementById("cartItems");
 const emptyMsgEl    = document.getElementById("emptyMsg");
 const itemsTotalEl  = document.getElementById("itemsTotal");
@@ -172,11 +172,16 @@ let shipping   = 0;
 let discount   = 0;
 let grandTotal = 0;
 
-// رسم محتوى السلة
+// ===== حذف عنصر من السلة =====
+function removeItem(index) {
+  cart.splice(index, 1);
+  saveCart(cart);
+  renderCart();
+}
+
+// ===== رسم السلة =====
 function renderCart() {
   cartItemsEl.innerHTML = "";
-  itemsTotal = 0;
-
   if (!cart.length) {
     emptyMsgEl.classList.remove("hidden");
   } else {
@@ -185,8 +190,6 @@ function renderCart() {
 
   cart.forEach((item, index) => {
     const lineTotal = item.price * item.qty;
-    itemsTotal += lineTotal;
-
     const div = document.createElement("div");
     div.className = "flex justify-between items-center border rounded-xl p-2";
     div.innerHTML = `
@@ -195,7 +198,12 @@ function renderCart() {
         <div class="text-xs text-gray-600">اللون: ${item.color}</div>
         <div class="text-xs text-gray-600">الكمية: ${item.qty}</div>
       </div>
-      <div class="text-sm font-semibold">${lineTotal} ج</div>
+      <div class="flex flex-col items-end text-sm">
+        <div class="font-semibold mb-1">${lineTotal} ج</div>
+        <button type="button"
+          class="text-xs text-red-600"
+          onclick="removeItem(${index})">حذف</button>
+      </div>
     `;
     cartItemsEl.appendChild(div);
   });
@@ -203,15 +211,15 @@ function renderCart() {
   updateTotals();
 }
 
-// حساب الشحن
+// ===== الشحن =====
 function calcShipping() {
   const gov = governorateEl.value || "";
   if (!cart.length) return 0;
-  if (gov.includes("القاهرة")) return 60; // القاهرة 60
-  return 70; // باقي المحافظات 70
+  if (gov.includes("القاهرة")) return 60;
+  return 70;
 }
 
-// التحقق هل رقم الهاتف أخذ خصم قبل كده
+// ===== هل ده أول أوردر للرقم؟ =====
 function isFirstOrderForPhone(phone) {
   try {
     const orders = JSON.parse(localStorage.getItem("orders") || "[]");
@@ -224,12 +232,11 @@ function isFirstOrderForPhone(phone) {
   }
 }
 
-// حساب الخصم والإجمالي
+// ===== حساب الإجماليات (قبل الخصم الفعلي) =====
 function updateTotals() {
-  const gov = governorateEl.value || "";
-  shipping = calcShipping();
+  itemsTotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  shipping   = calcShipping();
 
-  // حساب الخصم بناءً على الكود
   const code = (couponInput.value || "").trim().toUpperCase();
   discount = 0;
   couponMsg.textContent = "";
@@ -237,7 +244,6 @@ function updateTotals() {
 
   if (code) {
     if (code === "TEFA4434") {
-      // هنقرر إذا ينطبق الخصم عند حفظ الأوردر فعليًا
       couponMsg.textContent = "سيتم تطبيق خصم 10٪ إذا كان هذا أول طلب بهذا الرقم.";
       couponMsg.classList.add("text-green-700");
     } else {
@@ -260,9 +266,8 @@ couponInput.addEventListener("input", updateTotals);
 // أول رسم
 renderCart();
 
-// ==== حفظ الطلب في localStorage ====
+// ===== حفظ الطلب =====
 const orderForm = document.getElementById("orderForm");
-
 orderForm.addEventListener("submit", function (e) {
   e.preventDefault();
   if (!cart.length) {
@@ -287,21 +292,23 @@ orderForm.addEventListener("submit", function (e) {
     return;
   }
 
-  // إعادة حساب الإجماليات
+  // نعيد حساب الإجماليات هنا
   itemsTotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   shipping   = calcShipping();
   discount   = 0;
-
   let discountApplied = false;
 
   if (code === "TEFA4434" && isFirstOrderForPhone(phone1)) {
-    discount = Math.round((itemsTotal + shipping) * 0.10); // 10٪ تقريبا
+    discount = Math.round((itemsTotal + shipping) * 0.10);
     discountApplied = true;
   }
 
   grandTotal = itemsTotal + shipping - discount;
 
-  // نص ملخص المنتجات
+  // تحديث الأرقام الظاهرة للعميل
+  discountEl.textContent   = discount + " ج";
+  grandTotalEl.textContent = grandTotal + " ج";
+
   const productSummary = cart.map(i =>
     `${i.name} - لون: ${i.color} - عدد: ${i.qty} - ${i.price * i.qty}ج`
   ).join("\n");
@@ -327,7 +334,6 @@ orderForm.addEventListener("submit", function (e) {
     time: new Date().toLocaleString("ar-EG")
   };
 
-  // حفظ في localStorage
   let orders = [];
   try {
     orders = JSON.parse(localStorage.getItem("orders") || "[]");
@@ -337,22 +343,20 @@ orderForm.addEventListener("submit", function (e) {
   orders.push(order);
   localStorage.setItem("orders", JSON.stringify(orders));
 
-  // تحديث العرض بعد الخصم
-  discountEl.textContent = discount + " ج";
-  grandTotalEl.textContent = grandTotal + " ج";
+  // ✅ رسالة تأكيد للعميل فيها الإجمالي بعد الخصم
+  formMsg.textContent = discountApplied
+    ? `تم تسجيل الطلب مع خصم 10٪ لك كأول طلب 🎉 — الإجمالي المستحق عليك: ${grandTotal} ج`
+    : `تم تسجيل الطلب بنجاح ✅ — الإجمالي المستحق عليك: ${grandTotal} ج`;
+  formMsg.className = "text-center text-sm mt-2 text-green-700";
 
   // تفريغ السلة
   saveCart([]);
   cart.length = 0;
   renderCart();
 
-  formMsg.textContent = discountApplied
-    ? "تم تسجيل الطلب مع خصم 10٪ لك كأول طلب 🎉"
-    : "تم تسجيل الطلب بنجاح ✅";
-  formMsg.className = "text-center text-sm mt-2 text-green-700";
-
+  // نسيب المحافظة زي ما هي عشان الشحن
   orderForm.reset();
-  governorateEl.value = gov; // نخليه زي ما هو عشان الشحن
+  governorateEl.value = gov;
   updateTotals();
 });
 </script>

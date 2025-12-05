@@ -9,22 +9,26 @@
 
 <body class="bg-gray-100 font-sans">
 
-<!-- هيدر -->
 <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-40">
   <a href="index.html" class="text-sm">⬅ الرجوع للمتجر</a>
   <span class="font-bold text-lg">TEFA STORE</span>
-  <a href="cart.html" class="text-2xl">🛒</a>
+  <a href="cart.html" class="relative text-2xl">
+    🛒
+    <span id="cartCount"
+          class="hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
+    </span>
+  </a>
 </header>
 
 <main class="max-w-md mx-auto p-4">
   <div id="productContainer"></div>
 </main>
 
-<!-- صوت إضافة للسلة (ارفع ملف add-to-cart.mp3 في جت هب) -->
+<!-- صوت إضافة للسلة -->
 <audio id="addSound" src="add-to-cart.mp3" preload="auto"></audio>
 
 <script>
-// ======================= بيانات المنتجات (مطابقة لأسماء الصور عندك) =======================
+// ======================= بيانات المنتجات =======================
 const PRODUCTS = {
   rozalin: {
     name: "طقم روزالين 3 قطع",
@@ -64,7 +68,7 @@ const PRODUCTS = {
     mainImg: "toonz-main.jpg",
     desc: "شمواه × شمواه – وان سايز من 60 لـ 90 ك.",
     colors: [
-      { label: "أزرق",  hex: "#1e3a8a", img: "toonz-main.jpg" }, // مفيش صورة منفصلة، نستخدم الكولاج
+      { label: "أزرق",  hex: "#1e3a8a", img: "toonz-main.jpg" },
       { label: "بينك",  hex: "#ec4899", img: "toonz-pink.jpg" },
       { label: "بيج",   hex: "#ead7b7", img: "toonz-beige.jpg" },
       { label: "زيتي",  hex: "#6b8f71", img: "toonz-olive.jpg" },
@@ -99,23 +103,20 @@ function loadDisabledColors() {
   }
 }
 const disabledColors = loadDisabledColors();
-
 function isColorDisabled(pid, label) {
-  return disabledColors[pid] && disabledColors[pid][label] === false;
+  return !!(disabledColors[pid] && disabledColors[pid][label]);
 }
 
-// ======================= تحميل المنتج من الـ URL =======================
+// ======================= تحميل المنتج =======================
 const params = new URLSearchParams(location.search);
 const productId = params.get("id") || "rozalin";
 const product = PRODUCTS[productId] || PRODUCTS.rozalin;
 
 let qty = 1;
-
-// أول لون شغّال (مش موقوف)
 let selectedColorIndex = product.colors.findIndex(c => !isColorDisabled(productId, c.label));
 if (selectedColorIndex === -1) selectedColorIndex = 0;
 
-// ======================= رسم صفحة المنتج =======================
+// ======================= رسم الصفحة =======================
 const container = document.getElementById("productContainer");
 container.innerHTML = `
   <div class="bg-white rounded-3xl shadow p-4">
@@ -156,7 +157,6 @@ container.innerHTML = `
       إضافة إلى السلة
     </button>
 
-    <!-- رسالة نجاح عند إضافة اللون -->
     <p id="successMsg"
        class="hidden text-center mt-3 font-bold text-sm rounded-2xl px-3 py-2">
       ✅ تمت إضافة اللون بنجاح 🥰
@@ -164,7 +164,6 @@ container.innerHTML = `
   </div>
 `;
 
-// ======================= تهيئة دوائر الألوان =======================
 const colorsRow  = document.getElementById("colorsRow");
 const mainImg    = document.getElementById("mainImg");
 const qtyValue   = document.getElementById("qtyValue");
@@ -173,6 +172,31 @@ const decQtyBtn  = document.getElementById("decQty");
 const addBtn     = document.getElementById("addToCartBtn");
 const successMsg = document.getElementById("successMsg");
 const addSound   = document.getElementById("addSound");
+
+// ======================= شارة السلة =======================
+function updateCartCount() {
+  let count = 0;
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    cart.forEach(item => {
+      count += item.qty || 0;
+    });
+  } catch(e) {}
+  const badge = document.getElementById("cartCount");
+  if (!badge) return;
+  if (count > 0) {
+    badge.textContent = count;
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+updateCartCount();
+
+// لو السلة اتعدلت من صفحة أخرى
+window.addEventListener("storage", (e) => {
+  if (e.key === "cart") updateCartCount();
+});
 
 mainImg.dataset.main = product.mainImg;
 mainImg.onerror = function () {
@@ -186,8 +210,7 @@ product.colors.forEach((col, idx) => {
   const disabled = isColorDisabled(productId, col.label);
 
   const dot = document.createElement("span");
-  dot.className =
-    "w-10 h-10 rounded-full border cursor-pointer transition";
+  dot.className = "w-10 h-10 rounded-full border cursor-pointer transition";
   dot.style.backgroundColor = col.hex;
   dot.dataset.index = idx;
   dot.dataset.disabled = disabled ? "1" : "0";
@@ -218,8 +241,6 @@ function updateSelectedColor() {
     mainImg.src = mainImg.dataset.main;
   }
 }
-
-// أول تحديث
 updateSelectedColor();
 
 colorsRow.addEventListener("click", (e) => {
@@ -235,12 +256,11 @@ colorsRow.addEventListener("click", (e) => {
   updateSelectedColor();
 });
 
-// ======================= الكمية =======================
+// الكمية
 incQtyBtn.addEventListener("click", () => {
   qty++;
   qtyValue.textContent = qty;
 });
-
 decQtyBtn.addEventListener("click", () => {
   if (qty > 1) {
     qty--;
@@ -248,7 +268,7 @@ decQtyBtn.addEventListener("click", () => {
   }
 });
 
-// ======================= السلة (localStorage) =======================
+// السلة
 function loadCart() {
   try {
     return JSON.parse(localStorage.getItem("cart") || "[]");
@@ -260,38 +280,44 @@ function saveCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+function isDarkColor(hex) {
+  const h = hex.replace("#","");
+  if (h.length !== 6) return false;
+  const r = parseInt(h.substr(0,2), 16);
+  const g = parseInt(h.substr(2,2), 16);
+  const b = parseInt(h.substr(4,2), 16);
+  const brightness = (r*299 + g*587 + b*114) / 1000;
+  return brightness < 140;
+}
+
 addBtn.addEventListener("click", () => {
   const col = product.colors[selectedColorIndex];
-
   if (!col || isColorDisabled(productId, col.label)) {
     alert("هذا اللون موقوف ولا يمكن طلبه حاليًا ❌");
     return;
   }
 
   const cart = loadCart();
-
   cart.push({
-    productId: productId,
+    productId,
     name: product.name,
     price: product.price,
     color: col.label,
     colorHex: col.hex,
-    qty: qty
+    qty
   });
-
   saveCart(cart);
 
-  // ✅ رسالة نجاح بنفس لون اللون
+  // تحديث شارة السلة
+  updateCartCount();
+
+  // رسالة نجاح بنفس لون اللون
   successMsg.style.backgroundColor = col.hex;
-  // لو اللون غامق نخلي الخط أبيض، لو فاتح نخليه أسود
   successMsg.style.color = isDarkColor(col.hex) ? "#ffffff" : "#000000";
-
   successMsg.classList.remove("hidden");
-  setTimeout(() => {
-    successMsg.classList.add("hidden");
-  }, 2000);
+  setTimeout(() => successMsg.classList.add("hidden"), 2000);
 
-  // 🔊 تشغيل الصوت
+  // صوت
   if (addSound) {
     try {
       addSound.currentTime = 0;
@@ -299,18 +325,6 @@ addBtn.addEventListener("click", () => {
     } catch(e) {}
   }
 });
-
-// دالة بسيطة لتحديد إذا اللون غامق ولا لا
-function isDarkColor(hex) {
-  const h = hex.replace("#","");
-  if (h.length !== 6) return false;
-  const r = parseInt(h.substr(0,2), 16);
-  const g = parseInt(h.substr(2,2), 16);
-  const b = parseInt(h.substr(4,2), 16);
-  // معادلة تقريبية للسطوع
-  const brightness = (r*299 + g*587 + b*114) / 1000;
-  return brightness < 140;
-}
 </script>
 
 </body>
