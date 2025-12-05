@@ -10,335 +10,410 @@
 <body class="bg-gray-100 font-sans">
 
 <!-- شاشة تسجيل الدخول -->
-<section id="loginSection" class="min-h-screen flex items-center justify-center">
-  <div class="bg-white rounded-2xl shadow p-6 w-full max-w-sm text-center">
-    <h1 class="text-2xl font-extrabold mb-1">لوحة تحكم TEFA STORE</h1>
-    <p class="text-sm text-gray-600 mb-4">دخول الأدمن</p>
-
-    <form id="loginForm" class="space-y-3 text-right">
-      <div>
-        <label class="block text-sm mb-1">اسم المستخدم</label>
-        <input id="username" class="w-full border rounded-lg p-2 text-sm" placeholder="admin">
-      </div>
-      <div>
-        <label class="block text-sm mb-1">كلمة السر</label>
-        <input id="password" type="password" class="w-full border rounded-lg p-2 text-sm" placeholder="••••••">
-      </div>
-      <p id="loginError" class="text-xs text-red-600 h-4"></p>
-      <button class="w-full bg-black text-white py-2 rounded-lg font-semibold text-sm">
-        دخول
-      </button>
-    </form>
+<div id="loginScreen" class="min-h-screen flex items-center justify-center">
+  <div class="bg-white rounded-3xl shadow p-6 w-full max-w-sm text-center">
+    <h1 class="text-2xl font-extrabold mb-4">تسجيل دخول لوحة التحكم</h1>
+    <input id="adminUser"
+           type="text"
+           placeholder="اسم المستخدم"
+           class="w-full mb-3 p-2 border rounded-xl text-center">
+    <input id="adminPass"
+           type="password"
+           placeholder="كلمة السر"
+           class="w-full mb-3 p-2 border rounded-xl text-center">
+    <button id="loginBtn"
+            class="w-full bg-black text-white py-2 rounded-2xl font-bold">
+      دخول
+    </button>
+    <p id="loginError" class="text-red-600 text-sm mt-2 hidden">
+      بيانات الدخول غير صحيحة
+    </p>
   </div>
-</section>
+</div>
 
-<!-- لوحة التحكم -->
-<section id="dashboardSection" class="hidden min-h-screen">
-
+<!-- لوحة التحكم الرئيسية -->
+<div id="adminPanel" class="hidden min-h-screen">
   <!-- هيدر -->
   <header class="bg-black text-white p-4 flex justify-between items-center">
-    <div>
-      <h1 class="text-xl font-extrabold">لوحة تحكم TEFA STORE</h1>
-      <p class="text-xs text-gray-300">متابعة الطلبات وإدارة الألوان</p>
-    </div>
-    <button id="logoutBtn" class="text-xs bg-red-600 px-3 py-1 rounded-lg">
+    <h1 class="text-xl font-extrabold">لوحة تحكم TEFA STORE</h1>
+    <button id="logoutBtn"
+            class="bg-red-600 text-white px-4 py-2 rounded-2xl text-sm">
       تسجيل خروج
     </button>
   </header>
 
-  <main class="max-w-6xl mx-auto p-4 space-y-4">
+  <main class="p-4 max-w-5xl mx-auto">
 
-    <!-- كروت ملخص -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">إجمالي الطلبات</p>
-        <p id="totalOrders" class="text-2xl font-extrabold">0</p>
+    <!-- إحصائيات -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <p class="text-sm text-gray-500">إجمالي الطلبات</p>
+        <p id="statTotalOrders" class="text-2xl font-extrabold">0</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">طلبات اليوم</p>
-        <p id="todayOrders" class="text-2xl font-extrabold">0</p>
+      <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <p class="text-sm text-gray-500">طلبات اليوم</p>
+        <p id="statTodayOrders" class="text-2xl font-extrabold">0</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">عدد زوار الموقع (هذا المتصفح)</p>
-        <p id="visitsCount" class="text-2xl font-extrabold">0</p>
+      <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <p class="text-sm text-gray-500">آخر محافظة في الطلبات</p>
+        <p id="statLastGov" class="text-lg font-bold">-</p>
       </div>
-      <div class="bg-white rounded-xl shadow p-3 text-center">
-        <p class="text-xs text-gray-500">آخر محافظة في الطلبات</p>
-        <p id="lastGov" class="text-sm font-semibold">–</p>
+      <div class="bg-white rounded-2xl shadow p-4 text-center">
+        <p class="text-sm text-gray-500">عدد زوار الموقع (هذا المتصفح)</p>
+        <p id="statViews" class="text-2xl font-extrabold">0</p>
       </div>
-    </div>
-
-    <!-- إدارة الموديلات والألوان -->
-    <section class="bg-white rounded-2xl shadow p-4">
-      <h2 class="text-lg font-bold mb-3">إدارة الموديلات و إيقاف الألوان</h2>
-      <p class="text-xs text-gray-500 mb-3">
-        لو عايز توقف لون معيّن، شيّل علامة ✓ من أمامه. اللون الموقوف هيظهر عند العميل باهت و مش هيقدر يطلبه.
-      </p>
-      <div id="modelsColors" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
     </section>
 
-    <!-- جدول الطلبات + إحصائيات المحافظات -->
-    <section class="bg-white rounded-2xl shadow p-4">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
-        <div>
-          <h2 class="text-lg font-bold">قائمة الطلبات</h2>
-          <p class="text-xs text-gray-500">مصنفة من LocalStorage (على هذا المتصفح).</p>
-        </div>
-        <input id="searchInput" placeholder="بحث بالاسم أو التليفون..."
-               class="border rounded-lg px-3 py-1 text-xs w-full md:w-64">
+    <!-- إدارة الموديلات و إيقاف الألوان -->
+    <section class="bg-white rounded-2xl shadow p-4 mb-6">
+      <h2 class="text-xl font-extrabold mb-2">إدارة الموديلات و إيقاف الألوان</h2>
+      <p class="text-xs text-gray-500 mb-3">
+        لو عايز توقف لون معين، شيل علامة ✓ من أمامه. اللون الموقوف هيظهر عند العميل باهت و مش هيقدر يطلبه.
+      </p>
+      <div id="modelsManagement" class="space-y-4"></div>
+    </section>
+
+    <!-- قائمة الطلبات -->
+    <section class="bg-white rounded-2xl shadow p-4 mb-6">
+      <h2 class="text-xl font-extrabold mb-2">قائمة الطلبات</h2>
+      <p class="text-xs text-gray-500 mb-3">
+        الطلبات محفوظة في LocalStorage لهذا المتصفح.
+      </p>
+
+      <!-- بحث و فلاتر -->
+      <div class="flex flex-col md:flex-row gap-2 mb-3">
+        <input id="searchInput"
+               type="text"
+               placeholder="بحث بالاسم أو التليفون..."
+               class="flex-1 border rounded-xl p-2 text-sm">
+        <select id="filterGov"
+                class="border rounded-xl p-2 text-sm">
+          <option value="">كل المحافظات</option>
+        </select>
+        <select id="filterDate"
+                class="border rounded-xl p-2 text-sm">
+          <option value="all">كل الأوقات</option>
+          <option value="today">اليوم فقط</option>
+        </select>
       </div>
 
-      <div class="overflow-x-auto mb-4">
-        <table class="w-full text-xs md:text-sm">
-          <thead>
-            <tr class="border-b bg-gray-100">
-              <th class="p-2">#</th>
-              <th class="p-2">العميل</th>
-              <th class="p-2">التليفون</th>
-              <th class="p-2">المحافظة</th>
-              <th class="p-2">الإجمالي</th>
-              <th class="p-2">المنتجات</th>
-              <th class="p-2">الوقت</th>
-            </tr>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-center border">
+          <thead class="bg-gray-100">
+          <tr>
+            <th class="border p-2">#</th>
+            <th class="border p-2">العميل</th>
+            <th class="border p-2">التليفون</th>
+            <th class="border p-2">المحافظة</th>
+            <th class="border p-2">الإجمالي</th>
+            <th class="border p-2">المنتجات</th>
+            <th class="border p-2">الوقت</th>
+          </tr>
           </thead>
-          <tbody id="ordersBody"></tbody>
+          <tbody id="ordersTableBody">
+          <!-- الصفوف تتولد بالسكربت -->
+          </tbody>
         </table>
       </div>
 
-      <p id="noOrdersMsg" class="text-center text-xs text-gray-500 mt-3 hidden">
-        لا يوجد طلبات محفوظة حتى الآن على هذا المتصفح.
+      <p id="ordersSummary" class="text-xs text-gray-600 mt-2">
+        لا توجد طلبات مسجلة.
       </p>
-
-      <div id="govStatsBox" class="mt-4">
-        <h3 class="text-sm font-bold mb-2">تصنيف الطلبات حسب المحافظة</h3>
-        <div id="govStats" class="flex flex-wrap gap-2 text-xs"></div>
-      </div>
     </section>
 
   </main>
-</section>
+</div>
 
 <script>
-// ---------------- إعداد الدخول ----------------
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "tefa4434";
+// ===================== تسجيل الدخول =====================
+const ADMIN_USERNAME = "tefa";
+const ADMIN_PASSWORD = "4434";
 
-const loginSection   = document.getElementById("loginSection");
-const dashboardSection = document.getElementById("dashboardSection");
-const loginForm      = document.getElementById("loginForm");
-const loginError     = document.getElementById("loginError");
-const logoutBtn      = document.getElementById("logoutBtn");
+const loginScreen = document.getElementById("loginScreen");
+const adminPanel  = document.getElementById("adminPanel");
+const loginBtn    = document.getElementById("loginBtn");
+const logoutBtn   = document.getElementById("logoutBtn");
+const loginError  = document.getElementById("loginError");
 
-const totalOrdersEl  = document.getElementById("totalOrders");
-const todayOrdersEl  = document.getElementById("todayOrders");
-const visitsCountEl  = document.getElementById("visitsCount");
-const lastGovEl      = document.getElementById("lastGov");
-const ordersBodyEl   = document.getElementById("ordersBody");
-const noOrdersMsgEl  = document.getElementById("noOrdersMsg");
-const searchInput    = document.getElementById("searchInput");
-const govStatsEl     = document.getElementById("govStats");
-const modelsColorsEl = document.getElementById("modelsColors");
-
-function showDashboard() {
-  loginSection.classList.add("hidden");
-  dashboardSection.classList.remove("hidden");
-  renderModelsColors();
-  loadOrders();
-  loadVisits();
+function showPanel() {
+  loginScreen.classList.add("hidden");
+  adminPanel.classList.remove("hidden");
+  initDashboard();
 }
 function showLogin() {
-  loginSection.classList.remove("hidden");
-  dashboardSection.classList.add("hidden");
+  adminPanel.classList.add("hidden");
+  loginScreen.classList.remove("hidden");
 }
 
-if (localStorage.getItem("tefa_admin_logged") === "1") {
-  showDashboard();
-}
+(function checkLogin() {
+  const logged = localStorage.getItem("admin_logged_in") === "1";
+  if (logged) showPanel();
+})();
 
-loginForm.addEventListener("submit", e => {
-  e.preventDefault();
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-  if (user === ADMIN_USER && pass === ADMIN_PASS) {
-    localStorage.setItem("tefa_admin_logged", "1");
-    loginError.textContent = "";
-    showDashboard();
+loginBtn.addEventListener("click", () => {
+  const user = document.getElementById("adminUser").value.trim().toLowerCase();
+  const pass = document.getElementById("adminPass").value.trim();
+  if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
+    localStorage.setItem("admin_logged_in", "1");
+    loginError.classList.add("hidden");
+    showPanel();
   } else {
-    loginError.textContent = "اسم المستخدم أو كلمة السر غير صحيحة.";
+    loginError.classList.remove("hidden");
   }
 });
 
 logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("tefa_admin_logged");
-  showLogin();
+  localStorage.removeItem("admin_logged_in");
+  location.reload();
 });
 
-// ---------------- بيانات الموديلات و الألوان (نفس labels الموجودة في product.html) ----------------
-const PRODUCTS_META = {
+// ===================== بيانات المنتجات و الألوان =====================
+const PRODUCT_MODELS = {
   rozalin: {
     name: "طقم روزالين 3 قطع",
-    img: "rozalin-main.jpg",
-    colors: ["كافيه","بيج","موف","زيتي","أسود","سيمون"]
+    colors: [
+      { label: "كافيه", hex: "#8b6a4f" },
+      { label: "بيج",   hex: "#ead7b7" },
+      { label: "موف",   hex: "#7c3aed" },
+      { label: "زيتي",  hex: "#4b7351" },
+      { label: "أسود",  hex: "#000000" },
+      { label: "سيمون", hex: "#f4a6a6" }
+    ]
   },
   formal: {
     name: "طقم فورمال 3 قطع",
-    img: "formal-main.jpg",
-    colors: ["منت","بيبي بلو","بيج","هافان","أسود"]
+    colors: [
+      { label: "منت",      hex: "#98ff98" },
+      { label: "بيبي بلو", hex: "#a7c7ff" },
+      { label: "بيج",      hex: "#ead7b7" },
+      { label: "هافان",    hex: "#8b5a2b" },
+      { label: "أسود",     hex: "#000000" }
+    ]
   },
   toonz: {
     name: "تونز – قطعتين",
-    img: "toonz-main.jpg",
-    colors: ["أزرق","بينك","بيج","زيتي","نبيتي","موف"]
+    colors: [
+      { label: "أزرق",  hex: "#1e3a8a" },
+      { label: "بينك",  hex: "#ec4899" },
+      { label: "بيج",   hex: "#ead7b7" },
+      { label: "زيتي",  hex: "#6b8f71" },
+      { label: "نبيتي", hex: "#6d1b1b" },
+      { label: "موف",   hex: "#7c3aed" }
+    ]
   },
   abaya_btn: {
     name: "عباية زراير كبس",
-    img: "abaya-btn-main.jpg",
-    colors: ["كراميل","نبيتي","رمادي فاتح","زيتي","أسود","رمادي غامق"]
+    colors: [
+      { label: "كراميل",     hex: "#c19a6b" },
+      { label: "نبيتي",      hex: "#6b1b1b" },
+      { label: "رمادي فاتح", hex: "#d1d5db" },
+      { label: "زيتي",       hex: "#6b8f71" },
+      { label: "أسود",       hex: "#000000" },
+      { label: "رمادي غامق", hex: "#374151" }
+    ]
   }
 };
 
-// ---------------- حالة الألوان الموقوفة ----------------
+// disabledColors[productId][colorLabel] = true  => اللون موقوف
 function loadDisabledColors() {
   try {
     return JSON.parse(localStorage.getItem("disabledColors") || "{}");
-  } catch(e) {
+  } catch (e) {
     return {};
   }
 }
-function saveDisabledColors(obj) {
-  localStorage.setItem("disabledColors", JSON.stringify(obj));
-}
-let disabledColors = loadDisabledColors();
-
-// رسم كروت الموديلات و الألوان
-function renderModelsColors() {
-  modelsColorsEl.innerHTML = "";
-  Object.entries(PRODUCTS_META).forEach(([pid, meta]) => {
-    const card = document.createElement("div");
-    card.className = "border rounded-xl p-3 bg-gray-50 flex flex-col gap-2";
-    card.innerHTML = `
-      <div class="flex items-center gap-2 mb-1">
-        <img src="${meta.img}" class="w-10 h-10 rounded-lg object-cover">
-        <div>
-          <p class="text-sm font-bold">${meta.name}</p>
-          <p class="text-[11px] text-gray-500">${pid}</p>
-        </div>
-      </div>
-      <div class="space-y-1 text-[11px]"></div>
-    `;
-    const colorsWrap = card.querySelector("div.space-y-1");
-    meta.colors.forEach(colorLabel => {
-      const pidState = disabledColors[pid] || {};
-      const enabled = pidState[colorLabel] !== false; // الافتراضي شغال
-      const row = document.createElement("div");
-      row.className = "flex items-center justify-between gap-2";
-      row.innerHTML = `
-        <span>${colorLabel}</span>
-        <label class="flex items-center gap-1 text-[11px]">
-          <span class="${enabled ? 'text-green-600' : 'text-red-600'} status-text">
-            ${enabled ? 'مسموح' : 'موقوف'}
-          </span>
-          <input type="checkbox" class="color-toggle" ${enabled ? 'checked' : ''}>
-        </label>
-      `;
-      const checkbox = row.querySelector("input.color-toggle");
-      const statusText = row.querySelector(".status-text");
-      checkbox.addEventListener("change", () => {
-        disabledColors = loadDisabledColors();
-        if (!disabledColors[pid]) disabledColors[pid] = {};
-        disabledColors[pid][colorLabel] = checkbox.checked; // true = شغال, false = موقوف
-        saveDisabledColors(disabledColors);
-        statusText.textContent = checkbox.checked ? "مسموح" : "موقوف";
-        statusText.className =
-          "status-text " + (checkbox.checked ? "text-green-600" : "text-red-600");
-      });
-      colorsWrap.appendChild(row);
-    });
-    modelsColorsEl.appendChild(card);
-  });
+function saveDisabledColors(map) {
+  localStorage.setItem("disabledColors", JSON.stringify(map));
 }
 
-// ---------------- الطلبات و المحافظات ----------------
-function loadOrders(filterText = "") {
-  let orders = [];
+// ===================== الطلبات =====================
+function loadOrders() {
   try {
-    orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    return JSON.parse(localStorage.getItem("orders") || "[]");
   } catch (e) {
-    orders = [];
+    return [];
   }
+}
 
-  orders.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
+// ===================== تهيئة لوحة التحكم =====================
+function initDashboard() {
+  renderStats();
+  renderModelsManagement();
+  renderOrdersTable();
+}
 
-  const f = filterText.trim();
-  if (f) {
-    const fLower = f.toLowerCase();
-    orders = orders.filter(o =>
-      (o.name || "").toLowerCase().includes(fLower) ||
-      (o.phone1 || "").includes(f) ||
-      (o.phone2 || "").includes(f)
-    );
-  }
+// --------- الإحصائيات ---------
+function renderStats() {
+  const orders = loadOrders();
+  const totalOrders = orders.length;
 
-  totalOrdersEl.textContent = orders.length;
+  const today = new Date();
+  today.setHours(0,0,0,0);
 
-  const todayStart = new Date(); todayStart.setHours(0,0,0,0);
-  const todayTs = todayStart.getTime();
-  todayOrdersEl.textContent = orders.filter(o => (o.timestamp || 0) >= todayTs).length;
+  let todayCount = 0;
+  let lastGov = "-";
 
-  if (orders.length > 0) {
-    const last = orders[0];
-    lastGovEl.textContent = last.governorate || "غير محدد";
-  } else {
-    lastGovEl.textContent = "–";
-  }
-
-  ordersBodyEl.innerHTML = "";
-  if (orders.length === 0) {
-    noOrdersMsgEl.classList.remove("hidden");
-  } else {
-    noOrdersMsgEl.classList.add("hidden");
-  }
-
-  const govCounts = {};
-
-  orders.forEach((o, idx) => {
-    const tr = document.createElement("tr");
-    tr.className = "border-b hover:bg-gray-50";
-    tr.innerHTML = `
-      <td class="p-2 text-center">${idx + 1}</td>
-      <td class="p-2">${o.name || ""}</td>
-      <td class="p-2">
-        ${(o.phone1 || "")}${o.phone2 ? "<br>"+o.phone2 : ""}
-      </td>
-      <td class="p-2">${o.governorate || ""}</td>
-      <td class="p-2 text-center">${o.total || ""}</td>
-      <td class="p-2 text-[11px] whitespace-pre-line">${o.product || ""}</td>
-      <td class="p-2 text-[11px]">${o.time || ""}</td>
-    `;
-    ordersBodyEl.appendChild(tr);
-
-    const gov = (o.governorate || "غير محدد").trim();
-    govCounts[gov] = (govCounts[gov] || 0) + 1;
+  orders.forEach(o => {
+    if (o.createdAt) {
+      const d = new Date(o.createdAt);
+      if (!isNaN(d) && d >= today) todayCount++;
+    }
+    if (o.governorate) lastGov = o.governorate;
   });
 
-  // عرض إحصائية المحافظات
-  govStatsEl.innerHTML = "";
-  Object.entries(govCounts).sort((a,b) => b[1] - a[1]).forEach(([gov, count]) => {
-    const chip = document.createElement("span");
-    chip.className = "px-2 py-1 rounded-full bg-gray-100 border text-[11px]";
-    chip.textContent = `${gov}: ${count} طلب`;
-    govStatsEl.appendChild(chip);
+  const views = parseInt(localStorage.getItem("store_total_views") || "0", 10) || 0;
+
+  document.getElementById("statTotalOrders").textContent = totalOrders;
+  document.getElementById("statTodayOrders").textContent = todayCount;
+  document.getElementById("statLastGov").textContent   = lastGov || "-";
+  document.getElementById("statViews").textContent      = views;
+}
+
+// --------- إدارة الموديلات / الألوان ---------
+function renderModelsManagement() {
+  const container = document.getElementById("modelsManagement");
+  container.innerHTML = "";
+  const disabledMap = loadDisabledColors();
+
+  Object.keys(PRODUCT_MODELS).forEach(pid => {
+    const model = PRODUCT_MODELS[pid];
+    const card = document.createElement("div");
+    card.className = "border rounded-2xl p-3";
+
+    const title = document.createElement("h3");
+    title.className = "font-bold mb-2";
+    title.textContent = model.name;
+    card.appendChild(title);
+
+    const colorsWrap = document.createElement("div");
+    colorsWrap.className = "flex flex-wrap gap-3";
+
+    model.colors.forEach(col => {
+      const wrapper = document.createElement("label");
+      wrapper.className = "flex items-center gap-1 text-sm";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      const isDisabled = !!(disabledMap[pid] && disabledMap[pid][col.label]);
+      checkbox.checked = !isDisabled;
+
+      checkbox.addEventListener("change", () => {
+        const map = loadDisabledColors();
+        if (!map[pid]) map[pid] = {};
+        map[pid][col.label] = !checkbox.checked; // لو متعلم صح => نشط
+        saveDisabledColors(map);
+      });
+
+      const dot = document.createElement("span");
+      dot.className = "w-4 h-4 rounded-full border";
+      if (col.hex) dot.style.backgroundColor = col.hex;
+
+      const text = document.createElement("span");
+      text.textContent = col.label;
+
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(dot);
+      wrapper.appendChild(text);
+      colorsWrap.appendChild(wrapper);
+    });
+
+    card.appendChild(colorsWrap);
+    container.appendChild(card);
   });
 }
 
-searchInput.addEventListener("input", () => {
-  loadOrders(searchInput.value);
-});
+// --------- جدول الطلبات ---------
+function renderOrdersTable() {
+  const orders       = loadOrders();
+  const tbody        = document.getElementById("ordersTableBody");
+  const summaryEl    = document.getElementById("ordersSummary");
+  const filterGovSel = document.getElementById("filterGov");
 
-// ---------------- عدد الزوار (على هذا المتصفح) ----------------
-function loadVisits() {
-  const v = parseInt(localStorage.getItem("store_total_views") || "0", 10) || 0;
-  visitsCountEl.textContent = v;
+  tbody.innerHTML = "";
+
+  // تعبئة قائمة المحافظات في الفلتر
+  const govSet = new Set();
+  orders.forEach(o => { if (o.governorate) govSet.add(o.governorate); });
+  filterGovSel.innerHTML = '<option value="">كل المحافظات</option>';
+  [...govSet].forEach(g => {
+    const op = document.createElement("option");
+    op.value = g;
+    op.textContent = g;
+    filterGovSel.appendChild(op);
+  });
+
+  function applyFilters() {
+    const search = document.getElementById("searchInput").value.trim().toLowerCase();
+    const gov    = filterGovSel.value;
+    const dateF  = document.getElementById("filterDate").value;
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let filtered = orders.slice();
+
+    if (search) {
+      filtered = filtered.filter(o =>
+        (o.name && o.name.toLowerCase().includes(search)) ||
+        (o.phone && String(o.phone).includes(search))
+      );
+    }
+
+    if (gov) {
+      filtered = filtered.filter(o => o.governorate === gov);
+    }
+
+    if (dateF === "today") {
+      filtered = filtered.filter(o => {
+        if (!o.createdAt) return false;
+        const d = new Date(o.createdAt);
+        if (isNaN(d)) return false;
+        d.setHours(0,0,0,0);
+        return d.getTime() === today.getTime();
+      });
+    }
+
+    tbody.innerHTML = "";
+    filtered.forEach((o, idx) => {
+      const tr = document.createElement("tr");
+
+      const productsText = (o.items || o.products || [])
+        .map(it => `${it.name || it.productName || ""} (${it.color || ""} × ${it.qty || 1})`)
+        .join("، ");
+
+      const total = o.total || o.totalPrice || 0;
+
+      const created = o.createdAt ? new Date(o.createdAt) : null;
+      const timeStr = created && !isNaN(created)
+        ? created.toLocaleString("ar-EG")
+        : "-";
+
+      tr.innerHTML = `
+        <td class="border p-2">${idx + 1}</td>
+        <td class="border p-2">${o.name || "-"}</td>
+        <td class="border p-2">${o.phone || "-"}</td>
+        <td class="border p-2">${o.governorate || "-"}</td>
+        <td class="border p-2">${total} ج</td>
+        <td class="border p-2 text-xs">${productsText || "-"}</td>
+        <td class="border p-2 text-xs">${timeStr}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (!filtered.length) {
+      summaryEl.textContent = "لا توجد طلبات مطابقة للفلاتر الحالية.";
+    } else {
+      summaryEl.textContent = `إجمالي الطلبات المعروضة: ${filtered.length}`;
+    }
+  }
+
+  // أول رسم
+  applyFilters();
+
+  // أحداث الفلتر والبحث
+  document.getElementById("searchInput").addEventListener("input", applyFilters);
+  filterGovSel.addEventListener("change", applyFilters);
+  document.getElementById("filterDate").addEventListener("change", applyFilters);
 }
 </script>
 

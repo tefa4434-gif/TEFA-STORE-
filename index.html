@@ -5,6 +5,13 @@
   <title>TEFA STORE | أطقم حريمي جاهزة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Meta للفيس بوك (اختياري) -->
+  <meta property="og:title" content="TEFA STORE | أطقم حريمي جاهزة">
+  <meta property="og:description" content="اطلبي وانتِ مطمئنة وعايني قبل الاستلام 🥰❤️ خصم 10٪ لأول أوردر بكود TEFA4434">
+  <meta property="og:image" content="https://tefa4434-gif.github.io/TEFA-STORE-/rozalin-main.jpg">
+  <meta property="og:url" content="https://tefa4434-gif.github.io/TEFA-STORE-/">
+  <meta property="og:type" content="website">
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -12,13 +19,19 @@
 <!-- الهيدر -->
 <header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-50">
   <h1 class="text-2xl font-extrabold">TEFA STORE</h1>
-  <a href="cart.html" class="relative text-3xl">
-    🛒
-    <!-- شارة عدد القطع -->
-    <span id="cartCount"
-          class="hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
-    </span>
-  </a>
+
+  <div class="flex items-center gap-4">
+    <!-- لينك لوحة التحكم (تقدر تخليه مخفي لو حابب) -->
+    <a href="admin.html" class="hidden text-xs text-gray-500 md:inline-block">لوحة التحكم</a>
+
+    <a href="cart.html" class="relative text-3xl">
+      🛒
+      <!-- شارة عدد القطع -->
+      <span id="cartCount"
+            class="hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
+      </span>
+    </a>
+  </div>
 </header>
 
 <!-- البانر الرئيسي + العداد التنازلي -->
@@ -149,7 +162,7 @@
 
 <script>
   (function () {
-    // ====== عداد الزوار (يُستخدم في لوحة التحكم) ======
+    // ====== عداد الزوار (لهذا المتصفح فقط) ======
     const viewsKey = "store_total_views";
     let v = parseInt(localStorage.getItem(viewsKey) || "0", 10) || 0;
     v++;
@@ -229,7 +242,6 @@
     }
 
     updateCartCount();
-    // لو فتحت صفحة جديدة وعدّلت السلة في صفحة تانية، storage event يحدث تحديث
     window.addEventListener("storage", (e) => {
       if (e.key === "cart") updateCartCount();
     });
