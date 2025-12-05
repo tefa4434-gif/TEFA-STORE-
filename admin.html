@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>لوحة التحكم - TEFA STORE</title>
+  <title>لوحة التحكم - ألوان الموديلات | TEFA STORE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
@@ -192,7 +192,7 @@
   <section class="card">
     <div class="card-title">
       <span>التحكم في ألوان الموديلات</span>
-      <span class="tag">دون لمس الأوردرات أو الشيت</span>
+      <span class="tag">مرتبط مباشرة بصفحة المنتج</span>
     </div>
     <p class="stat">
       شيل علامة التفعيل من أي لون عشان يتوقف في صفحة المنتج، و احفظ التعديلات.
@@ -206,55 +206,55 @@
 </div>
 
 <script>
-  const COLOR_STATUS_KEY = "tefa_color_status_v1";
+  // نفس المفتاح اللي product.html بيقراه
+  const COLOR_STATUS_KEY = "tefa_color_status";
 
+  // نفس الموديلات و الألوان اللي في product.html (keys + أسماء)
   const PRODUCTS = {
     rozalin: {
       id: "rozalin",
       title: "طقم روزالين 3 قطع",
       colors: [
-        { name: "كافيه", code: "#c8a27a" },
-        { name: "بيج", code: "#e7d4b5" },
-        { name: "موف", code: "#c084fc" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "أسود", code: "#111827" },
-        { name: "سيمون", code: "#f9a8a8" },
-        { name: "موف غامق", code: "#7c3aed" }
+        { key: "kafeh", label: "كافيه",   code: "#8b5a2b" },
+        { key: "beige", label: "بيج",     code: "#e3c8a3" },
+        { key: "mov",   label: "موف",     code: "#5b185e" },
+        { key: "zyti",  label: "زيتي",    code: "#3f5f3a" },
+        { key: "black", label: "أسود",    code: "#111111" },
+        { key: "simon", label: "سيمون",   code: "#f8a8a0" }
       ]
     },
     formal: {
       id: "formal",
       title: "طقم فورمال 3 قطع",
       colors: [
-        { name: "منت", code: "#7cd3aa" },
-        { name: "بيبي بلو", code: "#93c5fd" },
-        { name: "بيج", code: "#e7d4b5" },
-        { name: "هافان", code: "#b45309" },
-        { name: "أسود", code: "#111827" }
+        { key: "ment",     label: "منت",      code: "#3f7f6d" },
+        { key: "babyblue", label: "بيبي بلو", code: "#9fd3ff" },
+        { key: "beige",    label: "بيج",      code: "#e3c8a3" },
+        { key: "havan",    label: "هافان",    code: "#8b5a2b" },
+        { key: "black",    label: "أسود",     code: "#111111" }
       ]
     },
     abaya: {
       id: "abaya",
       title: "عباية زراير كبس",
       colors: [
-        { name: "أسود", code: "#111827" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "رمادي فاتح", code: "#d1d5db" },
-        { name: "نبيتي", code: "#7f1d1d" },
-        { name: "كاراميل", code: "#b45309" },
-        { name: "رمادي غامق", code: "#4b5563" }
+        { key: "black",    label: "أسود",        code: "#111111" },
+        { key: "green",    label: "زيتي",        code: "#4b6b4b" },
+        { key: "burgundy", label: "عنابي",       code: "#6a102b" },
+        { key: "lightgray",label: "رمادي فاتح",  code: "#d1d5db" },
+        { key: "caramel",  label: "كراميل",     code: "#c57a3a" },
+        { key: "darkgray", label: "رمادي غامق",  code: "#4b5563" }
       ]
     },
     toonz: {
       id: "toonz",
-      title: "موديل تونز قطعتين",
+      title: "طقم تونز قطعتين",
       colors: [
-        { name: "أزرق", code: "#1d4ed8" },
-        { name: "بينك", code: "#f9a8d4" },
-        { name: "أوف وايت", code: "#fef9c3" },
-        { name: "زيتي", code: "#4b7350" },
-        { name: "نبيتي", code: "#7f1d1d" },
-        { name: "بنفسجي", code: "#7c3aed" }
+        { key: "beige",   label: "بيج",      code: "#e3c8a3" },
+        { key: "olive",   label: "زيتي",     code: "#3f5f3a" },
+        { key: "wine",    label: "نبيتي",    code: "#7f1d1d" },
+        { key: "purple",  label: "موف",      code: "#6b21a8" },
+        { key: "pink",    label: "بنفسجي",   code: "#f9a8d4" }
       ]
     }
   };
@@ -265,6 +265,10 @@
     } catch (e) {
       return {};
     }
+  }
+
+  function saveColorStatus(status) {
+    localStorage.setItem(COLOR_STATUS_KEY, JSON.stringify(status));
   }
 
   function renderProductsColors() {
@@ -307,21 +311,23 @@
 
       const productStatus = status[product.id] || {};
 
-      product.colors.forEach((c, idx) => {
+      product.colors.forEach((c) => {
         const tr = document.createElement("tr");
+
+        // الافتراض: اللون شغال لو مش متخزن false
+        const enabled =
+          typeof productStatus[c.key] === "undefined"
+            ? true
+            : !!productStatus[c.key];
 
         const tdName = document.createElement("td");
         tdName.innerHTML =
           '<span class="color-dot" style="background:' +
           c.code +
           '"></span>' +
-          c.name;
+          c.label;
 
         const tdState = document.createElement("td");
-        const enabled =
-          typeof productStatus[c.name] === "undefined"
-            ? true
-            : !!productStatus[c.name];
         tdState.textContent = enabled ? "شغال" : "متوقف";
         tdState.style.color = enabled ? "#4ade80" : "#f97316";
 
@@ -335,7 +341,7 @@
         input.type = "checkbox";
         input.checked = enabled;
         input.dataset.productId = product.id;
-        input.dataset.colorName = c.name;
+        input.dataset.colorKey = c.key;
 
         const slider = document.createElement("span");
         slider.className = "slider";
@@ -359,20 +365,22 @@
   function saveColors() {
     const status = loadColorStatus();
 
+    // تأكد أن في كائن لكل موديل
     Object.values(PRODUCTS).forEach((product) => {
       if (!status[product.id]) status[product.id] = {};
     });
 
+    // اقرأ حالة كل سويتش
     document
       .querySelectorAll('input[type="checkbox"][data-product-id]')
       .forEach((input) => {
         const pId = input.dataset.productId;
-        const colorName = input.dataset.colorName;
+        const colorKey = input.dataset.colorKey;
         const enabled = input.checked;
-        status[pId][colorName] = enabled;
+        status[pId][colorKey] = enabled; // true = شغال، false = متوقف
       });
 
-    localStorage.setItem(COLOR_STATUS_KEY, JSON.stringify(status));
+    saveColorStatus(status);
 
     const s = document.getElementById("save-status");
     s.textContent = "تم حفظ التعديلات بنجاح ✅";
@@ -380,7 +388,7 @@
       s.textContent = "";
     }, 2000);
 
-    renderProductsColors(); // نعيد الريندر عشان تحديث نص "شغال/متوقف"
+    renderProductsColors(); // نعيد العرض عشان نص "شغال / متوقف" يتحدث
   }
 
   function updateVisitCounter() {

@@ -318,6 +318,7 @@
 
   <script>
     const CART_KEY = 'tefa_cart';
+    const COLOR_STATUS_KEY = 'tefa_color_status'; // تخزين حالة الألوان
 
     function getCart() {
       try {
@@ -341,6 +342,18 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
+    // قراءة حالة الألوان من localStorage (تكتبها صفحة التحكم)
+    function getColorStatus() {
+      try {
+        const raw = localStorage.getItem(COLOR_STATUS_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
     // تعريف المنتجات والألوان
     const PRODUCTS = {
       rozalin: {
@@ -351,7 +364,7 @@
         price: 749,
         oldPrice: 999,
         mainImage: 'rozalin-main.jpg',
-        // ترتيب الألوان زي ما بتحبي: كافيه – بيج – موف – زيتي – أسود – سيمون
+        // ترتيب الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون
         colors: [
           { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
           { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
@@ -420,7 +433,6 @@
     function showToast(message, colorHex) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
-      // خلي لون الرسالة نفس لون الموديل (مع درجة أغمق بسيطة للنص يبان)
       if (colorHex) {
         toast.style.background = colorHex;
         toast.style.color = '#fff';
@@ -457,8 +469,19 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // رسم دوائر الألوان
+      // نجيب حالة الألوان من لوحة التحكم (لو موجودة)
+      const colorStatusAll = getColorStatus();
+      const productColorStatus = colorStatusAll[product.key] || {};
+
+      // رسم دوائر الألوان مع احترام حالة التشغيل/الإيقاف
       product.colors.forEach(color => {
+        const status = productColorStatus[color.key];
+
+        // لو الحالة false أو 0 → اللون متوقف، نخبيه من الواجهة
+        if (status === false || status === 0) {
+          return;
+        }
+
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'color-dot';
@@ -533,6 +556,7 @@
             sound.currentTime = 0;
             sound.play().catch(() => {});
           } catch (e) {}
+
         }
 
         showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
