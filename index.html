@@ -3,265 +3,544 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEFA STORE | أطقم حريمي جاهزة</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>TEFA STORE - أطقم روزالين و فورمال</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f3f3;
+      color: #111;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Top bar */
+    .top-bar {
+      background: #111;
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .countdown {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Header */
+    header {
+      background: #f3f3f3;
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .store-name {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .store-sub {
+      font-size: 13px;
+      color: #555;
+      margin-top: 2px;
+    }
+
+    .cart-icon-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+    }
+    .cart-icon-wrapper span {
+      font-size: 20px;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #ff3b30;
+      color: #fff;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* Hero section */
+    .hero {
+      background: #ffffff;
+      margin-top: 12px;
+      border-radius: 18px;
+      padding: 20px 18px 18px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      background: #fff4e5;
+      color: #b45309;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .hero-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .hero-title span {
+      color: #b91c1c;
+    }
+    .hero-text {
+      font-size: 15px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .hero-bullets {
+      font-size: 14px;
+      color: #333;
+      margin: 6px 0 10px;
+    }
+    .hero-bullets li {
+      margin-bottom: 3px;
+    }
+    .hero-guarantee {
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #111;
+    }
+    .hero-guarantee span {
+      color: #16a34a;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 10px 16px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      background: #111;
+      color: #fff;
+      flex: 1;
+    }
+    .btn-outline {
+      background: #fff;
+      color: #111;
+      border: 1px solid #ddd;
+      flex: 1;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .feature-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .feature-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .feature-title {
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .feature-text {
+      color: #555;
+      font-size: 12px;
+    }
+
+    /* Discount banner */
+    .discount-banner {
+      margin-top: 16px;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+    }
+    .discount-code {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .discount-small {
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    /* Products */
+    .section-title {
+      margin-top: 20px;
+      margin-bottom: 6px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 720px) {
+      .hero-title { font-size: 28px; }
+      .products-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .product-img-wrapper {
+      position: relative;
+      background: #e5e5e5;
+    }
+    .product-img-wrapper img {
+      width: 100%;
+      display: block;
+    }
+    .product-discount-tag {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #b91c1c;
+      color: #fff;
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 999px;
+    }
+
+    .product-body {
+      padding: 10px 12px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .product-name {
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .product-desc {
+      font-size: 12px;
+      color: #555;
+    }
+    .product-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .product-price {
+      font-size: 17px;
+      font-weight: 800;
+      color: #16a34a;
+    }
+    .product-oldprice {
+      font-size: 12px;
+      color: #9ca3af;
+      text-decoration: line-through;
+    }
+    .product-note {
+      font-size: 12px;
+      color: #555;
+    }
+
+    .product-footer {
+      margin-top: 8px;
+    }
+    .product-footer .btn-primary {
+      width: 100%;
+      font-size: 14px;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body>
+  <!-- شريط العد التنازلي -->
+  <div class="top-bar">
+    <span>⏰ ينتهي عرض الخصم خلال:</span>
+    <span class="countdown" id="countdown">-- : -- : -- : --</span>
+  </div>
 
   <!-- الهيدر -->
-  <header class="bg-white shadow sticky top-0 z-20">
-    <div class="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
-          TS
-        </div>
-        <div>
-          <h1 class="text-xl font-extrabold tracking-wide">TEFA STORE</h1>
-          <p class="text-xs text-gray-500">متجر أطقم حريمي روزالين و فورمال</p>
-        </div>
+  <header>
+    <div class="header-inner">
+      <div>
+        <div class="store-name">TEFA STORE</div>
+        <div class="store-sub">متجر أطقم حريمي روزالين و فورمال جاهزة للخروجات والمناسبات</div>
       </div>
-
-      <!-- أيقونة السلة -->
-      <a href="cart.html" class="relative">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7"
-                d="M3 3h2l.4 2M7 13h11l2-7H6.4M7 13L5.4 5M7 13l-2 7m5-7v7m4-7v7m4-7l2 7"/>
-        </svg>
-        <span
-          class="cart-count hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] leading-none rounded-full w-5 h-5 flex items-center justify-center">
-          0
-        </span>
+      <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
+        <span>🛒</span>
+        <div class="cart-badge" id="cart-count">0</div>
       </a>
     </div>
   </header>
 
-  <!-- بانر العد التنازلي -->
-  <section class="bg-black text-white py-3 text-center text-sm">
-    عرض لفترة محدودة 🔥 — خصم 10٪ لأول أوردر بكود
-    <span class="font-bold">TEFA4434</span>
-    <div class="mt-1 text-xs">
-      ينتهي خلال:
-      <span id="countdown" class="font-mono"></span>
-    </div>
-  </section>
-
-  <!-- الهيرو -->
-  <section class="max-w-4xl mx-auto px-4 py-6">
-    <div class="bg-white rounded-3xl shadow p-5">
-      <p class="text-sm text-pink-600 font-semibold mb-2">خصم على الأطقم الكاملة</p>
-      <h2 class="text-2xl md:text-3xl font-extrabold mb-3 leading-relaxed">
-        أطقم حريمي جاهزة للخروجات والمناسبات ✨
-      </h2>
-      <p class="text-gray-700 text-sm md:text-base mb-3 leading-relaxed">
-        أطقم 3 قطع بخامة روزالين مستوردة و فورمال راقي، قصة مريحة و شيك، مع شحن
-        لحد باب البيت لكل محافظات مصر و الدفع عند الاستلام.
+  <main class="container">
+    <!-- الهيرو -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span>🔥 خصم على الأطقم الكاملة</span>
+      </div>
+      <h1 class="hero-title">أطقم حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
+      <p class="hero-text">
+        3 قطع بخامة روزالين وفورمال مستوردة، قصة مريحة وشيك، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
       </p>
-      <ul class="text-gray-700 text-sm space-y-1 mb-4">
-        <li>• خامة ناعمة وثابتة اللون</li>
-        <li>• أطقم 3 قطع كاملة جاهزة على اللبس</li>
-        <li>• شحن سريع + دفع عند الاستلام</li>
+      <ul class="hero-bullets">
+        <li>• خامة ناعمة وثابتة اللون.</li>
+        <li>• أطقم جاهزة على اللبس بدون حيرة تنسيق.</li>
+        <li>• شحن سريع + دفع عند الاستلام.</li>
       </ul>
-      <p class="text-base md:text-lg font-bold text-emerald-700 mb-4">
-        اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️
+      <p class="hero-guarantee">
+        اطلب وانت مطمئن و <span>عاين براحتك قبل الاستلام 🥰❤️</span>
       </p>
-      <div class="flex flex-col md:flex-row gap-3">
-        <a href="#products"
-           class="flex-1 bg-black text-white text-center rounded-2xl py-3 text-sm md:text-base font-semibold">
-          تصفّح الأطقم الآن
-        </a>
-        <a href="https://wa.me/201157834203"
-           class="flex-1 border border-gray-300 text-gray-800 text-center rounded-2xl py-3 text-sm md:text-base font-semibold">
-          استفسار على واتساب
-        </a>
+
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">تصفح الأطقم الآن</a>
+        <a href="https://wa.me/201157834203" target="_blank" class="btn btn-outline">استفسار على واتساب</a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- مميزات سريعة -->
-  <section class="max-w-4xl mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-lg mb-1">✨ روزالين عالي الجودة</p>
-        <p class="text-gray-600 text-sm">ملمس ناعم وشيك جدًا في اللبس.</p>
+    <!-- مميزات -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <div class="feature-title">روزالين عالي الجودة</div>
+        <div class="feature-text">ملمس ناعم وشيك جداً في اللبس، خامة تقيلة ومناسبة للخروجات والمناسبات.</div>
       </div>
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-lg mb-1">💵 دفع عند الاستلام</p>
-        <p class="text-gray-600 text-sm">ادفعي لما تراجعي الطلب وتطمني عليه.</p>
+      <div class="feature-card">
+        <div class="feature-icon">💳</div>
+        <div class="feature-title">دفع عند الاستلام</div>
+        <div class="feature-text">ادفعي لما تعايني وتطمني على الطقم والمقاس قدام المندوب.</div>
       </div>
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-lg mb-1">🚚 شحن لكل المحافظات</p>
-        <p class="text-gray-600 text-sm">60 للقاهرة والجيزة – 70 لباقي المحافظات (ماعدا بعض المدن الساحلية).</p>
+      <div class="feature-card">
+        <div class="feature-icon">🚚</div>
+        <div class="feature-title">شحن لكل المحافظات</div>
+        <div class="feature-text">60 ج للقاهرة والجيزة – 70 ج لباقي المحافظات – 120 ج (شرم/غردقة/مطروح/سيناء/الوادي).</div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- المنتجات -->
-  <section id="products" class="max-w-4xl mx-auto px-4 py-6">
-    <div class="flex items-center justify-between mb-3">
-      <h3 class="text-xl md:text-2xl font-extrabold">منتجاتنا</h3>
-      <p class="text-xs text-gray-500">اختاري الطقم المناسب ليكي ✨</p>
-    </div>
+    <!-- بانر كود الخصم -->
+    <section class="discount-banner">
+      <div>🎁 <strong>كود خصم 10٪ لأول أوردر</strong> عند استخدام الكود:</div>
+      <div class="discount-code">TEFA4434</div>
+      <div class="discount-small">الخصم بيتطبق تلقائياً لأول طلب بنفس رقم الموبايل.</div>
+    </section>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- المنتجات -->
+    <section id="products">
+      <h2 class="section-title">منتجاتنا</h2>
+      <p class="section-sub">اختاري الموديل واللون والكمية اللي تريحك، وبعدين كمّلي بياناتك من السلة.</p>
 
-      <!-- طقم روزالين -->
-      <article class="bg-white rounded-3xl shadow overflow-hidden flex flex-col">
-        <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" class="w-full h-60 object-cover">
-        <div class="p-4 flex flex-col flex-1">
-          <h4 class="text-lg md:text-xl font-bold mb-1">طقم روزالين 3 قطع</h4>
-          <p class="text-pink-600 font-bold text-lg md:text-xl mb-1">
-            749 ج
-            <span class="text-xs text-gray-500 line-through mr-1">999 ج</span>
-          </p>
-          <p class="text-xs md:text-sm text-gray-700 mb-1">
-            الخامة روزالين – المقاس وان سايز تلبيس من 60 لـ 95 كيلو.
-          </p>
-          <p class="text-xs md:text-sm text-gray-600 mb-3">
-            الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون 💕
-          </p>
-          <button
-            onclick="openProduct('rozalin')"
-            class="mt-auto bg-black text-white w-full rounded-2xl py-2.5 text-sm md:text-base font-semibold">
-            شوفي الألوان واطلبي
-          </button>
-        </div>
-      </article>
+      <div class="products-grid">
+        <!-- روزالين -->
+        <article class="product-card">
+          <div class="product-img-wrapper">
+            <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
+            <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">طقم روزالين 3 قطع</div>
+            <div class="product-desc">
+              خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لـ 95 كيلو.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">749 ج</span>
+              <span class="product-oldprice">999 ج</span>
+            </div>
+            <div class="product-note">ألوان: موف – كافية – زيتي – أسود – بيج – سيمون.</div>
+            <div class="product-footer">
+              <a href="product.html?product=rozalin" class="btn btn-primary">شوفي الألوان واطلبي 💕</a>
+            </div>
+          </div>
+        </article>
 
-      <!-- طقم فورمال -->
-      <article class="bg-white rounded-3xl shadow overflow-hidden flex flex-col">
-        <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" class="w-full h-60 object-cover">
-        <div class="p-4 flex flex-col flex-1">
-          <h4 class="text-lg md:text-xl font-bold mb-1">طقم فورمال 3 قطع</h4>
-          <p class="text-pink-600 font-bold text-lg md:text-xl mb-1">
-            699 ج
-            <span class="text-xs text-gray-500 line-through mr-1">949 ج</span>
-          </p>
-          <p class="text-xs md:text-sm text-gray-700 mb-1">
-            الخامة روزالين – المقاس وان سايز تلبيس من 65 لـ 85 كيلو.
-          </p>
-          <p class="text-xs md:text-sm text-gray-600 mb-3">
-            الألوان: منت – بيبي بلو – بيج – هافان – أسود 🌈
-          </p>
-          <button
-            onclick="openProduct('formal')"
-            class="mt-auto bg-black text-white w-full rounded-2xl py-2.5 text-sm md:text-base font-semibold">
-            شوفي الألوان واطلبي
-          </button>
-        </div>
-      </article>
+        <!-- فورمال -->
+        <article class="product-card">
+          <div class="product-img-wrapper">
+            <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
+            <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">طقم فورمال 3 قطع</div>
+            <div class="product-desc">
+              خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لـ 85 كيلو.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">699 ج</span>
+              <span class="product-oldprice">949 ج</span>
+            </div>
+            <div class="product-note">ألوان: منت – بيبي بلو – بيج – هافان – أسود.</div>
+            <div class="product-footer">
+              <a href="product.html?product=formal" class="btn btn-primary">شوفي الألوان واطلبي 🌈</a>
+            </div>
+          </div>
+        </article>
 
-      <!-- عباية زراير كبس -->
-      <article class="bg-white rounded-3xl shadow overflow-hidden flex flex-col">
-        <img src="abaya-main.jpg" alt="عباية زراير كبس" class="w-full h-60 object-cover">
-        <div class="p-4 flex flex-col flex-1">
-          <h4 class="text-lg md:text-xl font-bold mb-1">عباية زراير كبس</h4>
-          <p class="text-pink-600 font-bold text-lg md:text-xl mb-1">
-            749 ج
-            <span class="text-xs text-gray-500 line-through mr-1">1049 ج</span>
-          </p>
-          <p class="text-xs md:text-sm text-gray-700 mb-1">
-            جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 ك.
-          </p>
-          <p class="text-xs md:text-sm text-gray-600 mb-3">
-            الألوان: أسود – زيتي – رمادي غامق – كراميل – نبيتي – لايت جراي.
-          </p>
-          <button
-            onclick="openProduct('abaya')"
-            class="mt-auto bg-black text-white w-full rounded-2xl py-2.5 text-sm md:text-base font-semibold">
-            شوفي الألوان واطلبي
-          </button>
-        </div>
-      </article>
+        <!-- عباية زراير كبس -->
+        <article class="product-card">
+          <div class="product-img-wrapper">
+            <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
+            <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">عباية زراير كبس</div>
+            <div class="product-desc">
+              جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">749 ج</span>
+              <span class="product-oldprice">1049 ج</span>
+            </div>
+            <div class="product-note">ألوان: أسود – زيتي – عنابي – رمادي فاتح – كراميل – رمادي غامق.</div>
+            <div class="product-footer">
+              <a href="product.html?product=abaya" class="btn btn-primary">شوفي الألوان واطلبي ✨</a>
+            </div>
+          </div>
+        </article>
 
-      <!-- موديل تونز قطعتين -->
-      <article class="bg-white rounded-3xl shadow overflow-hidden flex flex-col">
-        <img src="toonz-main.jpg" alt="موديل تونز قطعتين" class="w-full h-60 object-cover">
-        <div class="p-4 flex flex-col flex-1">
-          <h4 class="text-lg md:text-xl font-bold mb-1">تونز قطعتين</h4>
-          <p class="text-pink-600 font-bold text-lg md:text-xl mb-1">
-            799 ج
-            <span class="text-xs text-gray-500 line-through mr-1">1199 ج</span>
-          </p>
-          <p class="text-xs md:text-sm text-gray-700 mb-1">
-            الخامة شمواه في شمواه – السايز من 60 لـ 90 كِ مرتاح.
-          </p>
-          <p class="text-xs md:text-sm text-gray-600 mb-3">
-            ألوان: أزرق، بينك، أوف وايت، زيتوني، نبيتي، موف.
-          </p>
-          <button
-            onclick="openProduct('toonz')"
-            class="mt-auto bg-black text-white w-full rounded-2xl py-2.5 text-sm md:text-base font-semibold">
-            شوفي الألوان واطلبي
-          </button>
-        </div>
-      </article>
+        <!-- تونز قطعتين -->
+        <article class="product-card">
+          <div class="product-img-wrapper">
+            <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
+            <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">طقم تونز قطعتين</div>
+            <div class="product-desc">
+              خامة شمواه ناعمة – سايز من 60 لـ 90 كيلو مرتاح.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">799 ج</span>
+              <span class="product-oldprice">1199 ج</span>
+            </div>
+            <div class="product-note">ألوان: بيج – زيتي – نبيتي – موف – بنفسجي.</div>
+            <div class="product-footer">
+              <a href="product.html?product=toonz" class="btn btn-primary">شوفي الألوان واطلبي 😍</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
 
-    </div>
-  </section>
-
-  <footer class="bg-white border-t mt-6">
-    <div class="max-w-4xl mx-auto px-4 py-4 text-center text-xs text-gray-500">
-      © TEFA STORE - كل ما هو جديد في عالم الموضة
-    </div>
-  </footer>
-
-  <!-- سكربت مشترك للكارت + فتح صفحة المنتج -->
   <script>
-    const CART_KEY = 'tefaCart';
+    // مفتاح السلة الموحد
+    const CART_KEY = 'tefa_cart';
 
-    function loadCart() {
-      const raw = localStorage.getItem(CART_KEY);
+    function getCart() {
       try {
-        return raw ? JSON.parse(raw) : [];
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
       } catch (e) {
-        console.error('cart parse error', e);
         return [];
       }
     }
 
-    function updateCartBadge(cart) {
-      if (!cart) cart = loadCart();
-      const count = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
-      const badges = document.querySelectorAll('.cart-count');
-      badges.forEach(badge => {
-        if (count > 0) {
-          badge.textContent = count;
-          badge.classList.remove('hidden');
-        } else {
-          badge.classList.add('hidden');
+    function updateCartCount() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
+      const badge = document.getElementById('cart-count');
+      if (!badge) return;
+      badge.textContent = count;
+      badge.style.visibility = count > 0 ? 'visible' : 'hidden';
+    }
+
+    // عد تنازلي 3 أيام من أول زيارة
+    function initCountdown() {
+      const targetMs = Date.now() + 3 * 24 * 60 * 60 * 1000;
+      const el = document.getElementById('countdown');
+
+      function tick() {
+        const diff = targetMs - Date.now();
+        if (diff <= 0) {
+          el.textContent = "انتهى العرض 🎉";
+          return;
         }
-      });
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (24*3600));
+        const hours = Math.floor((totalSeconds % (24*3600)) / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = totalSeconds % 60;
+        el.textContent =
+          days + " يوم " +
+          String(hours).padStart(2,'0') + " ساعة " +
+          String(mins).padStart(2,'0') + " د " +
+          String(secs).padStart(2,'0') + " ث";
+      }
+
+      tick();
+      setInterval(tick, 1000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateCartBadge();
+      updateCartCount();
+      initCountdown();
+      window.addEventListener('storage', (e) => {
+        if (e.key === CART_KEY) updateCartCount();
+      });
     });
-
-    function openProduct(id) {
-      window.location.href = 'product.html?id=' + encodeURIComponent(id);
-    }
-
-    // عد تنازلي بسيط لـ 3 أيام من وقت فتح الصفحة
-    (function startCountdown() {
-      const countdownEl = document.getElementById('countdown');
-      if (!countdownEl) return;
-      const end = Date.now() + 3 * 24 * 60 * 60 * 1000;
-      function tick() {
-        const diff = end - Date.now();
-        if (diff <= 0) {
-          countdownEl.textContent = 'انتهى العرض';
-          return;
-        }
-        const d = Math.floor(diff / (24 * 60 * 60 * 1000));
-        const h = Math.floor((diff / (60 * 60 * 1000)) % 24);
-        const m = Math.floor((diff / (60 * 1000)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        countdownEl.textContent = `${d}ي ${h}س ${m}د ${s}ث`;
-        requestAnimationFrame(tick);
-      }
-      tick();
-    })();
   </script>
 </body>
 </html>
