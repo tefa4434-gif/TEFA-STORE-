@@ -1,281 +1,250 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>TEFA STORE | أطقم حريمي جاهزة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TEFA STORE | ملابس حريمي</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Meta للفيس بوك (اختياري) -->
-  <meta property="og:title" content="TEFA STORE | أطقم حريمي جاهزة">
-  <meta property="og:description" content="اطلبي وانتِ مطمئنة وعايني قبل الاستلام 🥰❤️ خصم 10٪ لأول أوردر بكود TEFA4434">
-  <meta property="og:image" content="https://tefa4434-gif.github.io/TEFA-STORE-/rozalin-main.jpg">
-  <meta property="og:url" content="https://tefa4434-gif.github.io/TEFA-STORE-/">
-  <meta property="og:type" content="website">
 </head>
-
 <body class="bg-gray-100 font-sans">
 
-<!-- الهيدر -->
-<header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-50">
-  <h1 class="text-2xl font-extrabold">TEFA STORE</h1>
+  <!-- الهيدر -->
+  <header class="bg-gray-900 text-white py-4 shadow">
+    <div class="container mx-auto px-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="bg-white text-gray-900 font-bold px-3 py-1 rounded-full text-sm">TS</span>
+        <h1 class="text-xl md:text-2xl font-extrabold">TEFA STORE</h1>
+      </div>
 
-  <div class="flex items-center gap-4">
-    <!-- لينك لوحة التحكم -->
-    <a href="admin.html" class="hidden md:inline-block text-xs text-gray-500">لوحة التحكم</a>
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="#products" class="hover:underline">الموديلات</a>
+        <a href="#offers" class="hover:underline">العروض</a>
+        <!-- لو عندك صفحة تحكم -->
+        <!-- <a href="admin.html" class="hover:underline">لوحة التحكم</a> -->
 
-    <a href="cart.html" class="relative text-3xl">
-      🛒
-      <!-- شارة عدد القطع -->
-      <span id="cartCount"
-            class="hidden absolute -top-2 -left-2 bg-red-600 text-white text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
-      </span>
-    </a>
-  </div>
-</header>
+        <!-- أيقونة السلة -->
+        <a href="cart.html" class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 6h15l-1.5 9h-13z" stroke-width="1.6" />
+            <circle cx="9" cy="20" r="1.4" />
+            <circle cx="18" cy="20" r="1.4" />
+            <path d="M6 6 5 3H3" stroke-width="1.6" />
+          </svg>
+          <span id="cart-count"
+                class="absolute -top-2 -left-2 bg-red-500 text-white text-[11px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-[3px]">
+            0
+          </span>
+        </a>
+      </nav>
+    </div>
+  </header>
 
-<!-- البانر الرئيسي + العداد التنازلي -->
-<section class="bg-white p-6 text-center">
-  <p class="text-lg text-gray-600 mb-2">
-    متجر أطقم حريمي روزالين و فورمال
-  </p>
+  <!-- هيرو -->
+  <section class="bg-gradient-to-b from-gray-900 to-gray-800 text-white py-10 md:py-16">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-6">
+      <div class="flex-1 space-y-4">
+        <h2 class="text-2xl md:text-4xl font-extrabold leading-relaxed">
+          أجمد طقُم وعبايات حريمي روزالين وفورمال 🤍<br />
+          توصيل لكل محافظات مصر 🚚
+        </h2>
+        <p class="text-sm md:text-base text-gray-200">
+          اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️<br />
+          خصم 10٪ على أول أوردر بكود:
+          <span class="font-mono font-bold bg-white text-gray-900 px-2 py-1 rounded-lg">TEFA4434</span>
+        </p>
+        <a href="#products"
+           class="inline-block bg-white text-gray-900 font-bold px-6 py-3 rounded-2xl text-sm md:text-base shadow hover:bg-gray-100">
+          شوفي الموديلات المتاحة الآن
+        </a>
+      </div>
 
-  <h2 class="text-4xl font-extrabold mb-4 leading-snug">
-    أطقم حريمي جاهزة للخروجات<br>والمناسبات
-  </h2>
-
-  <p class="text-xl font-semibold mb-2">
-    اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️
-  </p>
-
-  <!-- كود الخصم للتشجيع -->
-  <p class="text-base md:text-lg text-green-700 font-bold mb-3">
-    خصم 10٪ على أول أوردر بكود: <span class="underline">TEFA4434</span> 🎁
-  </p>
-
-  <!-- شريط العرض المحدود + العداد -->
-  <div class="mt-2 inline-flex flex-col items-center gap-2">
-    <span class="inline-flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm">
-      🔥 خصم كبير لفترة محدودة
-    </span>
-
-    <div class="bg-black text-white rounded-2xl px-5 py-3 mt-2 inline-flex items-center gap-4 text-sm">
-      <span class="font-semibold">ينتهي العرض خلال:</span>
-      <div class="flex gap-3">
-        <div class="text-center">
-          <div id="cd-days" class="text-xl font-extrabold">0</div>
-          <div class="text-[11px]">يوم</div>
-        </div>
-        <div class="text-center">
-          <div id="cd-hours" class="text-xl font-extrabold">0</div>
-          <div class="text-[11px]">ساعة</div>
-        </div>
-        <div class="text-center">
-          <div id="cd-minutes" class="text-xl font-extrabold">0</div>
-          <div class="text-[11px]">دقيقة</div>
-        </div>
-        <div class="text-center">
-          <div id="cd-seconds" class="text-xl font-extrabold">0</div>
-          <div class="text-[11px]">ثانية</div>
+      <div class="flex-1">
+        <div class="bg-white/10 border border-white/20 rounded-3xl p-4 md:p-6 shadow-xl space-y-3">
+          <p class="text-sm text-gray-200">عرض لفترة محدودة 🔥</p>
+          <h3 class="text-xl md:text-2xl font-extrabold">
+            خصم 10٪ على أول طلب 🎁
+          </h3>
+          <p class="text-sm text-gray-200">
+            استخدمي الكود <span class="font-mono font-bold bg-white text-gray-900 px-2 py-1 rounded-lg">TEFA4434</span>
+            في صفحة السلة، والخصم يتطبق تلقائيًا على إجمالي الحساب لأول طلب بنفس رقم الموبايل.
+          </p>
+          <div class="text-[11px] text-gray-300 leading-relaxed">
+            * الشحن: القاهرة والجيزة 60 ج – باقي المحافظات 70 ج –<br />
+            شرم الشيخ / الغردقة / مرسى مطروح / شمال وجنوب سيناء / الوادي الجديد 120 ج.
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- مميزات سريعة -->
-<section class="p-4 grid grid-cols-3 gap-3 text-center">
-  <div class="bg-white p-3 rounded-xl shadow">
-    ✨<br>
-    <span class="font-bold text-xs md:text-sm">خامات عالية الجودة</span>
-  </div>
-  <div class="bg-white p-3 rounded-xl shadow">
-    💳<br>
-    <span class="font-bold text-xs md:text-sm">دفع عند الاستلام</span>
-  </div>
-  <div class="bg-white p-3 rounded-xl shadow">
-    🚚<br>
-    <span class="font-bold text-xs md:text-sm">شحن لكل المحافظات</span>
-  </div>
-</section>
+  <!-- قسم العروض -->
+  <section id="offers" class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-2xl shadow p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="text-xl md:text-2xl font-extrabold mb-2">عروض لفترة محدودة 🔥</h3>
+        <p class="text-sm md:text-base text-gray-700">
+          أسعار خاصة على أطقم روزالين والفورمال والعبايات لفترة محدودة… الكمية محدودة، إلحق العرض قبل ما يخلص 👀
+        </p>
+      </div>
+      <a href="#products"
+         class="bg-gray-900 text-white px-5 py-2 rounded-2xl text-sm font-bold hover:bg-black">
+        شوفي كل العروض
+      </a>
+    </div>
+  </section>
 
-<!-- المنتجات (تُبنى بالـ JS من الموديلات الأساسية + المضافة من لوحة التحكم) -->
-<section class="p-4">
-  <h3 class="text-3xl font-extrabold text-center mb-6">
-    اختاري الطقم المناسب لك ✨
-  </h3>
+  <!-- الموديلات -->
+  <section id="products" class="container mx-auto px-4 py-4 md:py-8">
+    <h3 class="text-xl md:text-2xl font-extrabold mb-4 md:mb-6 text-center">
+      الموديلات المتاحة دلوقتي
+    </h3>
 
-  <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-    <!-- البطاقات هتتولد بالـ JS -->
-  </div>
-</section>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
 
-<!-- فوتر بسيط -->
-<footer class="bg-black text-white text-center p-4 mt-6 text-sm">
-  <p class="font-bold mb-1">TEFA STORE</p>
-  <p>جميع الحقوق محفوظة © 2025</p>
-</footer>
+      <!-- طقم روزالين 3 قطع -->
+      <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col md:flex-row">
+        <div class="md:w-1/2">
+          <img src="images/rozalin-main.jpg"
+               alt="طقم روزالين 3 قطع"
+               class="w-full h-56 object-cover md:h-full">
+        </div>
+        <div class="flex-1 p-4 space-y-2 flex flex-col">
+          <h4 class="text-lg md:text-xl font-extrabold">طقم روزالين 3 قطع</h4>
+          <p class="text-xs text-gray-600">
+            خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لـ 95 كيلو.
+          </p>
+          <p class="text-sm text-gray-700">
+            السعر:
+            <span class="text-xl font-extrabold text-green-600">749 ج</span>
+            <span class="text-xs line-through text-gray-400">بدل 999 ج</span>
+          </p>
+          <p class="text-xs text-gray-600">
+            الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون 💕
+          </p>
+          <div class="mt-auto flex gap-2 flex-wrap">
+            <a href="product.html?id=rozalin"
+               class="inline-block bg-gray-900 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-2xl hover:bg-black">
+              شوفي الألوان واطلبي
+            </a>
+          </div>
+        </div>
+      </div>
 
-<script>
-  // ====== موديلات أساسية ثابتة (الأربعة اللي عندك) ======
-  const BASE_PRODUCTS = [
-    {
-      id: "rozalin",
-      name: "طقم روزالين 3 قطع",
-      desc: "خامة روزالين – وان سايز 60–95 ك",
-      price: 749,
-      oldPrice: 999,
-      img: "rozalin-main.jpg"
-    },
-    {
-      id: "formal",
-      name: "طقم فورمال 3 قطع",
-      desc: "ستايل فورمال أنيق",
-      price: 699,
-      oldPrice: 949,
-      img: "formal-main.jpg"
-    },
-    {
-      id: "toonz",
-      name: "تونز – قطعتين",
-      desc: "شمواه × شمواه – شتوي شيك",
-      price: 799,
-      oldPrice: 1199,
-      img: "toonz-main.jpg"
-    },
-    {
-      id: "abaya_btn",
-      name: "عباية زراير كبس",
-      desc: "جوخ ليكرا – شتوي أنيق",
-      price: 749,
-      oldPrice: 1049,
-      img: "abaya-btn-main.jpg"
-    }
-  ];
+      <!-- طقم فورمال 3 قطع -->
+      <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col md:flex-row">
+        <div class="md:w-1/2">
+          <img src="images/formal-main.jpg"
+               alt="طقم فورمال 3 قطع"
+               class="w-full h-56 object-cover md:h-full">
+        </div>
+        <div class="flex-1 p-4 space-y-2 flex flex-col">
+          <h4 class="text-lg md:text-xl font-extrabold">طقم فورمال 3 قطع</h4>
+          <p class="text-xs text-gray-600">
+            خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لـ 85 كيلو.
+          </p>
+          <p class="text-sm text-gray-700">
+            السعر:
+            <span class="text-xl font-extrabold text-green-600">699 ج</span>
+            <span class="text-xs line-through text-gray-400">بدل 949 ج</span>
+          </p>
+          <p class="text-xs text-gray-600">
+            الألوان: منت – بيبي بلو – بيج – هافان – أسود 🌈
+          </p>
+          <div class="mt-auto flex gap-2 flex-wrap">
+            <a href="product.html?id=formal"
+               class="inline-block bg-gray-900 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-2xl hover:bg-black">
+              شوفي الألوان واطلبي
+            </a>
+          </div>
+        </div>
+      </div>
 
-  // ====== موديلات مضافة من لوحة التحكم ======
-  function loadHomeModels() {
-    try {
-      return JSON.parse(localStorage.getItem("homeModels") || "[]");
-    } catch (e) {
-      return [];
-    }
-  }
+      <!-- عباية زراير كبس -->
+      <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col md:flex-row">
+        <div class="md:w-1/2">
+          <img src="images/abaya-btn-main.jpg"
+               alt="عباية زراير كبس"
+               class="w-full h-56 object-cover md:h-full">
+        </div>
+        <div class="flex-1 p-4 space-y-2 flex flex-col">
+          <h4 class="text-lg md:text-xl font-extrabold">عباية زراير كبس</h4>
+          <p class="text-xs text-gray-600">
+            الماتريال جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.
+          </p>
+          <p class="text-sm text-gray-700">
+            السعر:
+            <span class="text-xl font-extrabold text-green-600">749 ج</span>
+            <span class="text-xs line-through text-gray-400">بدل 1049 ج</span>
+          </p>
+          <div class="mt-auto flex gap-2 flex-wrap">
+            <a href="product.html?id=abaya_btn"
+               class="inline-block bg-gray-900 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-2xl hover:bg-black">
+              شوفي الألوان واطلبي
+            </a>
+          </div>
+        </div>
+      </div>
 
-  function renderProductsGrid() {
-    const grid = document.getElementById("productsGrid");
-    grid.innerHTML = "";
+      <!-- تونز قطعتين -->
+      <div class="bg-white rounded-2xl shadow overflow-hidden flex flex-col md:flex-row">
+        <div class="md:w-1/2">
+          <img src="images/toonz-main.jpg"
+               alt="تونز قطعتين"
+               class="w-full h-56 object-cover md:h-full">
+        </div>
+        <div class="flex-1 p-4 space-y-2 flex flex-col">
+          <h4 class="text-lg md:text-xl font-extrabold">تونز قطعتين</h4>
+          <p class="text-xs text-gray-600">
+            خامة شمواه في شمواه – وان سايز تلبيس من 60 لـ 90 كيلو مرتاح.
+          </p>
+          <p class="text-sm text-gray-700">
+            السعر:
+            <span class="text-xl font-extrabold text-green-600">799 ج</span>
+            <span class="text-xs line-through text-gray-400">بدل 1199 ج</span>
+          </p>
+          <div class="mt-auto flex gap-2 flex-wrap">
+            <a href="product.html?id=toonz"
+               class="inline-block bg-gray-900 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-2xl hover:bg-black">
+              شوفي الألوان واطلبي
+            </a>
+          </div>
+        </div>
+      </div>
 
-    const extra = loadHomeModels();   // من لوحة التحكم
-    const all = [...BASE_PRODUCTS, ...extra];
+    </div>
+  </section>
 
-    all.forEach(p => {
-      const card = document.createElement("a");
-      card.className = "bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition";
-      card.href = p.id ? `product.html?id=${p.id}` : "#";
+  <!-- فوتر -->
+  <footer class="bg-gray-900 text-gray-300 text-center text-sm py-4 mt-4">
+    للطلب أو الاستفسار المباشر واتساب: 01157834203 ❤️
+  </footer>
 
-      card.innerHTML = `
-        <img src="${p.img}"
-             alt="${p.name}"
-             class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-        <h4 class="text-xl font-semibold mb-1">${p.name}</h4>
-        <p class="text-sm text-gray-600 mb-1">${p.desc || ""}</p>
-        ${p.oldPrice ? `<p class="line-through text-gray-400 text-sm">${p.oldPrice} ج</p>` : ""}
-        <span class="text-4xl font-extrabold text-black">${p.price} ج</span>
-      `;
-      grid.appendChild(card);
-    });
-  }
+  <!-- سكربت السلة في الصفحة الرئيسية (قراءة فقط) -->
+  <script>
+    const CART_KEY = "tefa_cart";
 
-  (function () {
-    // ====== عداد الزوار (لهذا المتصفح فقط) ======
-    const viewsKey = "store_total_views";
-    let v = parseInt(localStorage.getItem(viewsKey) || "0", 10) || 0;
-    v++;
-    localStorage.setItem(viewsKey, v);
-
-    // ====== العداد التنازلي ======
-    const saleKey = "store_sale_end";
-    let end = localStorage.getItem(saleKey);
-
-    if (!end) {
-      const now = new Date();
-      now.setDate(now.getDate() + 3); // 3 أيام من الآن
-      end = now.getTime();
-      localStorage.setItem(saleKey, String(end));
-    } else {
-      end = parseInt(end, 10);
-    }
-
-    const endTime = end;
-
-    const daysEl    = document.getElementById("cd-days");
-    const hoursEl   = document.getElementById("cd-hours");
-    const minsEl    = document.getElementById("cd-minutes");
-    const secsEl    = document.getElementById("cd-seconds");
-
-    function updateCountdown() {
-      const now = Date.now();
-      let diff = endTime - now;
-
-      if (diff <= 0) {
-        daysEl.textContent  = "0";
-        hoursEl.textContent = "0";
-        minsEl.textContent  = "0";
-        secsEl.textContent  = "0";
-        return;
-      }
-
-      const sec  = 1000;
-      const min  = sec * 60;
-      const hour = min * 60;
-      const day  = hour * 24;
-
-      const d = Math.floor(diff / day);
-      diff   %= day;
-      const h = Math.floor(diff / hour);
-      diff   %= hour;
-      const m = Math.floor(diff / min);
-      diff   %= min;
-      const s = Math.floor(diff / sec);
-
-      daysEl.textContent  = d;
-      hoursEl.textContent = h.toString().padStart(2, "0");
-      minsEl.textContent  = m.toString().padStart(2, "0");
-      secsEl.textContent  = s.toString().padStart(2, "0");
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // ====== شارة عدد القطع في السلة ======
-    function updateCartCount() {
-      let count = 0;
+    function loadCart() {
       try {
-        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        cart.forEach(item => {
-          count += item.qty || 0;
-        });
-      } catch(e) {}
-      const badge = document.getElementById("cartCount");
-      if (!badge) return;
-      if (count > 0) {
-        badge.textContent = count;
-        badge.classList.remove("hidden");
-      } else {
-        badge.classList.add("hidden");
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (e) {
+        return [];
       }
     }
 
-    updateCartCount();
-    window.addEventListener("storage", (e) => {
-      if (e.key === "cart") updateCartCount();
-    });
+    function updateCartBadge() {
+      const cart = loadCart();
+      const badge = document.getElementById("cart-count");
+      const totalPieces = cart.reduce((sum, item) => {
+        const qty = Number(item.quantity || 1);
+        return sum + qty;
+      }, 0);
+      if (badge) {
+        badge.textContent = totalPieces;
+        badge.classList.toggle("hidden", totalPieces === 0);
+      }
+    }
 
-    // رسم المنتجات
-    renderProductsGrid();
-  })();
-</script>
-
+    document.addEventListener("DOMContentLoaded", updateCartBadge);
+  </script>
 </body>
 </html>

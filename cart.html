@@ -15,18 +15,12 @@
         <span class="bg-black text-white rounded-full w-9 h-9 flex items-center justify-center text-sm font-bold">TS</span>
         <div>
           <h1 class="text-lg font-bold">TEFA STORE</h1>
-          <p class="text-xs text-gray-500">متجر أطقم حريمي روزالين و فورمال</p>
+          <p class="text-xs text-gray-500">متجر أطقم حريمي</p>
         </div>
       </a>
 
-      <!-- أيقونة السلة + الشارة -->
       <a href="cart.html" class="relative">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M6 6h15l-1.5 9h-13z" stroke-width="1.6" />
-          <circle cx="9" cy="20" r="1.4" />
-          <circle cx="18" cy="20" r="1.4" />
-          <path d="M6 6 5 3H3" stroke-width="1.6" />
-        </svg>
+        <span class="material-icons">shopping_cart</span>
         <span id="cart-count"
               class="absolute -top-2 -left-2 bg-red-500 text-white text-[11px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-[3px]">
           0
@@ -43,7 +37,7 @@
       راجعي الألوان والكميات، ثم ادخلي بيانات التوصيل واضغطي <span class="font-semibold">تأكيد الطلب</span>.
     </p>
 
-    <!-- رسالة فاضية -->
+    <!-- رسالة السلة الفاضية -->
     <div id="empty-cart" class="hidden bg-white rounded-2xl p-6 shadow text-center">
       <p class="text-lg font-semibold mb-2">السلة فاضية حتى الآن 🧺</p>
       <p class="text-sm text-gray-500 mb-4">اختاري الموديل واللون من الصفحة الرئيسية وابدئي أول طلب ليكي.</p>
@@ -53,12 +47,12 @@
     </div>
 
     <div id="cart-wrapper" class="grid gap-6 lg:grid-cols-3">
-      <!-- قائمة المنتجات -->
+      <!-- المنتجات في السلة -->
       <section class="lg:col-span-2 space-y-3">
         <div id="cart-items"></div>
       </section>
 
-      <!-- ملخص الطلب + نموذج البيانات -->
+      <!-- ملخص + بيانات عميل -->
       <section class="space-y-4">
 
         <!-- ملخص الأسعار -->
@@ -92,7 +86,7 @@
           </p>
         </div>
 
-        <!-- بيانات العميل -->
+        <!-- نموذج بيانات العميل -->
         <form id="order-form" class="bg-white rounded-2xl p-4 shadow space-y-3">
 
           <h3 class="font-bold text-lg mb-2">بيانات التوصيل</h3>
@@ -166,26 +160,26 @@
             <div class="space-y-1">
               <label class="text-sm text-gray-700">الوزن (اختياري)</label>
               <input type="text" id="weight"
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
             </div>
             <div class="space-y-1">
               <label class="text-sm text-gray-700">الطول (اختياري)</label>
               <input type="text" id="height"
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400">
+                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
             </div>
           </div>
 
           <div class="space-y-1">
             <label class="text-sm text-gray-700">ملاحظات (اختياري)</label>
             <textarea id="notes" rows="2"
-                      class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm"
                       placeholder="لو حابة توصية معينة للكابتن أو مواعيد استلام معينة اكتبيها هنا"></textarea>
           </div>
 
           <div class="space-y-1">
             <label class="text-sm font-semibold">كود الخصم</label>
             <input type="text" id="coupon" placeholder="TEFA4434 لأول أوردر"
-                   class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                   class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
           </div>
 
           <button type="submit"
@@ -204,83 +198,35 @@
   </main>
 
   <script>
-    // رابط Google Apps Script
+    const CART_KEY = "tefa_cart";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDCEny0w1V8EVpFix56-7v_e930qLEWqz1aXKt5HOaDafo9NJJn8-k-RvGfjbzg-AN/exec";
 
     let cart = [];
-    let cartKey = null;
 
-    // محاولة اكتشاف السلة من localStorage بأي مفتاح
-    function detectCart() {
-      const preferred = ["tefa_cart", "cart", "cartItems"];
-      // أولاً نجرب المفاتيح المشهورة
-      for (const key of preferred) {
-        const data = parseCartKey(key);
-        if (data.found) {
-          cartKey = key;
-          return data.items;
-        }
-      }
-      // ثانياً نمسح كل localStorage لو المفتاح مختلف
-      for (const key in localStorage) {
-        const data = parseCartKey(key);
-        if (data.found) {
-          cartKey = key;
-          return data.items;
-        }
-      }
-      cartKey = null;
-      return [];
-    }
-
-    function parseCartKey(key) {
+    function loadCart() {
       try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return { found: false, items: [] };
-        const obj = JSON.parse(raw);
-
-        // لو Array مباشرة
-        if (Array.isArray(obj) && obj.length && typeof obj[0] === "object") {
-          const f = obj[0];
-          if ("name" in f || "productName" in f || "price" in f || "color" in f || "colorName" in f) {
-            return { found: true, items: obj };
-          }
-        }
-        // لو object فيه items[]
-        if (obj && Array.isArray(obj.items) && obj.items.length && typeof obj.items[0] === "object") {
-          const f = obj.items[0];
-          if ("name" in f || "productName" in f || "price" in f || "color" in f || "colorName" in f) {
-            return { found: true, items: obj.items };
-          }
-        }
-      } catch (e) {}
-      return { found: false, items: [] };
+        cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (e) {
+        cart = [];
+      }
     }
 
     function saveCart() {
-      if (!cartKey) cartKey = "tefa_cart";
       if (!cart.length) {
-        localStorage.removeItem(cartKey);
-        localStorage.removeItem("tefa_cart");
-        localStorage.removeItem("cart");
-        localStorage.removeItem("cartItems");
+        localStorage.removeItem(CART_KEY);
       } else {
-        const str = JSON.stringify(cart);
-        localStorage.setItem(cartKey, str);
-        // نعمل نسخ احتياطية عشان الصفحات التانية
-        localStorage.setItem("tefa_cart", str);
-        localStorage.setItem("cart", str);
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
       }
     }
 
     function getItemFields(item) {
       return {
         name: item.name || item.productName || "منتج بدون اسم",
-        price: Number(item.price || item.unitPrice || 0),
-        quantity: Number(item.quantity || item.qty || 1),
-        colorName: item.colorName || item.color || "",
-        colorHex: item.colorHex || item.hex || "#111",
-        image: item.image || item.img || ""
+        price: Number(item.price || 0),
+        quantity: Number(item.quantity || 1),
+        colorName: item.colorName || "",
+        colorHex: item.colorHex || "#111",
+        image: item.image || ""
       };
     }
 
@@ -320,14 +266,13 @@
       return 70;
     }
 
-    function getDiscount(subtotalPlusShipping, coupon, phone) {
-      if (!coupon) return 0;
+    function getDiscount(totalWithShipping, coupon, phone) {
+      if (!coupon || !phone) return 0;
       coupon = coupon.trim().toUpperCase();
       if (coupon !== "TEFA4434") return 0;
-      if (!phone) return 0;
       const usedKey = `discount_used_${phone}`;
       if (localStorage.getItem(usedKey)) return 0; // نفس الرقم استخدم الخصم قبل كدا
-      return subtotalPlusShipping * 0.10;
+      return totalWithShipping * 0.10;
     }
 
     function updateSummary() {
@@ -411,7 +356,7 @@
       updateSummary();
     }
 
-    // التعامل مع الأزرار (+ / - / حذف) بتفويض الحدث من الكونتينر
+    // أزرار زيادة/نقصان/حذف
     document.addEventListener("click", (e) => {
       const decIndex = e.target.getAttribute("data-dec");
       const incIndex = e.target.getAttribute("data-inc");
@@ -447,7 +392,7 @@
     document.getElementById("coupon").addEventListener("input", updateSummary);
     document.getElementById("phone").addEventListener("input", updateSummary);
 
-    // إرسال الطلب
+    // إرسال الطلب لجوجل شيت
     document.getElementById("order-form").addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -510,4 +455,47 @@
       spinner.classList.remove("hidden");
       textSpan.textContent = "جاري تأكيد الطلب...";
 
-  
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok || data.status === "error") {
+          throw new Error(data.message || "خطأ غير معروف");
+        }
+
+        if (coupon === "TEFA4434" && discount > 0) {
+          localStorage.setItem(`discount_used_${phone}`, "1");
+        }
+
+        cart = [];
+        saveCart();
+        renderCart();
+
+        alert("تم تسجيل طلبك بنجاح ❤️ فريق TEFA STORE هيتواصل معاكي لتأكيد الأوردر.");
+        window.location.href = "index.html";
+
+      } catch (error) {
+        console.error(error);
+        alert("حدث خطأ أثناء تسجيل الطلب، لو استمرت المشكلة تواصلي معانا على الواتساب.");
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove("opacity-75");
+        spinner.classList.add("hidden");
+        textSpan.textContent = "تأكيد الطلب الآن";
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadCart();
+      renderCart();
+    });
+  </script>
+</body>
+</html>
