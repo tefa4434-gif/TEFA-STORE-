@@ -1,110 +1,234 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>تفاصيل المنتج</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>TEFA STORE | تفاصيل المنتج</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 font-sans">
+
+<!-- هيدر بسيط -->
+<header class="bg-white shadow p-4 flex justify-between items-center sticky top-0 z-40">
+  <a href="index.html" class="text-sm">⬅ الرجوع للمتجر</a>
+  <span class="font-bold text-lg">TEFA STORE</span>
+  <a href="cart.html" class="text-2xl">🛒</a>
+</header>
+
+<!-- محتوى المنتج -->
+<main class="max-w-md mx-auto p-4">
+  <div id="productContainer"></div>
+</main>
 
 <script>
+// ======================= بيانات المنتجات =======================
 const PRODUCTS = {
-
-  rozalin:{
-    name:"طقم روزالين 3 قطع",
-    price:749,
-    img:"rozalin-main.jpg",
-    desc:"خامة روزالين مستوردة – وان سايز من 60 لـ 95 ك",
-    colors:[
-      {c:"#8b6a4f",img:"rozalin-cafe.jpg"},
-      {c:"#ead7b7",img:"rozalin-beige.jpg"},
-      {c:"#6b8f71",img:"rozalin-olive.jpg"},
-      {c:"#000",img:"rozalin-black.jpg"},
-      {c:"#f4a6a6",img:"rozalin-simon.jpg"},
-      {c:"#7c3aed",img:"rozalin-move.jpg"}
+  rozalin: {
+    name: "طقم روزالين 3 قطع",
+    price: 749,
+    oldPrice: 999,
+    mainImg: "rozalin-main.jpg",
+    desc: "خامة روزالين مستوردة – وان سايز من 60 لـ 95 ك.",
+    colors: [
+      { label: "سيمون", hex: "#f4a6a6" },
+      { label: "موف",   hex: "#7c3aed" },   // ✅ اللون الجديد
+      { label: "أسود", hex: "#000000" },
+      { label: "زيتي", hex: "#4b7351" },
+      { label: "بيج",  hex: "#ead7b7" },
+      { label: "بني",  hex: "#8b5a2b" }
     ]
   },
 
-  formal:{
-    name:"طقم فورمال 3 قطع",
-    price:699,
-    img:"formal-main.jpg",
-    desc:"روزالين مستورد عالي الجودة – وان سايز 65 لـ 85 ك",
-    colors:[
-      {c:"#98ff98",img:"formal-mint.jpg"},
-      {c:"#a7c7ff",img:"formal-babyblue.jpg"},
-      {c:"#ead7b7",img:"formal-beige.jpg"},
-      {c:"#8b6a4f",img:"formal-havan.jpg"},
-      {c:"#000",img:"formal-black.jpg"}
+  formal: {
+    name: "طقم فورمال 3 قطع",
+    price: 699,
+    oldPrice: 949,
+    mainImg: "formal-main.jpg",
+    desc: "خامة روزالين مستوردة – وان سايز تقريبًا من 65 لـ 85 ك.",
+    colors: [
+      { label: "منت",      hex: "#98ff98" },
+      { label: "بيبي بلو", hex: "#a7c7ff" },
+      { label: "بيج",      hex: "#ead7b7" },
+      { label: "هافان",    hex: "#8b5a2b" },
+      { label: "أسود",     hex: "#000000" }
     ]
   },
 
-  toonz:{
-    name:"تونز – قطعتين",
-    price:799,
-    img:"toonz-main.jpg",
-    desc:"شمواه × شمواه – وان سايز من 60 لـ 90 ك",
-    colors:[
-      {c:"#1e3a8a",img:"toonz-blue.jpg"},
-      {c:"#ec4899",img:"toonz-pink.jpg"},
-      {c:"#ead7b7",img:"toonz-beige.jpg"},
-      {c:"#6b8f71",img:"toonz-olive.jpg"},
-      {c:"#6d1b1b",img:"toonz-wine.jpg"},
-      {c:"#7c3aed",img:"toonz-purple.jpg"}
+  toonz: {
+    name: "تونز – قطعتين",
+    price: 799,
+    oldPrice: 1199,
+    mainImg: "toonz-main.jpg",
+    desc: "شمواه × شمواه – وان سايز من 60 لـ 90 ك.",
+    colors: [
+      { label: "أزرق",  hex: "#1e3a8a" },
+      { label: "بينك",  hex: "#ec4899" },
+      { label: "بيج",   hex: "#ead7b7" },
+      { label: "زيتي",  hex: "#6b8f71" },
+      { label: "نبيتي", hex: "#6d1b1b" },
+      { label: "موف",   hex: "#7c3aed" }
     ]
   },
 
-  abaya_btn:{
-    name:"عباية زراير كبس",
-    price:749,
-    img:"abaya-btn-main.jpg",
-    desc:"جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80ك",
-    colors:[
-      {c:"#000",img:"abaya-black.jpg"},
-      {c:"#6b8f71",img:"abaya-olive.jpg"},
-      {c:"#d1d5db",img:"abaya-gray.jpg"},
-      {c:"#6b1b1b",img:"abaya-wine.jpg"},
-      {c:"#c19a6b",img:"abaya-caramel.jpg"},
-      {c:"#374151",img:"abaya-darkgray.jpg"}
+  abaya_btn: {
+    name: "عباية زراير كبس",
+    price: 749,
+    oldPrice: 1049,
+    // تأكد إن صورة الكولاج مرفوعة بهذا الاسم
+    mainImg: "abaya-btn-main.jpg",
+    desc: "جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80ك.",
+    colors: [
+      { label: "كراميل",     hex: "#c19a6b" },
+      { label: "نبيتي",      hex: "#6b1b1b" },
+      { label: "رمادي فاتح", hex: "#d1d5db" },
+      { label: "زيتي",       hex: "#6b8f71" },
+      { label: "أسود",       hex: "#000000" },
+      { label: "رمادي غامق", hex: "#374151" }
     ]
   }
 };
 
-const id = new URLSearchParams(location.search).get("id");
-const p = PRODUCTS[id];
+// ======================= تحميل المنتج من الـ URL =======================
+const params = new URLSearchParams(location.search);
+const productId = params.get("id") || "rozalin";
+const product = PRODUCTS[productId] || PRODUCTS.rozalin;
+
+let selectedColorIndex = 0;
 let qty = 1;
 
-document.body.innerHTML += `
-<section class="max-w-md mx-auto bg-white mt-4 p-4 rounded-xl shadow">
-  <img id="mainImg" src="${p.img}" class="rounded-xl mb-3 w-full">
-  <h2 class="text-3xl font-extrabold">${p.name}</h2>
-  <p class="text-3xl font-extrabold my-2">${p.price} ج</p>
-  <p class="text-gray-700 mb-4">${p.desc}</p>
+// ======================= رسم صفحة المنتج =======================
+const container = document.getElementById("productContainer");
 
-  <h4 class="font-semibold mb-2">اختاري اللون</h4>
-  <div class="flex gap-3 flex-wrap mb-4">
-    ${p.colors.map(col=>`
-      <span onclick="document.getElementById('mainImg').src='${col.img}'"
-      class="w-14 h-14 rounded-full border-2 cursor-pointer"
-      style="background:${col.c}"></span>
-    `).join("")}
+container.innerHTML = `
+  <div class="bg-white rounded-3xl shadow p-4">
+    <img id="mainImg"
+         src="${product.mainImg}"
+         alt="${product.name}"
+         class="w-full rounded-2xl mb-4 object-cover">
+
+    <div class="text-right mb-4">
+      <h1 class="text-2xl font-extrabold mb-1">${product.name}</h1>
+      <div class="flex items-baseline justify-end gap-2">
+        ${product.oldPrice ? `<span class="line-through text-gray-400 text-sm">${product.oldPrice} ج</span>` : ""}
+        <span class="text-3xl font-extrabold text-black">${product.price} ج</span>
+      </div>
+      <p class="text-gray-700 mt-2 text-sm md:text-base">
+        ${product.desc}
+      </p>
+    </div>
+
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-sm text-gray-700 font-semibold">اختاري اللون</span>
+    </div>
+    <div id="colorsRow" class="flex flex-wrap gap-3 mb-4"></div>
+
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-sm text-gray-700 font-semibold">الكمية</span>
+    </div>
+    <div class="flex items-center justify-start gap-4 mb-6">
+      <button id="decQty"
+        class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">-</button>
+      <span id="qtyValue" class="text-xl font-bold">1</span>
+      <button id="incQty"
+        class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">+</button>
+    </div>
+
+    <button id="addToCartBtn"
+      class="bg-black text-white w-full py-4 rounded-2xl text-xl font-extrabold">
+      إضافة إلى السلة
+    </button>
   </div>
+`;
 
-  <h4 class="font-semibold mb-2">الكمية</h4>
-  <div class="flex items-center gap-4 mb-4">
-    <button onclick="qty=Math.max(1,--qty);q.innerText=qty"
-      class="w-10 h-10 bg-gray-200 rounded-full">−</button>
-    <span id="q" class="text-xl font-bold">1</span>
-    <button onclick="qty++;q.innerText=qty"
-      class="w-10 h-10 bg-gray-200 rounded-full">+</button>
-  </div>
+// ======================= تهيئة دوائر الألوان =======================
+const colorsRow = document.getElementById("colorsRow");
+const mainImg   = document.getElementById("mainImg");
+const qtyValue  = document.getElementById("qtyValue");
+const incQtyBtn = document.getElementById("incQty");
+const decQtyBtn = document.getElementById("decQty");
+const addBtn    = document.getElementById("addToCartBtn");
 
-  <button class="bg-black text-white w-full py-4 rounded-2xl text-2xl font-extrabold">
-    إضافة إلى السلة
-  </button>
-</section>`;
+const colorDots = [];
+
+product.colors.forEach((col, idx) => {
+  const dot = document.createElement("span");
+  dot.className =
+    "w-10 h-10 rounded-full border border-gray-300 cursor-pointer transition";
+  dot.style.backgroundColor = col.hex;
+  dot.dataset.index = idx;
+  colorsRow.appendChild(dot);
+  colorDots.push(dot);
+});
+
+// تمييز اللون المختار
+function updateSelectedColor() {
+  colorDots.forEach((dot, idx) => {
+    if (idx === selectedColorIndex) {
+      dot.classList.add("ring-2", "ring-black");
+    } else {
+      dot.classList.remove("ring-2", "ring-black");
+    }
+  });
+
+  // نرجع دايمًا للصورة الأساسية (مفيش صور منفصلة لكل لون حاليًا)
+  mainImg.src = product.mainImg;
+}
+
+// أول لون مختار تلقائيًا
+updateSelectedColor();
+
+colorsRow.addEventListener("click", (e) => {
+  const dot = e.target.closest("span");
+  if (!dot) return;
+  const idx = parseInt(dot.dataset.index, 10);
+  if (isNaN(idx)) return;
+  selectedColorIndex = idx;
+  updateSelectedColor();
+});
+
+// ======================= الكمية =======================
+incQtyBtn.addEventListener("click", () => {
+  qty++;
+  qtyValue.textContent = qty;
+});
+
+decQtyBtn.addEventListener("click", () => {
+  if (qty > 1) {
+    qty--;
+    qtyValue.textContent = qty;
+  }
+});
+
+// ======================= السلة (localStorage) =======================
+function loadCart() {
+  try {
+    return JSON.parse(localStorage.getItem("cart") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+addBtn.addEventListener("click", () => {
+  const cart = loadCart();
+  const selectedColor = product.colors[selectedColorIndex];
+
+  cart.push({
+    productId: productId,
+    name: product.name,
+    price: product.price,
+    color: selectedColor.label,
+    colorHex: selectedColor.hex,
+    qty: qty
+  });
+
+  saveCart(cart);
+  alert("✅ تم إضافة المنتج إلى السلة بنجاح");
+});
 </script>
 
 </body>
