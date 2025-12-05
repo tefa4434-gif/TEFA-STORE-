@@ -4,14 +4,16 @@
   <meta charset="UTF-8" />
   <title>سلة الطلبات | TEFA STORE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
@@ -19,718 +21,493 @@
       color: #111827;
     }
 
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
     header {
-      background: #111827;
-      color: #fff;
-      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #ffffff;
       position: sticky;
       top: 0;
       z-index: 10;
     }
 
-    header .logo {
+    .title {
       font-weight: 800;
-      letter-spacing: 1px;
       font-size: 18px;
-    }
-
-    header .cart-icon {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: #f97316;
-      color: #111827;
-      font-size: 18px;
-      text-decoration: none;
-    }
-
-    header .cart-count {
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      background: #ef4444;
-      color: #fff;
-      font-size: 11px;
-      padding: 1px 5px;
-      border-radius: 999px;
-      min-width: 18px;
-      text-align: center;
     }
 
     main {
-      max-width: 960px;
-      margin: 16px auto 32px;
-      padding: 0 12px;
+      padding: 12px 16px 24px;
+      flex: 1;
     }
 
-    h1 {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 16px;
-    }
-
-    .card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .card-header h2 {
-      font-size: 18px;
-    }
-
-    .empty-cart {
+    .cart-empty {
       text-align: center;
-      padding: 32px 16px;
+      padding: 40px 20px;
       color: #6b7280;
       font-size: 14px;
+    }
+
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .cart-item {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      background: #fafafa;
     }
 
-    .cart-item:last-child {
-      border-bottom: none;
-    }
-
-    .cart-item-details {
+    .cart-item-main {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .cart-item-title {
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 4px;
-      font-size: 15px;
+    }
+
+    .cart-item-sub {
+      font-size: 12px;
+      color: #6b7280;
     }
 
     .cart-item-color {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
     }
 
-    .color-dot {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
+    .cart-item-color-dot {
+      width: 14px;
+      height: 14px;
       border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      margin-left: 4px;
-      vertical-align: middle;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 1px #e5e7eb;
+    }
+
+    .cart-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
     }
 
     .cart-item-price {
-      font-size: 14px;
-      font-weight: 600;
-      color: #16a34a;
-      margin-bottom: 6px;
-    }
-
-    .cart-item-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .qty-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .qty-value {
-      min-width: 24px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .remove-btn {
-      font-size: 12px;
-      color: #ef4444;
-      border: none;
-      background: transparent;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .totals-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 4px 0;
-      font-size: 14px;
-    }
-
-    .totals-row strong {
+      font-size: 13px;
       font-weight: 700;
     }
 
-    .totals-row.total {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed #e5e7eb;
-      font-size: 16px;
-    }
-
-    .totals-row.total strong {
-      color: #16a34a;
-    }
-
-    .badge {
+    .cart-qty-controls {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      padding: 2px 8px;
       border-radius: 999px;
-      background: #fee2e2;
-      color: #b91c1c;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+
+    .cart-qty-btn {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: #f9fafb;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .cart-qty-value {
+      min-width: 26px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .cart-remove {
+      font-size: 11px;
+      color: #ef4444;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .summary {
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      background: #f9fafb;
+      font-size: 13px;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 4px;
     }
 
-    form label {
+    .summary-row.total {
+      font-weight: 800;
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    .form-section {
+      margin-bottom: 12px;
+    }
+
+    label {
       display: block;
-      font-size: 14px;
+      font-size: 13px;
       margin-bottom: 4px;
       font-weight: 600;
     }
 
-    form input,
-    form select,
-    form textarea {
+    input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
       border-radius: 12px;
       border: 1px solid #e5e7eb;
+      padding: 10px 12px;
       font-size: 14px;
-      margin-bottom: 10px;
+      outline: none;
     }
 
-    form textarea {
-      min-height: 60px;
+    textarea {
+      min-height: 70px;
       resize: vertical;
     }
 
     .hint {
       font-size: 11px;
       color: #6b7280;
-      margin-top: -6px;
-      margin-bottom: 8px;
-    }
-
-    .two-cols {
-      display: flex;
-      gap: 8px;
-    }
-
-    .two-cols > div {
-      flex: 1;
-    }
-
-    .btn-main {
-      width: 100%;
-      padding: 12px;
-      border-radius: 999px;
-      border: none;
-      background: #111827;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
       margin-top: 4px;
     }
 
-    .btn-main:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    .btn-primary {
+      width: 100%;
+      border-radius: 999px;
+      padding: 14px 18px;
+      border: none;
+      background: #111827;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
     }
 
-    .note {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 6px;
+    footer {
+      padding: 10px 16px 16px;
+      font-size: 11px;
+      color: #9ca3af;
       text-align: center;
     }
 
-    .discount-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .discount-row input {
-      margin-bottom: 0;
-    }
-
-    .btn-secondary {
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: none;
-      background: #f97316;
-      color: #111827;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    @media (min-width: 800px) {
-      .layout {
-        display: grid;
-        grid-template-columns: 3fr 2fr;
-        gap: 16px;
+    @media (min-width: 640px) {
+      main {
+        padding-inline: 24px;
+      }
+      footer {
+        padding-inline: 24px;
       }
     }
   </style>
 </head>
 <body>
-<header>
-  <div class="logo">TEFA STORE</div>
-  <a href="cart.html" class="cart-icon" aria-label="سلة الطلبات">
-    🛒
-    <span class="cart-count" id="cartCount">0</span>
-  </a>
-</header>
+  <div class="page">
+    <header>
+      <a href="index.html">←</a>
+      <div class="title">سلة الطلبات</div>
+      <div style="width:24px;"></div>
+    </header>
 
-<main>
-  <h1>سلة الطلبات</h1>
-  <p class="subtitle">
-    راجع اختياراتك، ثم اكتب بيانات التوصيل واضغط تأكيد الطلب ✨
-  </p>
-
-  <div class="layout">
-    <!-- السلة -->
-    <section class="card" id="cartCard">
-      <div class="card-header">
-        <h2>المنتجات المختارة</h2>
-      </div>
-      <div id="cartItems"></div>
-      <div id="emptyCart" class="empty-cart" style="display:none;">
-        السلة فاضية حالياً 😅<br/>ارجع للصفحة الرئيسية واختار الموديلات اللي تعجبك.
+    <main>
+      <div id="cart-empty" class="cart-empty" style="display:none;">
+        السلة فاضية حاليًا 🧺<br/>ابدأي باختيار الموديل واللون من الصفحة الرئيسية.
       </div>
 
-      <div id="totalsBox" style="margin-top:12px; display:none;">
-        <div class="badge">🚚 الشحن حسب المحافظة</div>
+      <div id="cart-list" class="cart-list"></div>
 
-        <div class="totals-row">
+      <div id="summary" class="summary" style="display:none;">
+        <div class="summary-row">
           <span>إجمالي المنتجات</span>
-          <span id="itemsTotal">0 ج</span>
+          <span id="summary-products">0 ج</span>
         </div>
-        <div class="totals-row">
+        <div class="summary-row">
           <span>الشحن</span>
-          <span id="shippingTotal">0 ج</span>
+          <span id="summary-shipping">0 ج</span>
         </div>
-        <div class="totals-row" id="discountRow" style="display:none;">
-          <span>خصم الكوبون</span>
-          <span id="discountAmount">-0 ج</span>
-        </div>
-        <div class="totals-row total">
-          <strong>الإجمالي بعد الشحن</strong>
-          <strong id="grandTotal">0 ج</strong>
+        <div class="summary-row total">
+          <span>الإجمالي بعد الخصم</span>
+          <span id="summary-total">0 ج</span>
         </div>
       </div>
-    </section>
 
-    <!-- بيانات العميل -->
-    <section class="card">
-      <div class="card-header">
-        <h2>بيانات التوصيل</h2>
-      </div>
+      <form id="order-form">
+        <div class="form-section">
+          <label for="name">الاسم *</label>
+          <input id="name" required placeholder="اسم ثلاثي" />
+        </div>
 
-      <div class="badge" style="background:#dcfce7; color:#166534;">
-        💸 خصم 10٪ لأول أوردر بكود TEFA4434
-      </div>
-      <p class="hint" style="margin-bottom:10px;">
-        خصم بيتطبق تلقائياً لو الكود صحيح.
-      </p>
+        <div class="form-section">
+          <label for="phone">رقم الموبايل الأساسي *</label>
+          <input id="phone" required placeholder="01xxxxxxxxx" />
+        </div>
 
-      <form id="orderForm">
-        <label for="name">الاسم الثلاثي *</label>
-        <input id="name" required placeholder="مثال: آية محمد أحمد" />
+        <div class="form-section">
+          <label for="phone2">رقم موبايل بديل (اختياري)</label>
+          <input id="phone2" placeholder="للتأكيد أو التواصل" />
+        </div>
 
-        <div class="two-cols">
-          <div>
-            <label for="phone">موبايل واتساب *</label>
-            <input
-              id="phone"
-              required
-              inputmode="tel"
-              placeholder="01xxxxxxxxx"
-            />
-          </div>
-          <div>
-            <label for="phone2">موبايل بديل (اختياري)</label>
-            <input
-              id="phone2"
-              inputmode="tel"
-              placeholder="رقم تاني لو حابب"
-            />
+        <div class="form-section">
+          <label for="governorate">المحافظة *</label>
+          <select id="governorate" required>
+            <option value="">اختاري المحافظة</option>
+            <option>القاهرة</option>
+            <option>الجيزة</option>
+            <option>الإسكندرية</option>
+            <option>القليوبية</option>
+            <option>المنوفية</option>
+            <option>الغربية</option>
+            <option>الشرقية</option>
+            <option>الدقهلية</option>
+            <option>كفر الشيخ</option>
+            <option>دمياط</option>
+            <option>البحيرة</option>
+            <option>بورسعيد</option>
+            <option>الإسماعيلية</option>
+            <option>السويس</option>
+            <option>بني سويف</option>
+            <option>الفيوم</option>
+            <option>المنيا</option>
+            <option>أسيوط</option>
+            <option>سوهاج</option>
+            <option>قنا</option>
+            <option>الأقصر</option>
+            <option>أسوان</option>
+            <option>البحر الأحمر</option>
+            <option>مطروح</option>
+            <option>شمال سيناء</option>
+            <option>جنوب سيناء</option>
+            <option>الوادي الجديد</option>
+            <option>شرم الشيخ</option>
+          </select>
+          <div class="hint">
+            القاهرة والجيزة: 60 ج – باقي المحافظات: 70 ج – المحافظات البعيدة (شرم الشيخ، الغردقة، مرسى مطروح، شمال سيناء، جنوب سيناء، الوادي الجديد): 120 ج
           </div>
         </div>
 
-        <label for="governorate">المحافظة *</label>
-        <select id="governorate" required>
-          <option value="">اختار المحافظة</option>
-          <option>القاهرة</option>
-          <option>الجيزة</option>
-          <option>الإسكندرية</option>
-          <option>الدقهلية</option>
-          <option>الشرقية</option>
-          <option>الغربية</option>
-          <option>المنوفية</option>
-          <option>كفر الشيخ</option>
-          <option>البحيرة</option>
-          <option>دمياط</option>
-          <option>بورسعيد</option>
-          <option>الإسماعيلية</option>
-          <option>السويس</option>
-          <option>الفيوم</option>
-          <option>بني سويف</option>
-          <option>المنيا</option>
-          <option>أسيوط</option>
-          <option>سوهاج</option>
-          <option>قنا</option>
-          <option>الأقصر</option>
-          <option>أسوان</option>
-          <option>البحر الأحمر</option>
-          <option>مرسى مطروح</option>
-          <option>شمال سيناء</option>
-          <option>جنوب سيناء</option>
-          <option>الوادي الجديد</option>
-          <option>شرم الشيخ</option>
-          <option>الغردقة</option>
-        </select>
-
-        <label for="address">العنوان بالتفصيل *</label>
-        <textarea
-          id="address"
-          required
-          placeholder="المركز / المنطقة - اسم الشارع - رقم المنزل / العمارة - أقرب علامة مميزة"
-        ></textarea>
-
-        <label for="notes">ملاحظات (اختياري)</label>
-        <textarea
-          id="notes"
-          placeholder="مثلاً: واسع شوية، يفضل اتصال قبل الشحن .."
-        ></textarea>
-
-        <div class="two-cols">
-          <div>
-            <label for="height">الطول (اختياري)</label>
-            <input id="height" placeholder="مثال 165 سم" />
-          </div>
-          <div>
-            <label for="weight">الوزن (اختياري)</label>
-            <input id="weight" placeholder="مثال 75 ك" />
-          </div>
+        <div class="form-section">
+          <label for="address">العنوان بالتفصيل *</label>
+          <input id="address" required placeholder="الشارع - رقم العمارة - أقرب علامة مميزة" />
         </div>
 
-        <div class="discount-row">
-          <input
-            id="coupon"
-            placeholder="لو معاك كود خصم اكتبه هنا"
-          />
-          <button type="button" class="btn-secondary" id="applyCouponBtn">
-            تطبيق الكود
-          </button>
+        <div class="form-section">
+          <label for="notes">ملاحظات للطلب (اختياري)</label>
+          <textarea id="notes" placeholder="مثال: مقاس واسع شوية، يفضل اتصال قبل الشحن .."></textarea>
         </div>
-        <p class="hint">
-          كود الخصم الحالي: <strong>TEFA4434</strong> خصم 10٪ لأول أوردر.
-        </p>
 
-        <button type="submit" class="btn-main" id="submitBtn">
-          تأكيد الطلب الآن
+        <div class="form-section">
+          <label for="weight">الطول أو الوزن (اختياري)</label>
+          <input id="weight" placeholder="مثال: 165 سم / 80 ك" />
+          <div class="hint">يساعدنا نختار أنسب مقاس ليكي ❤️</div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <span>تأكيد الطلب</span>
         </button>
-        <p class="note">
-          مفيش أي دفع أونلاين 💳 – الدفع عند الاستلام بعد المعاينة براحتك.
-        </p>
       </form>
-    </section>
+    </main>
+
+    <footer>
+      للتواصل والاقتراحات واتساب: 010209942139
+    </footer>
   </div>
-</main>
 
-<script>
-  // 🔗 لينك Google Apps Script الجديد
-  const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwPgm3Ez315GP5_E4SyM-NOjId3Whah4tdrXCRCHF1wYlk_CVwEgs4kd8WHCpJ50ggpiw/exec";
+  <script>
+    const CART_KEY = "tefa_cart_v1";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPgm3Ez315GP5_E4SyM-NOjId3Whah4tdrXCRCHF1wYlk_CVwEgs4kd8WHCpJ50ggpiw/exec";
 
-  // 🔑 اسم المفتاح في localStorage – مهم يكون نفس الاسم في index و product
-  const CART_KEY = "tefa_cart";
-
-  const cartCountEl = document.getElementById("cartCount");
-  const cartItemsEl = document.getElementById("cartItems");
-  const emptyCartEl = document.getElementById("emptyCart");
-  const totalsBoxEl = document.getElementById("totalsBox");
-  const itemsTotalEl = document.getElementById("itemsTotal");
-  const shippingTotalEl = document.getElementById("shippingTotal");
-  const discountRowEl = document.getElementById("discountRow");
-  const discountAmountEl = document.getElementById("discountAmount");
-  const grandTotalEl = document.getElementById("grandTotal");
-  const governorateEl = document.getElementById("governorate");
-  const couponInput = document.getElementById("coupon");
-  const applyCouponBtn = document.getElementById("applyCouponBtn");
-
-  let cart = [];
-  let discountValue = 0;
-
-  function loadCart() {
-    try {
-      const stored = localStorage.getItem(CART_KEY);
-      cart = stored ? JSON.parse(stored) : [];
-    } catch (e) {
-      cart = [];
+    function loadCart() {
+      try {
+        const raw = localStorage.getItem(CART_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
     }
-    if (!Array.isArray(cart)) cart = [];
-    updateCartBadge();
-    renderCart();
-  }
 
-  function saveCart() {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    updateCartBadge();
-  }
-
-  function updateCartBadge() {
-    const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-    cartCountEl.textContent = count;
-  }
-
-  function renderCart() {
-    cartItemsEl.innerHTML = "";
-    if (cart.length === 0) {
-      emptyCartEl.style.display = "block";
-      totalsBoxEl.style.display = "none";
-      return;
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      renderCart();
     }
-    emptyCartEl.style.display = "none";
-    totalsBoxEl.style.display = "block";
 
-    cart.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "cart-item";
+    function calcShipping(governorate) {
+      if (!governorate) return 0;
+      const g = governorate.trim();
+      const remote = ["شرم الشيخ","الغردقة","مرسى مطروح","مطروح","شمال سيناء","جنوب سيناء","الوادي الجديد","البحر الأحمر"];
+      if (g === "القاهرة" || g === "الجيزة") return 60;
+      if (remote.includes(g)) return 120;
+      return 70;
+    }
 
-      const details = document.createElement("div");
-      details.className = "cart-item-details";
+    function renderCart() {
+      const cart = loadCart();
+      const listEl = document.getElementById("cart-list");
+      const emptyEl = document.getElementById("cart-empty");
+      const summaryEl = document.getElementById("summary");
 
-      const title = document.createElement("div");
-      title.className = "cart-item-title";
-      title.textContent = item.name || "منتج بدون اسم";
+      listEl.innerHTML = "";
 
-      const color = document.createElement("div");
-      color.className = "cart-item-color";
-      if (item.colorName) {
-        const dot = document.createElement("span");
-        dot.className = "color-dot";
-        if (item.colorCode) dot.style.background = item.colorCode;
-        color.appendChild(dot);
-        color.appendChild(
-          document.createTextNode(" اللون: " + item.colorName)
-        );
-      } else {
-        color.textContent = "اللون: غير محدد";
+      if (!cart.length) {
+        emptyEl.style.display = "block";
+        summaryEl.style.display = "none";
+        return;
       }
 
-      const price = document.createElement("div");
-      price.className = "cart-item-price";
-      price.textContent = (item.price || 0) + " ج";
+      emptyEl.style.display = "none";
 
-      const actions = document.createElement("div");
-      actions.className = "cart-item-actions";
+      let productsTotal = 0;
 
-      const minus = document.createElement("button");
-      minus.type = "button";
-      minus.className = "qty-btn";
-      minus.textContent = "−";
-      minus.addEventListener("click", () => changeQty(index, -1));
+      cart.forEach((item, index) => {
+        const lineTotal = item.price * item.quantity;
+        productsTotal += lineTotal;
 
-      const qty = document.createElement("div");
-      qty.className = "qty-value";
-      qty.textContent = item.qty || 1;
+        const row = document.createElement("div");
+        row.className = "cart-item";
 
-      const plus = document.createElement("button");
-      plus.type = "button";
-      plus.className = "qty-btn";
-      plus.textContent = "+";
-      plus.addEventListener("click", () => changeQty(index, +1));
+        row.innerHTML = `
+          <div class="cart-item-main">
+            <div class="cart-item-title">${item.productName}</div>
+            <div class="cart-item-sub">اللون: 
+              <span class="cart-item-color">
+                <span class="cart-item-color-dot" style="background:${item.colorHex || "#111"}"></span>
+                <span>${item.colorLabel}</span>
+              </span>
+            </div>
+          </div>
+          <div class="cart-item-right">
+            <div class="cart-item-price">${lineTotal} ج</div>
+            <div class="cart-qty-controls">
+              <button type="button" class="cart-qty-btn" data-index="${index}" data-action="minus">−</button>
+              <div class="cart-qty-value">${item.quantity}</div>
+              <button type="button" class="cart-qty-btn" data-index="${index}" data-action="plus">+</button>
+            </div>
+            <button type="button" class="cart-remove" data-index="${index}">حذف</button>
+          </div>
+        `;
 
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "remove-btn";
-      remove.textContent = "إزالة اللون";
-      remove.addEventListener("click", () => removeItem(index));
+        listEl.appendChild(row);
+      });
 
-      actions.appendChild(minus);
-      actions.appendChild(qty);
-      actions.appendChild(plus);
-      actions.appendChild(remove);
+      const governorate = document.getElementById("governorate").value;
+      const shipping = calcShipping(governorate);
+      const total = productsTotal + shipping;
 
-      details.appendChild(title);
-      details.appendChild(color);
-      details.appendChild(price);
-      details.appendChild(actions);
+      document.getElementById("summary-products").textContent = productsTotal + " ج";
+      document.getElementById("summary-shipping").textContent = shipping + " ج";
+      document.getElementById("summary-total").textContent = total + " ج";
 
-      row.appendChild(details);
-      cartItemsEl.appendChild(row);
+      summaryEl.style.display = "block";
+    }
+
+    document.getElementById("cart-list").addEventListener("click", (e) => {
+      const cart = loadCart();
+      const btn = e.target;
+
+      if (btn.classList.contains("cart-qty-btn")) {
+        const index = Number(btn.dataset.index);
+        const action = btn.dataset.action;
+        const item = cart[index];
+        if (!item) return;
+
+        if (action === "plus") {
+          item.quantity = Math.min(20, item.quantity + 1);
+        } else if (action === "minus") {
+          item.quantity = Math.max(1, item.quantity - 1);
+        }
+        saveCart(cart);
+      }
+
+      if (btn.classList.contains("cart-remove")) {
+        const index = Number(btn.dataset.index);
+        cart.splice(index, 1);
+        saveCart(cart);
+      }
     });
 
-    updateTotals();
-  }
+    document.getElementById("governorate").addEventListener("change", () => {
+      renderCart();
+    });
 
-  function changeQty(index, delta) {
-    const item = cart[index];
-    if (!item) return;
-    const newQty = (item.qty || 1) + delta;
-    if (newQty <= 0) {
-      removeItem(index);
-      return;
-    }
-    item.qty = newQty;
-    saveCart();
-    renderCart();
-  }
-
-  function removeItem(index) {
-    cart.splice(index, 1);
-    saveCart();
-    renderCart();
-  }
-
-  function getShippingForGovernorate(gov) {
-    if (!gov) return 0;
-
-    const special120 = [
-      "شرم الشيخ",
-      "الغردقة",
-      "مرسى مطروح",
-      "شمال سيناء",
-      "جنوب سيناء",
-      "الوادي الجديد",
-    ];
-
-    if (gov === "القاهرة" || gov === "الجيزة") return 60;
-    if (special120.includes(gov)) return 120;
-    return 70;
-  }
-
-  function updateTotals() {
-    const itemsTotal = cart.reduce(
-      (sum, item) => sum + (item.price || 0) * (item.qty || 1),
-      0
-    );
-
-    const gov = governorateEl.value || "";
-    const shipping = getShippingForGovernorate(gov);
-
-    const discount = discountValue ? Math.round(itemsTotal * discountValue) : 0;
-    const grand = itemsTotal + shipping - discount;
-
-    itemsTotalEl.textContent = itemsTotal + " ج";
-    shippingTotalEl.textContent = shipping + " ج";
-
-    if (discount > 0) {
-      discountRowEl.style.display = "flex";
-      discountAmountEl.textContent = "-" + discount + " ج";
-    } else {
-      discountRowEl.style.display = "none";
-    }
-
-    grandTotalEl.textContent = grand + " ج";
-  }
-
-  governorateEl.addEventListener("change", updateTotals);
-
-  // كوبون الخصم
-  applyCouponBtn.addEventListener("click", () => {
-    const code = couponInput.value.trim().toUpperCase();
-    if (!code) {
-      alert("اكتب كود الخصم الأول.");
-      return;
-    }
-    if (code !== "TEFA4434") {
-      alert("الكود غير صحيح أو منتهي.");
-      discountValue = 0;
-      updateTotals();
-      return;
-    }
-    // خصم 10٪ على المنتجات فقط
-    discountValue = 0.1;
-    alert("تم تطبيق كود الخصم 10٪ بنجاح 🎉");
-    updateTotals();
-  });
-
-  // إرسال الطلب لـ Google Sheet
-  document
-    .getElementById("orderForm")
-    .addEventListener("submit", async (e) => {
+    document.getElementById("order-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (cart.length === 0) {
-        alert("السلة فاضية، اختار منتج واحد على الأقل.");
+      const cart = loadCart();
+      if (!cart.length) {
+        alert("السلة فاضية حاليًا، ضيفي منتج واحد على الأقل 🧺");
         return;
       }
 
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const phone2 = document.getElementById("phone2").value.trim();
-      const governorate = governorateEl.value;
+      const governorate = document.getElementById("governorate").value.trim();
       const address = document.getElementById("address").value.trim();
       const notes = document.getElementById("notes").value.trim();
-      const height = document.getElementById("height").value.trim();
       const weight = document.getElementById("weight").value.trim();
 
       if (!name || !phone || !governorate || !address) {
-        alert("من فضلك املأ الحقول الأساسية (الاسم - الموبايل - المحافظة - العنوان).");
+        alert("من فضلك املئي البيانات الأساسية (الاسم، الموبايل، المحافظة، العنوان).");
         return;
       }
 
-      const itemsSummary = cart
+      const productsSummary = cart
         .map(
-          (item) =>
-            `${item.name || "منتج"} - ${item.colorName || "بدون لون"} × ${
-              item.qty || 1
-            }`
+          item =>
+            `${item.productName} – ${item.colorLabel} × ${item.quantity}`
         )
         .join(" | ");
 
-      // الأرقام المعروضة في صفحة السلة
-      const itemsTotal = cart.reduce(
-        (sum, item) => sum + (item.price || 0) * (item.qty || 1),
+      const productsTotal = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
         0
       );
-      const shipping = getShippingForGovernorate(governorate);
-      const discount = discountValue ? Math.round(itemsTotal * discountValue) : 0;
-      const grand = itemsTotal + shipping - discount;
+      const shipping = calcShipping(governorate);
+      const total = productsTotal + shipping;
 
       const payload = {
         name,
@@ -739,50 +516,35 @@
         governorate,
         address,
         notes,
-        height,
         weight,
-        products: itemsSummary,
-        itemsTotal,
-        shipping,
-        discount,
-        total: grand,
-        source: "TEFA STORE",
+        total,
+        products: productsSummary
       };
 
-      const submitBtn = document.getElementById("submitBtn");
-      submitBtn.disabled = true;
-      submitBtn.textContent = "جاري إرسال الطلب ...";
-
       try {
-        const res = await fetch(SCRIPT_URL, {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", // نتجنب مشاكل CORS مع Apps Script
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
 
-        // مع no-cors مش هنقدر نقرأ response، فهنفترض النجاح
-        alert("تم استلام طلبك بنجاح ❤️ هنكلمك لتأكده في أسرع وقت.");
-        // نمسح السلة
-        localStorage.removeItem(CART_KEY);
-        cart = [];
-        renderCart();
-        // نرجع للرئيسية
-        window.location.href = "index.html";
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.result === "success") {
+          alert("تم استلام طلبك بنجاح ❤️ هنكلمك لتأكيده في أسرع وقت.");
+          localStorage.removeItem(CART_KEY);
+          renderCart();
+          e.target.reset();
+        } else {
+          alert("في مشكلة في الاتصال بالإنترنت أو Google Sheet. لو سمحتي كلمينا واتساب لتأكيد طلبك.");
+        }
       } catch (err) {
-        console.error(err);
-        alert(
-          "في مشكلة في الاتصال بالإنترنت أو Google Sheet. لو سمحت كلمنا على واتساب لتأكيد طلبك."
-        );
-        submitBtn.disabled = false;
-        submitBtn.textContent = "تأكيد الطلب الآن";
+        alert("في مشكلة في الاتصال بالإنترنت أو Google Sheet. لو سمحتي كلمينا واتساب لتأكيد طلبك.");
       }
     });
 
-  // تشغيل السلة عند فتح الصفحة
-  loadCart();
-</script>
+    // تشغيل أول مرة
+    renderCart();
+  </script>
 </body>
 </html>
