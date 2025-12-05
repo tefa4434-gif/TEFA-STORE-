@@ -2,19 +2,15 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>TEFA STORE - أطقم حريمي جاهزة</title>
+  <title>TEFA STORE | أطقم حريمي جاهزة</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
     }
     body {
       background: #f5f5f7;
@@ -26,15 +22,15 @@
     }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
       background: #111827;
       color: #fff;
-      padding: 10px 16px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
     .logo-box {
       display: flex;
@@ -50,42 +46,41 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
+      color: #111827;
     }
     .brand-title {
       font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-weight: 800;
+      letter-spacing: 0.08em;
     }
     .brand-sub {
       font-size: 11px;
       color: #9ca3af;
     }
 
-    .cart-btn {
+    .cart-icon {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 6px 10px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
-      border: 1px solid #f97316;
-      background: #f973161a;
-      color: #fefce8;
-      cursor: pointer;
-      font-size: 12px;
+      background: #f97316;
+      color: #111827;
+      font-size: 18px;
     }
-    .cart-count-badge {
+    .cart-count {
       position: absolute;
       top: -6px;
       left: -6px;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 999px;
       background: #ef4444;
       color: #fff;
       font-size: 11px;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
       display: none;
       align-items: center;
       justify-content: center;
@@ -93,17 +88,17 @@
     }
 
     main {
-      padding: 16px;
-      max-width: 900px;
-      margin: 0 auto 40px;
+      max-width: 960px;
+      margin: 16px auto 32px;
+      padding: 0 12px;
     }
 
     .hero {
-      background: #fff;
+      background: #ffffff;
       border-radius: 18px;
-      padding: 18px 16px 16px;
+      padding: 16px 14px 18px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
       margin-bottom: 16px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
     }
     .hero-badge {
       display: inline-flex;
@@ -113,32 +108,33 @@
       border-radius: 999px;
       background: #fee2e2;
       color: #b91c1c;
-      font-size: 12px;
-      margin-bottom: 8px;
+      font-size: 11px;
+      margin-bottom: 6px;
     }
     .hero-title {
       font-size: 22px;
       font-weight: 800;
-      line-height: 1.4;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      line-height: 1.5;
     }
     .hero-sub {
-      font-size: 14px;
+      font-size: 13px;
       color: #4b5563;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
+      line-height: 1.6;
     }
-    .hero-bullets {
+    .hero-list {
       font-size: 13px;
       color: #374151;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-    .hero-bullets li {
-      margin-bottom: 4px;
+    .hero-list li {
+      margin-bottom: 3px;
     }
     .hero-offer {
-      margin: 8px 0 0;
       font-size: 13px;
       color: #111827;
+      margin-top: 4px;
     }
     .hero-offer span {
       font-weight: 700;
@@ -147,49 +143,49 @@
     .hero-buttons {
       display: flex;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 10px;
       flex-wrap: wrap;
     }
-    .btn-main {
-      flex: 1;
-      text-align: center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: #111827;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-    }
+    .btn-main,
     .btn-ghost {
       flex: 1;
       text-align: center;
       padding: 10px 12px;
       border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-main {
+      background: #111827;
+      color: #fff;
+      font-weight: 700;
+    }
+    .btn-ghost {
       background: #f3f4f6;
       color: #111827;
-      font-size: 14px;
-      font-weight: 600;
       border: 1px solid #e5e7eb;
+      font-weight: 600;
     }
 
     .usp-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-      margin: 16px 0 4px;
+      margin-top: 12px;
     }
     .usp-card {
-      background: #fff;
+      background: #f9fafb;
       border-radius: 14px;
-      padding: 10px 8px;
+      padding: 8px;
+      font-size: 11px;
+      color: #4b5563;
       text-align: center;
-      font-size: 12px;
-      color: #374151;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e5e7eb;
     }
     .usp-card strong {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       margin-bottom: 2px;
       color: #111827;
     }
@@ -198,37 +194,34 @@
       font-size: 16px;
       font-weight: 700;
       margin: 10px 0 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
     }
     .product-card {
-      background: #fff;
+      background: #ffffff;
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+      cursor: pointer;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
     }
-    .product-image-wrapper {
+    .product-img-wrapper {
       position: relative;
       overflow: hidden;
     }
-    .product-image-wrapper img {
+    .product-img-wrapper img {
       width: 100%;
       display: block;
-      transition: transform 0.25s ease-out;
       max-height: 260px;
       object-fit: cover;
+      transition: transform 0.2s ease-out;
     }
-    .product-card:hover .product-image-wrapper img {
+    .product-card:hover .product-img-wrapper img {
       transform: scale(1.03);
     }
     .discount-badge {
@@ -237,9 +230,9 @@
       right: 10px;
       background: #ef4444;
       color: #fff;
-      font-size: 11px;
-      padding: 4px 8px;
       border-radius: 999px;
+      font-size: 11px;
+      padding: 3px 8px;
     }
     .product-body {
       padding: 10px 12px 12px;
@@ -249,17 +242,16 @@
       font-weight: 700;
       margin-bottom: 4px;
     }
-    .product-material,
-    .product-size {
+    .product-meta {
       font-size: 12px;
-      color: #4b5563;
+      color: #6b7280;
       margin-bottom: 4px;
     }
     .product-price-row {
       display: flex;
       align-items: baseline;
       gap: 6px;
-      margin-bottom: 6px;
+      margin: 4px 0;
     }
     .product-price {
       font-size: 18px;
@@ -274,50 +266,37 @@
     .product-colors {
       font-size: 12px;
       color: #4b5563;
-      margin-bottom: 8px;
+      margin-top: 2px;
     }
     .product-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 4px;
+      margin-top: 8px;
     }
     .product-actions button {
-      flex: 1;
+      width: 100%;
+      padding: 8px 10px;
       border-radius: 999px;
       border: none;
-      padding: 8px 10px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .product-actions .btn-view {
       background: #111827;
       color: #fff;
+      font-size: 13px;
       font-weight: 700;
+      cursor: pointer;
     }
 
     footer {
       text-align: center;
       font-size: 12px;
       color: #6b7280;
-      margin: 24px 0 10px;
+      margin: 20px 0 10px;
     }
-    .footer-whatsapp {
-      margin-top: 6px;
-      font-size: 13px;
-      color: #111827;
-    }
-    .footer-whatsapp a {
+    footer a {
       color: #16a34a;
-      font-weight: 700;
+      font-weight: 600;
     }
 
     @media (max-width: 480px) {
-      .hero-title {
-        font-size: 20px;
-      }
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
+      .hero-title { font-size: 20px; }
+      .products-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -330,77 +309,74 @@
       <div class="brand-sub">أطقم حريمي جاهزة على اللبس</div>
     </div>
   </div>
-  <button class="cart-btn" onclick="window.location.href='cart.html'">
-    <span class="cart-count-badge" id="cart-count">0</span>
-    🛒 سلة الطلبات
-  </button>
+  <a href="cart.html" class="cart-icon" aria-label="سلة الطلبات">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </a>
 </header>
 
 <main>
   <section class="hero">
     <div class="hero-badge">
-      🔥 كود خصم 10٪ لأول أوردر: TEFA4434
+      🔥 كود خصم 10٪ على أول أوردر: TEFA4434
     </div>
     <h1 class="hero-title">
-      أطقم حريمي 3 قطع وخامات مستوردة جاهزة للخروجات والمناسبات 💃✨
+      أطقم حريمي 3 قطع وخامات مستوردة جاهزة لكل الخروجات والمناسبات 💃✨
     </h1>
     <p class="hero-sub">
-      روزالين – فورمال – عبايات – شمواه بناتي 🙈  
-      شحن لحد باب البيت، والدفع عند الاستلام.
+      اختاري من موديلات روزالين – فورمال – عبايات – شمواه بناتي، واطلبي لحد باب البيت والدفع عند الاستلام.
     </p>
-    <ul class="hero-bullets">
-      <li>• خامات ناعمة وثابتة في الغسيل 🤍</li>
+    <ul class="hero-list">
+      <li>• خامة ناعمة وثابتة في الغسيل 🤍</li>
       <li>• اطلب وانت مطمئن وعاين براحتك قبل الاستلام 🥰❤️</li>
-      <li>• شحن لجميع المحافظات + خدمة عملاء على واتساب</li>
+      <li>• شحن لكل محافظات مصر 🚚</li>
     </ul>
     <p class="hero-offer">
-      استخدمي كود الخصم <strong>TEFA4434</strong> على أول طلب بنفس رقم الموبايل واستفيدي بخصم <span>10٪</span> 💸
+      استخدمي كود <strong>TEFA4434</strong> على أول طلب بنفس رقم الموبايل واستفيدي بخصم <span>10٪</span> 💸
     </p>
     <div class="hero-buttons">
-      <a href="#products" class="btn-main">شوفي العروض دلوقتي</a>
-      <a href="https://wa.me/2010209942139" target="_blank" class="btn-ghost">
-        تواصل واتساب للاستفسار السريع
-      </a>
+      <button class="btn-main" onclick="scrollToProducts()">شوفي العروض دلوقتي</button>
+      <a href="https://wa.me/201029942139" target="_blank" class="btn-ghost">تواصلي واتساب للاستفسار</a>
     </div>
     <div class="usp-row">
       <div class="usp-card">
-        <strong>خامة مريحة</strong>
-        خامات مستوردة عالية الجودة
+        <strong>خامات مستوردة</strong>
+        روزالين – جوخ – شمواه ناعم
       </div>
       <div class="usp-card">
         <strong>دفع عند الاستلام</strong>
-        تعاينـي براحتك قبل الدفع
+        تعايني الأول وبعدين تدفعي
       </div>
       <div class="usp-card">
         <strong>شحن لكل المحافظات</strong>
-        60 للقاهرة/الجيزة – 70 – 120 لبعض المناطق
+        القاهرة/الجيزة 60 – باقي المحافظات 70 – مناطق بعيدة 120
       </div>
     </div>
   </section>
 
-  <h2 class="section-title" id="products">منتجاتنا</h2>
+  <h2 class="section-title" id="products">الموديلات المتاحة</h2>
 
   <section class="products-grid">
     <!-- روزالين -->
     <article class="product-card" onclick="openProduct('rozalin')">
-      <div class="product-image-wrapper">
+      <div class="product-img-wrapper">
         <div class="discount-badge">749 بدل 949</div>
         <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" />
       </div>
       <div class="product-body">
         <div class="product-name">طقم روزالين 3 قطع</div>
-        <div class="product-material">خامة روزالين مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز تلبيس من 60 لـ 95 ك تقريبًا</div>
+        <div class="product-meta">خامة روزالين مستورد عالي الجودة</div>
+        <div class="product-meta">وان سايز من 60 لـ 95 كيلو تقريبًا</div>
         <div class="product-price-row">
-          <div class="product-price">749 ج</div>
-          <div class="product-old">949 ج</div>
+          <span class="product-price">749 ج</span>
+          <span class="product-old">949 ج</span>
         </div>
         <div class="product-colors">
           ألوان: سيمون – موف – كافيه – بيج – زيتي – أسود
         </div>
         <div class="product-actions">
-          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('rozalin')">
-            شوفي الألوان واطلبي
+          <button type="button" onclick="event.stopPropagation(); openProduct('rozalin')">
+            شوفي الألوان واطلبي الآن
           </button>
         </div>
       </div>
@@ -408,24 +384,24 @@
 
     <!-- فورمال -->
     <article class="product-card" onclick="openProduct('formal')">
-      <div class="product-image-wrapper">
+      <div class="product-img-wrapper">
         <div class="discount-badge">699 بدل 949</div>
         <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" />
       </div>
       <div class="product-body">
         <div class="product-name">طقم فورمال 3 قطع</div>
-        <div class="product-material">خامة روزالين مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز من 65 لـ 85 ك تقريبًا</div>
+        <div class="product-meta">خامة روزالين مستورد</div>
+        <div class="product-meta">وان سايز من 65 لـ 85 كيلو تقريبًا</div>
         <div class="product-price-row">
-          <div class="product-price">699 ج</div>
-          <div class="product-old">949 ج</div>
+          <span class="product-price">699 ج</span>
+          <span class="product-old">949 ج</span>
         </div>
         <div class="product-colors">
           ألوان: منت – بيبي بلو – بيج – هافان – أسود
         </div>
         <div class="product-actions">
-          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('formal')">
-            شوفي الألوان واطلبي
+          <button type="button" onclick="event.stopPropagation(); openProduct('formal')">
+            شوفي الألوان واطلبي الآن
           </button>
         </div>
       </div>
@@ -433,24 +409,24 @@
 
     <!-- عباية -->
     <article class="product-card" onclick="openProduct('abaya')">
-      <div class="product-image-wrapper">
+      <div class="product-img-wrapper">
         <div class="discount-badge">749 بدل 1049</div>
         <img src="abaya-main.jpg" alt="عباية زراير كبس" />
       </div>
       <div class="product-body">
         <div class="product-name">عباية زراير كبس</div>
-        <div class="product-material">جوخ ليكرا مستورد عالي الجودة</div>
-        <div class="product-size">وان سايز تلبيس حتى 80 ك مرتاح</div>
+        <div class="product-meta">جوخ ليكرا مستورد عالي الجودة</div>
+        <div class="product-meta">وان سايز تلبيس حتى 80 كيلو مرتاح</div>
         <div class="product-price-row">
-          <div class="product-price">749 ج</div>
-          <div class="product-old">1049 ج</div>
+          <span class="product-price">749 ج</span>
+          <span class="product-old">1049 ج</span>
         </div>
         <div class="product-colors">
           ألوان: أسود – زيتي – رمادي فاتح – نبيتي – كاراميل – رمادي غامق
         </div>
         <div class="product-actions">
-          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('abaya')">
-            شوفي الألوان واطلبي
+          <button type="button" onclick="event.stopPropagation(); openProduct('abaya')">
+            شوفي الألوان واطلبي الآن
           </button>
         </div>
       </div>
@@ -458,24 +434,24 @@
 
     <!-- تونز -->
     <article class="product-card" onclick="openProduct('toonz')">
-      <div class="product-image-wrapper">
+      <div class="product-img-wrapper">
         <div class="discount-badge">799 بدل 1199</div>
-        <img src="toonz-main.jpg" alt="موديل تونز قطعتين" />
+        <img src="toonz-main.jpg" alt="تونز قطعتين" />
       </div>
       <div class="product-body">
         <div class="product-name">تونز قطعتين</div>
-        <div class="product-material">شمواه × شمواه ناعم</div>
-        <div class="product-size">من 60 لـ 90 ك تقريبًا</div>
+        <div class="product-meta">شمواه × شمواه ناعم</div>
+        <div class="product-meta">من 60 لـ 90 كيلو مرتاح</div>
         <div class="product-price-row">
-          <div class="product-price">799 ج</div>
-          <div class="product-old">1199 ج</div>
+          <span class="product-price">799 ج</span>
+          <span class="product-old">1199 ج</span>
         </div>
         <div class="product-colors">
-          ألوان: بيج – زيتي – بينك – بنفسجي – نبيتي
+          ألوان: بيج – زيتي – بينك – موف – نبيتي
         </div>
         <div class="product-actions">
-          <button type="button" class="btn-view" onclick="event.stopPropagation(); openProduct('toonz')">
-            شوفي الألوان واطلبي
+          <button type="button" onclick="event.stopPropagation(); openProduct('toonz')">
+            شوفي الألوان واطلبي الآن
           </button>
         </div>
       </div>
@@ -484,33 +460,28 @@
 </main>
 
 <footer>
-  © TEFA STORE – كل ما هو جديد في عالم الموضة
-  <div class="footer-whatsapp">
-    للتواصل والاقتراحات واتساب:
-    <a href="https://wa.me/201029942139" target="_blank">
-      01029942139
-    </a>
-  </div>
+  للتواصل والاقتراحات واتساب:
+  <a href="https://wa.me/201029942139" target="_blank">01029942139</a>
 </footer>
 
 <script>
   const CART_KEY = "tefa_cart";
 
-  function loadCart() {
+  function getCart() {
     try {
       const raw = localStorage.getItem(CART_KEY);
       if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : [];
     } catch (e) {
       return [];
     }
   }
 
   function updateCartBadge() {
-    const cart = loadCart();
-    const totalQty = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    const badge = document.getElementById("cart-count");
+    const cart = getCart();
+    const totalQty = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const badge = document.getElementById("cartCount");
     if (!badge) return;
     if (totalQty > 0) {
       badge.textContent = totalQty;
@@ -518,6 +489,12 @@
     } else {
       badge.style.display = "none";
     }
+  }
+
+  function scrollToProducts() {
+    const el = document.getElementById("products");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth" });
   }
 
   function openProduct(id) {

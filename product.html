@@ -4,465 +4,276 @@
   <meta charset="UTF-8" />
   <title>تفاصيل المنتج | TEFA STORE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  />
+
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-    }
     body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #f5f5f7;
       color: #111827;
     }
+
     header {
-      padding: 10px 16px;
       background: #111827;
       color: #fff;
+      padding: 12px 16px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
-    header .back {
-      font-size: 14px;
-      cursor: pointer;
+
+    .cart-icon {
+      position: relative;
+      font-size: 20px;
+      text-decoration: none;
+      color: #fff;
     }
+
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      left: -8px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
     main {
-      max-width: 900px;
-      margin: 16px auto 32px;
-      padding: 0 16px;
+      max-width: 520px;
+      margin: auto;
+      padding: 16px;
     }
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 14px 14px 18px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
-    }
-    .img-wrapper {
+
+    .product-image {
       width: 100%;
       border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-    .img-wrapper img {
-      width: 100%;
-      max-height: 380px; /* تم التصغير عشان الألوان تكون قريبة وتبان كلها */
+      margin-bottom: 14px;
       object-fit: cover;
-      display: block;
     }
-    .title {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
+
+    h1 {
+      font-size: 20px;
       margin-bottom: 6px;
     }
+
     .price {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: #16a34a;
+      margin-bottom: 10px;
     }
-    .old {
-      font-size: 13px;
-      color: #9ca3af;
+
+    .old-price {
       text-decoration: line-through;
-    }
-    .desc {
-      font-size: 13px;
-      color: #4b5563;
-      margin-bottom: 6px;
-    }
-    .colors-label {
-      margin: 10px 0 6px;
+      color: #9ca3af;
       font-size: 14px;
+    }
+
+    .section-title {
+      font-size: 15px;
       font-weight: 700;
+      margin: 14px 0 8px;
     }
-    .colors-row {
+
+    .colors {
       display: flex;
+      gap: 10px;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
     }
-    .color-dot {
-      width: 28px;   /* تصغير بسيط للدائرة عشان الشكل يكون أنظف */
+
+    .color-btn {
+      width: 28px;
       height: 28px;
-      border-radius: 999px;
-      border: 2px solid #e5e7eb;
+      border-radius: 50%;
+      border: 2px solid transparent;
       cursor: pointer;
-      position: relative;
     }
-    .color-dot.selected {
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+
+    .color-btn.active {
       border-color: #111827;
     }
-    .colors-note {
-      font-size: 12px;
-      color: #ef4444;
-      margin-bottom: 6px;
-      display: none;
-    }
-    .quantity-row {
+
+    .qty-box {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin: 8px 0 12px;
-      font-size: 14px;
+      margin: 12px 0;
     }
-    .quantity-controls {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-    }
-    .quantity-controls button {
+
+    .qty-btn {
       width: 32px;
       height: 32px;
-      border: none;
-      background: #f3f4f6;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      font-size: 20px;
       cursor: pointer;
-      font-size: 18px;
     }
-    .quantity-value {
-      width: 40px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .btn-add {
+
+    .add-btn {
       width: 100%;
+      padding: 14px;
       border-radius: 999px;
       border: none;
-      padding: 10px 12px;
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 4px;
       background: #111827;
       color: #fff;
-      cursor: pointer;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 90%;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-size: 14px;
-      color: #fff;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s, transform 0.25s;
-      z-index: 9999;
-    }
-    .toast.show {
-      opacity: 1;
-      transform: translate(-50%, -4px);
-    }
-
-    footer {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 10px 16px 20px;
-      font-size: 12px;
-      text-align: center;
-      color: #6b7280;
-    }
-    footer a {
-      color: #16a34a;
+      font-size: 16px;
       font-weight: 700;
-      text-decoration: none;
+      cursor: pointer;
+      margin-top: 10px;
+      opacity: 0.6;
+    }
+
+    .add-btn.enabled {
+      opacity: 1;
+    }
+
+    .success-msg {
+      margin-top: 10px;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      display: none;
+      color: #fff;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
+
 <header>
-  <div class="back" onclick="window.location.href='index.html'">⬅ رجوع للمتجر</div>
-  <div>TEFA STORE</div>
-  <div style="width:40px"></div>
+  <a href="index.html" style="color:#fff;text-decoration:none;">← رجوع</a>
+  <a href="cart.html" class="cart-icon">
+    🛒
+    <span class="cart-badge" id="cartCount">0</span>
+  </a>
 </header>
 
 <main>
-  <section class="card">
-    <div class="img-wrapper">
-      <img id="product-image" src="rozalin-main.jpg" alt="" />
-    </div>
-    <h1 class="title" id="product-title">طقم روزالين 3 قطع</h1>
-    <div class="price-row">
-      <div class="price" id="product-price">749 ج</div>
-      <div class="old" id="product-old">949 ج</div>
-    </div>
-    <p class="desc" id="product-desc"></p>
-    <p class="desc" id="product-extra"></p>
+  <!-- صورة المنتج -->
+  <img id="productImage" src="images/rozalin-main.jpg" class="product-image" />
 
-    <div class="colors-label">اختاري اللون</div>
-    <div class="colors-row" id="colors-row"></div>
-    <div class="colors-note" id="colors-note">
-      حاليًا كل ألوان هذا الموديل موقوفة من لوحة التحكم.
-    </div>
+  <!-- العنوان والسعر -->
+  <h1 id="productName">طقم روزالين 3 قطع</h1>
+  <div class="price">
+    749 ج
+    <span class="old-price">999 ج</span>
+  </div>
 
-    <div class="quantity-row">
-      <span>الكمية</span>
-      <div class="quantity-controls">
-        <button type="button" onclick="changeQty(-1)">−</button>
-        <div class="quantity-value" id="qty-value">1</div>
-        <button type="button" onclick="changeQty(1)">+</button>
-      </div>
-    </div>
+  <!-- اختيار اللون -->
+  <div class="section-title">اختاري اللون</div>
+  <div class="colors" id="colorList"></div>
 
-    <button class="btn-add" onclick="addToCart()">
-      إضافة إلى السلة 🛒
-    </button>
-  </section>
+  <!-- الكمية -->
+  <div class="qty-box">
+    <button class="qty-btn" onclick="changeQty(-1)">−</button>
+    <span id="qty">1</span>
+    <button class="qty-btn" onclick="changeQty(1)">+</button>
+  </div>
+
+  <!-- زر الإضافة -->
+  <button class="add-btn" id="addBtn" onclick="addToCart()">
+    إضافة إلى السلة
+  </button>
+
+  <div class="success-msg" id="successMsg">
+    ✅ تمت إضافة اللون إلى السلة
+  </div>
 </main>
 
-<footer>
-  للتواصل والاقتراحات واتساب:
-  <a href="https://wa.me/201029942139" target="_blank">01029942139</a>
-</footer>
-
-<div id="toast" class="toast"></div>
-
-<audio id="beep-sound">
-  <source
-    src="https://actions.google.com/sounds/v1/cartoon/pop.ogg"
-    type="audio/ogg"
-  />
-</audio>
-
 <script>
-  const CART_KEY = "tefa_cart_v1";
-  const COLOR_STATUS_KEY = "tefa_color_status_v1";
+  const CART_KEY = "tefa_cart";
 
-  const PRODUCTS = {
-    rozalin: {
-      id: "rozalin",
-      title: "طقم روزالين 3 قطع",
-      price: 749,
-      old: 949,
-      image: "rozalin-main.jpg",
-      desc:
-        "خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لحد 95 كيلو تقريبًا. الموديل 3 قطع جاهزين على اللبس.",
-      extra: "",
-      colors: [
-        { name: "سيمون", code: "#f9a8a8", image: "rozalin-simon.jpg" },
-        { name: "موف", code: "#a855f7", image: "rozalin-mov.jpg" },
-        { name: "كافيه", code: "#b9936c", image: "rozalin-kafeh.jpg" },
-        { name: "بيج", code: "#f3e9dd", image: "rozalin-beige.jpg" },
-        { name: "زيتي", code: "#4b7f52", image: "rozalin-zyti.jpg" },
-        { name: "أسود", code: "#111827", image: "rozalin-black.jpg" }
-      ]
-    },
-    formal: {
-      id: "formal",
-      title: "طقم فورمال 3 قطع",
-      price: 699,
-      old: 949,
-      image: "formal-main.jpg",
-      desc:
-        "خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لحد 85 كيلو تقريبًا.",
-      extra: "",
-      colors: [
-        { name: "منت", code: "#86efac", image: "formal-ment.jpg" },
-        { name: "بيبي بلو", code: "#bfdbfe", image: "formal-babyblue.jpg" },
-        { name: "بيج", code: "#f3e9dd", image: "formal-beige.jpg" },
-        { name: "هافان", code: "#b9936c", image: "formal-havan.jpg" },
-        { name: "أسود", code: "#111827", image: "formal-black.jpg" }
-      ]
-    },
-    abaya: {
-      id: "abaya",
-      title: "عباية زراير كبس",
-      price: 749,
-      old: 1049,
-      image: "abaya-main.jpg",
-      desc:
-        "جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.",
-      extra: "",
-      colors: [
-        { name: "أسود", code: "#111827", image: "abaya-black.jpg" },
-        { name: "زيتي", code: "#4b7f52", image: "abaya-green.jpg" },
-        { name: "نبيتي", code: "#7f1d1d", image: "abaya-burgundy.jpg" },
-        { name: "كاراميل", code: "#b9936c", image: "abaya-caramel.jpg" },
-        { name: "رمادي غامق", code: "#4b5563", image: "abaya-darkgray.jpg" },
-        { name: "رمادي فاتح", code: "#d1d5db", image: "abaya-lightgray.jpg" }
-      ]
-    },
-    toonz: {
-      id: "toonz",
-      title: "تونز قطعتين",
-      price: 799,
-      old: 1199,
-      image: "toonz-main.jpg",
-      desc: "الخامة شمواه × شمواه ناعمة – من 60 لحد 90 كيلو مرتاح.",
-      extra: "",
-      colors: [
-        { name: "بيج", code: "#f3e9dd", image: "toonz-beige.jpg" },
-        { name: "زيتي", code: "#4b7f52", image: "toonz-olive.jpg" },
-        { name: "بينك", code: "#f9a8d4", image: "toonz-pink.jpg" },
-        { name: "موف", code: "#6d28d9", image: "toonz-purple.jpg" },
-        { name: "نبيتي", code: "#7f1d1d", image: "toonz-wine.jpg" }
-      ]
-    }
+  const product = {
+    name: "طقم روزالين 3 قطع",
+    price: 749,
+    colors: [
+      { name: "كافيه", code: "#a88962", image: "images/rozalin-coffee.jpg" },
+      { name: "بيج", code: "#e7d7b2", image: "images/rozalin-beige.jpg" },
+      { name: "موف", code: "#7e5a9b", image: "images/rozalin-move.jpg" },
+      { name: "زيتي", code: "#556b2f", image: "images/rozalin-olive.jpg" },
+      { name: "أسود", code: "#000000", image: "images/rozalin-black.jpg" },
+      { name: "سيمون", code: "#f2a28f", image: "images/rozalin-simon.jpg" }
+    ]
   };
 
-  let currentProduct = PRODUCTS.rozalin;
   let selectedColor = null;
-  let quantity = 1;
+  let qty = 1;
 
-  function getProductFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    const p = params.get("product");
-    if (p && PRODUCTS[p]) {
-      currentProduct = PRODUCTS[p];
-    }
-  }
+  const colorList = document.getElementById("colorList");
+  const productImage = document.getElementById("productImage");
+  const addBtn = document.getElementById("addBtn");
+  const successMsg = document.getElementById("successMsg");
 
-  function getColorStatus() {
-    try {
-      return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
-    } catch (e) {
-      return {};
-    }
-  }
+  product.colors.forEach((color, index) => {
+    const btn = document.createElement("div");
+    btn.className = "color-btn";
+    btn.style.background = color.code;
+    btn.onclick = () => selectColor(index, btn);
+    colorList.appendChild(btn);
+  });
 
-  function renderProduct() {
-    const imgEl = document.getElementById("product-image");
-    document.getElementById("product-title").textContent =
-      currentProduct.title;
-    document.getElementById("product-price").textContent =
-      currentProduct.price + " ج";
-    document.getElementById("product-old").textContent =
-      currentProduct.old + " ج";
-    document.getElementById("product-desc").textContent =
-      currentProduct.desc;
-    document.getElementById("product-extra").textContent =
-      currentProduct.extra || "";
-    imgEl.src = currentProduct.image;
-
-    const colorsRow = document.getElementById("colors-row");
-    const colorsNote = document.getElementById("colors-note");
-    colorsRow.innerHTML = "";
-    selectedColor = null;
-
-    const status = getColorStatus();
-    const productStatus = status[currentProduct.id] || {};
-
-    const enabledColors = currentProduct.colors.filter((c) => {
-      if (typeof productStatus[c.name] === "undefined") return true;
-      return !!productStatus[c.name];
-    });
-
-    if (!enabledColors.length) {
-      colorsNote.style.display = "block";
-      return;
-    } else {
-      colorsNote.style.display = "none";
-    }
-
-    enabledColors.forEach((c, index) => {
-      const dot = document.createElement("div");
-      dot.className = "color-dot";
-      dot.style.background = c.code;
-      dot.dataset.name = c.name;
-      dot.dataset.color = c.code;
-      dot.dataset.image = c.image || currentProduct.image;
-      dot.addEventListener("click", () => selectColor(dot));
-      colorsRow.appendChild(dot);
-      if (index === 0) {
-        selectColor(dot); // أول لون افتراضي
-      }
-    });
-  }
-
-  function selectColor(dot) {
-    document
-      .querySelectorAll(".color-dot")
-      .forEach((d) => d.classList.remove("selected"));
-    dot.classList.add("selected");
-    selectedColor = {
-      name: dot.dataset.name,
-      code: dot.dataset.color,
-      image: dot.dataset.image
-    };
-    const imgEl = document.getElementById("product-image");
-    imgEl.src = selectedColor.image || currentProduct.image;
+  function selectColor(index, btn) {
+    document.querySelectorAll(".color-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedColor = product.colors[index];
+    productImage.src = selectedColor.image;
+    addBtn.classList.add("enabled");
   }
 
   function changeQty(delta) {
-    quantity = Math.min(10, Math.max(1, quantity + delta));
-    document.getElementById("qty-value").textContent = quantity;
+    qty = Math.max(1, qty + delta);
+    document.getElementById("qty").textContent = qty;
+  }
+
+  function loadCart() {
+    try {
+      return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    updateCartCount();
+  }
+
+  function updateCartCount() {
+    const cart = loadCart();
+    const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+    document.getElementById("cartCount").textContent = count;
   }
 
   function addToCart() {
-    if (!selectedColor) {
-      showToast("من فضلك اختاري لون الأول 💖", "#111827");
-      return;
-    }
+    if (!selectedColor) return;
 
-    const raw = localStorage.getItem(CART_KEY);
-    let items = [];
-    if (raw) {
-      try {
-        items = JSON.parse(raw);
-      } catch (e) {}
-    }
+    const cart = loadCart();
 
-    const existing = items.find(
-      (i) =>
-        i.productId === currentProduct.id &&
-        i.colorName === selectedColor.name
-    );
-    if (existing) {
-      existing.quantity += quantity;
-    } else {
-      items.push({
-        productId: currentProduct.id,
-        productName: currentProduct.title,
-        colorName: selectedColor.name,
-        colorCode: selectedColor.code,
-        quantity: quantity,
-        price: currentProduct.price
-      });
-    }
+    cart.push({
+      name: product.name,
+      price: product.price,
+      colorName: selectedColor.name,
+      colorCode: selectedColor.code,
+      image: selectedColor.image,
+      qty: qty
+    });
 
-    localStorage.setItem(CART_KEY, JSON.stringify(items));
+    saveCart(cart);
 
-    const audio = document.getElementById("beep-sound");
-    if (audio && audio.play) {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
-    }
+    successMsg.style.background = selectedColor.code;
+    successMsg.style.display = "block";
 
-    showToast(
-      `تم إضافة ${quantity} × (${selectedColor.name}) من ${currentProduct.title} إلى السلة 🛒`,
-      selectedColor.code
-    );
-  }
-
-  function showToast(message, color) {
-    const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.style.background = color || "#111827";
-    toast.classList.add("show");
     setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2000);
+      successMsg.style.display = "none";
+    }, 1200);
   }
 
-  getProductFromURL();
-  renderProduct();
+  updateCartCount();
 </script>
+
 </body>
 </html>
