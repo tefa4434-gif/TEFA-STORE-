@@ -2,434 +2,333 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>سلة الطلبات | TEFA STORE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
 
   <!-- الهيدر -->
-  <header class="bg-white shadow">
-    <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
-      <a href="index.html" class="flex items-center gap-2">
-        <span class="bg-black text-white rounded-full w-9 h-9 flex items-center justify-center text-sm font-bold">TS</span>
-        <div>
-          <h1 class="text-lg font-bold">TEFA STORE</h1>
-          <p class="text-xs text-gray-500">متجر أطقم حريمي</p>
-        </div>
-      </a>
+  <header class="bg-black text-white p-3 shadow">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="font-bold text-xl">TEFA STORE</a>
 
+      <!-- أيقونة السلة + عدد القطع -->
       <a href="cart.html" class="relative">
         <span class="material-icons">shopping_cart</span>
-        <span id="cart-count"
-              class="absolute -top-2 -left-2 bg-red-500 text-white text-[11px] min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-[3px]">
+        <span id="cart-badge"
+              class="absolute -top-2 -left-2 bg-pink-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">
           0
         </span>
       </a>
     </div>
   </header>
 
-  <!-- المحتوى -->
-  <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+  <main class="max-w-4xl mx-auto p-4 space-y-6">
 
-    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">سلة الطلبات</h2>
-    <p class="text-sm text-gray-500 mb-4">
-      راجعي الألوان والكميات، ثم ادخلي بيانات التوصيل واضغطي <span class="font-semibold">تأكيد الطلب</span>.
-    </p>
+    <!-- عنوان -->
+    <section class="bg-white rounded-xl shadow p-4">
+      <h1 class="text-2xl font-bold mb-1">سلة الطلبات</h1>
+      <p class="text-sm text-gray-600">
+        راجع القطع قبل تأكيد الطلب، ويمكنك حذف أي لون لا تريده.
+      </p>
+    </section>
 
-    <!-- رسالة السلة الفاضية -->
-    <div id="empty-cart" class="hidden bg-white rounded-2xl p-6 shadow text-center">
-      <p class="text-lg font-semibold mb-2">السلة فاضية حتى الآن 🧺</p>
-      <p class="text-sm text-gray-500 mb-4">اختاري الموديل واللون من الصفحة الرئيسية وابدئي أول طلب ليكي.</p>
-      <a href="index.html" class="inline-block bg-black text-white rounded-xl px-5 py-2 text-sm font-semibold">
-        رجوع للمنتجات
-      </a>
-    </div>
+    <!-- جدول السلة -->
+    <section class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-bold text-lg mb-3">المنتجات في السلة</h2>
 
-    <div id="cart-wrapper" class="grid gap-6 lg:grid-cols-3">
-      <!-- المنتجات في السلة -->
-      <section class="lg:col-span-2 space-y-3">
-        <div id="cart-items"></div>
-      </section>
+      <div id="empty-cart" class="text-center text-gray-500 py-6 hidden">
+        لا توجد منتجات في السلة حاليًا 🛒
+      </div>
 
-      <!-- ملخص + بيانات عميل -->
-      <section class="space-y-4">
+      <div id="cart-table-wrapper" class="overflow-x-auto hidden">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="border-b">
+              <th class="py-2 text-right">المنتج</th>
+              <th class="py-2 text-center">اللون</th>
+              <th class="py-2 text-center">الكمية</th>
+              <th class="py-2 text-center">السعر</th>
+              <th class="py-2 text-center">الإجمالي</th>
+              <th class="py-2 text-center">حذف</th>
+            </tr>
+          </thead>
+          <tbody id="cart-rows"></tbody>
+        </table>
+      </div>
 
-        <!-- ملخص الأسعار -->
-        <div class="bg-white rounded-2xl p-4 shadow space-y-3">
-          <h3 class="font-bold text-lg mb-1">ملخص الطلب</h3>
+      <!-- ملخص الأسعار -->
+      <div class="mt-4 border-t pt-4 space-y-1 text-sm">
+        <div class="flex justify-between">
+          <span>إجمالي المنتجات:</span>
+          <span id="subtotal">0 ج</span>
+        </div>
+        <div class="flex justify-between">
+          <span>الشحن:</span>
+          <span id="shipping">0 ج</span>
+        </div>
+        <div class="flex justify-between text-green-600 font-semibold">
+          <span>خصم كود TEFA4434:</span>
+          <span id="discount">0 ج</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold border-t pt-2 mt-2">
+          <span>الإجمالي النهائي:</span>
+          <span id="grand-total">0 ج</span>
+        </div>
+      </div>
 
-          <div class="flex justify-between text-sm">
-            <span>إجمالي المنتجات</span>
-            <span id="summary-subtotal">0 ج</span>
-          </div>
+      <!-- تنبيه الشحن -->
+      <p class="mt-3 text-xs text-gray-600 leading-relaxed">
+        💡 الشحن: القاهرة و الجيزة <strong>60 ج</strong> – باقي المحافظات <strong>70 ج</strong>  
+        ما عدا <strong>شرم الشيخ، الغردقة، مرسى مطروح، شمال سيناء، جنوب سيناء، الوادي الجديد</strong> الشحن
+        <strong>120 ج</strong>.
+      </p>
+    </section>
 
-          <div class="flex justify-between text-sm">
-            <span>سعر الشحن</span>
-            <span id="summary-shipping">—</span>
-          </div>
+    <!-- بيانات العميل -->
+    <section class="bg-white rounded-xl shadow p-4 space-y-3">
+      <h2 class="font-bold text-lg mb-2">بيانات الاستلام</h2>
 
-          <div class="flex justify-between text-sm text-emerald-700">
-            <span>خصم كود TEFA4434</span>
-            <span id="summary-discount">0 ج</span>
-          </div>
-
-          <hr class="my-2">
-
-          <div class="flex justify-between text-base font-extrabold">
-            <span>الإجمالي بعد الخصم</span>
-            <span id="summary-total">0 ج</span>
-          </div>
-
-          <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
-            كود خصم <span class="font-bold text-black">TEFA4434</span> يخصم 10٪ على أول أوردر بنفس رقم الموبايل 💥
-          </p>
+      <div class="grid gap-3 text-sm">
+        <div>
+          <label class="block mb-1">الاسم بالكامل</label>
+          <input id="name" type="text" class="w-full border rounded-lg px-3 py-2" />
         </div>
 
-        <!-- نموذج بيانات العميل -->
-        <form id="order-form" class="bg-white rounded-2xl p-4 shadow space-y-3">
-
-          <h3 class="font-bold text-lg mb-2">بيانات التوصيل</h3>
-
-          <div class="space-y-1">
-            <label class="text-sm font-semibold">الاسم الكامل</label>
-            <input type="text" id="name" required
-                   class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block mb-1">رقم الموبايل</label>
+            <input id="phone" type="tel" class="w-full border rounded-lg px-3 py-2" />
           </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div class="space-y-1">
-              <label class="text-sm font-semibold">رقم الموبايل</label>
-              <input type="tel" id="phone" required
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                     placeholder="01xxxxxxxxx">
-            </div>
-            <div class="space-y-1">
-              <label class="text-sm text-gray-700">رقم إضافي (اختياري)</label>
-              <input type="tel" id="phone2"
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-                     placeholder="01xxxxxxxxx">
-            </div>
+          <div>
+            <label class="block mb-1">رقم موبايل ٢ (اختياري)</label>
+            <input id="phone2" type="tel" class="w-full border rounded-lg px-3 py-2" />
           </div>
+        </div>
 
-          <div class="space-y-1">
-            <label class="text-sm font-semibold">المحافظة</label>
-            <select id="governorate" required
-                    class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black">
-              <option value="">اختاري المحافظة</option>
-              <option>القاهرة</option>
-              <option>الجيزة</option>
-              <option>الإسكندرية</option>
-              <option>الدقهلية</option>
-              <option>الشرقية</option>
-              <option>المنوفية</option>
-              <option>القليوبية</option>
-              <option>الغربية</option>
-              <option>كفر الشيخ</option>
-              <option>البحيرة</option>
-              <option>دمياط</option>
-              <option>بورسعيد</option>
-              <option>الإسماعيلية</option>
-              <option>السويس</option>
-              <option>الفيوم</option>
-              <option>بني سويف</option>
-              <option>المنيا</option>
-              <option>أسيوط</option>
-              <option>سوهاج</option>
-              <option>قنا</option>
-              <option>الأقصر</option>
-              <option>أسوان</option>
-              <option>البحر الأحمر</option>
-              <option>مرسى مطروح</option>
-              <option>شمال سيناء</option>
-              <option>جنوب سيناء</option>
-              <option>الوادي الجديد</option>
-              <option>شرم الشيخ</option>
-              <option>الغردقة</option>
-            </select>
+        <div>
+          <label class="block mb-1">المحافظة</label>
+          <select id="governorate" class="w-full border rounded-lg px-3 py-2">
+            <option value="">اختر المحافظة</option>
+            <option>القاهرة</option>
+            <option>الجيزة</option>
+            <option>الإسكندرية</option>
+            <option>القليوبية</option>
+            <option>الشرقية</option>
+            <option>الدقهلية</option>
+            <option>الغربية</option>
+            <option>المنوفية</option>
+            <option>البحيرة</option>
+            <option>كفر الشيخ</option>
+            <option>الفيوم</option>
+            <option>بني سويف</option>
+            <option>المنيا</option>
+            <option>أسيوط</option>
+            <option>سوهاج</option>
+            <option>قنا</option>
+            <option>الأقصر</option>
+            <option>أسوان</option>
+            <option>بورسعيد</option>
+            <option>الإسماعيلية</option>
+            <option>السويس</option>
+            <option>دمياط</option>
+            <option>مطروح</option>
+            <option>البحر الأحمر</option>
+            <option>الوادي الجديد</option>
+            <option>شمال سيناء</option>
+            <option>جنوب سيناء</option>
+            <option>شرم الشيخ</option>
+            <option>الغردقة</option>
+            <option>مرسى مطروح</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block mb-1">العنوان بالتفصيل</label>
+          <textarea id="address" rows="2" class="w-full border rounded-lg px-3 py-2"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block mb-1">الوزن (اختياري)</label>
+            <input id="weight" type="text" class="w-full border rounded-lg px-3 py-2" />
           </div>
-
-          <div class="space-y-1">
-            <label class="text-sm font-semibold">العنوان بالتفصيل</label>
-            <textarea id="address" required rows="2"
-                      class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                      placeholder="اسم الشارع – رقم المنزل – أقرب علامة مميزة"></textarea>
+          <div>
+            <label class="block mb-1">الطول (اختياري)</label>
+            <input id="height" type="text" class="w-full border rounded-lg px-3 py-2" />
           </div>
+        </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <div class="space-y-1">
-              <label class="text-sm text-gray-700">الوزن (اختياري)</label>
-              <input type="text" id="weight"
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
-            </div>
-            <div class="space-y-1">
-              <label class="text-sm text-gray-700">الطول (اختياري)</label>
-              <input type="text" id="height"
-                     class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
-            </div>
-          </div>
+        <div>
+          <label class="block mb-1">ملاحظات (اختياري)</label>
+          <textarea id="notes" rows="2" class="w-full border rounded-lg px-3 py-2"
+            placeholder="مثال: يفضل الاتصال قبل الوصول / مقاس واسع شوية ..."></textarea>
+        </div>
 
-          <div class="space-y-1">
-            <label class="text-sm text-gray-700">ملاحظات (اختياري)</label>
-            <textarea id="notes" rows="2"
-                      class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm"
-                      placeholder="لو حابة توصية معينة للكابتن أو مواعيد استلام معينة اكتبيها هنا"></textarea>
-          </div>
+        <div>
+          <label class="block mb-1">كود الخصم (10٪ لأول أوردر بنفس الرقم)</label>
+          <input id="coupon" type="text" class="w-full border rounded-lg px-3 py-2" placeholder="TEFA4434" />
+        </div>
+      </div>
 
-          <div class="space-y-1">
-            <label class="text-sm font-semibold">كود الخصم</label>
-            <input type="text" id="coupon" placeholder="TEFA4434 لأول أوردر"
-                   class="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm">
-          </div>
+      <!-- رسالة حالة -->
+      <div id="status" class="text-sm mt-3"></div>
 
-          <button type="submit"
-                  class="w-full mt-2 bg-black text-white rounded-xl py-3 text-sm font-semibold flex items-center justify-center gap-2"
-                  id="submit-btn">
-            <span id="submit-text">تأكيد الطلب الآن</span>
-            <span id="submit-spinner" class="hidden animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></span>
-          </button>
-
-          <p class="text-[11px] text-gray-500 text-center mt-1">
-            اطلب وانت مطمئن ❤ عاين براحتك قبل الاستلام – الدفع عند الاستلام.
-          </p>
-        </form>
-      </section>
-    </div>
+      <!-- زر تأكيد الطلب -->
+      <button onclick="submitOrder()"
+              class="w-full mt-3 bg-black text-white py-3 rounded-xl text-lg font-bold">
+        تأكيد الطلب الآن
+      </button>
+    </section>
   </main>
 
+  <!-- صوت إشعار بسيط عند إضافة/إرسال (لو حابب تشغله من الصفحات التانية برضه) -->
+  <audio id="ping-sound" preload="auto">
+    <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
+  </audio>
+
   <script>
-    const CART_KEY = "tefa_cart";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDCEny0w1V8EVpFix56-7v_e930qLEWqz1aXKt5HOaDafo9NJJn8-k-RvGfjbzg-AN/exec";
+    // ========== إعدادات عامة ==========
+    const CART_KEY = 'tefa_cart'; // لازم index.html و product.html يستخدموا نفس الاسم ده
+    const DISCOUNT_CODE = 'TEFA4434';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDCEny0w1V8EVpFix56-7v_e930qLEWqz1aXKt5HOaDafo9NJJn8-k-RvGfjbzg-AN/exec';
 
-    let cart = [];
+    let cartItems = [];
 
+    // ========== تحميل السلة ==========
     function loadCart() {
-      try {
-        cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      } catch (e) {
-        cart = [];
-      }
-    }
-
-    function saveCart() {
-      if (!cart.length) {
-        localStorage.removeItem(CART_KEY);
-      } else {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-      }
-    }
-
-    function getItemFields(item) {
-      return {
-        name: item.name || item.productName || "منتج بدون اسم",
-        price: Number(item.price || 0),
-        quantity: Number(item.quantity || 1),
-        colorName: item.colorName || "",
-        colorHex: item.colorHex || "#111",
-        image: item.image || ""
-      };
-    }
-
-    function formatPrice(num) {
-      return `${num.toFixed(0)} ج`;
+      const saved = localStorage.getItem(CART_KEY);
+      cartItems = saved ? JSON.parse(saved) : [];
+      updateCartBadge();
+      renderCart();
     }
 
     function updateCartBadge() {
-      const badge = document.getElementById("cart-count");
-      const totalPieces = cart.reduce((sum, item) => {
-        const { quantity } = getItemFields(item);
-        return sum + quantity;
-      }, 0);
-      badge.textContent = totalPieces;
-      badge.classList.toggle("hidden", totalPieces === 0);
+      const badge = document.getElementById('cart-badge');
+      const count = cartItems.reduce((sum, item) => sum + (item.qty || 0), 0);
+      badge.textContent = count;
     }
 
-    function getSubtotal() {
-      return cart.reduce((sum, item) => {
-        const { price, quantity } = getItemFields(item);
-        return sum + price * quantity;
-      }, 0);
+    function renderCart() {
+      const emptyDiv = document.getElementById('empty-cart');
+      const tableWrapper = document.getElementById('cart-table-wrapper');
+      const tbody = document.getElementById('cart-rows');
+      tbody.innerHTML = '';
+
+      if (!cartItems.length) {
+        emptyDiv.classList.remove('hidden');
+        tableWrapper.classList.add('hidden');
+        updateTotals();
+        return;
+      }
+
+      emptyDiv.classList.add('hidden');
+      tableWrapper.classList.remove('hidden');
+
+      cartItems.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b';
+
+        const total = (item.price || 0) * (item.qty || 0);
+
+        tr.innerHTML = `
+          <td class="py-2 pr-1 text-sm">${item.productName || 'منتج'}</td>
+          <td class="py-2 text-center text-sm">${item.colorName || ''}</td>
+          <td class="py-2 text-center text-sm">${item.qty || 0}</td>
+          <td class="py-2 text-center text-sm">${item.price || 0} ج</td>
+          <td class="py-2 text-center text-sm">${total} ج</td>
+          <td class="py-2 text-center">
+            <button class="text-red-600 text-xs" onclick="removeItem(${index})">حذف</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      updateTotals();
     }
 
-    function getShipping(governorate) {
-      const highCost = [
-        "شرم الشيخ",
-        "الغردقة",
-        "مرسى مطروح",
-        "شمال سيناء",
-        "جنوب سيناء",
-        "الوادي الجديد"
-      ];
+    function removeItem(index) {
+      cartItems.splice(index, 1);
+      localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+      updateCartBadge();
+      renderCart();
+    }
+
+    // ========== حساب الشحن / الخصم / الإجمالي ==========
+    function calcShipping(governorate, subtotal) {
+      if (!subtotal) return 0;
       if (!governorate) return 0;
-      if (governorate === "القاهرة" || governorate === "الجيزة") return 60;
+
+      const highCost = ['شرم الشيخ', 'الغردقة', 'مرسى مطروح', 'شمال سيناء', 'جنوب سيناء', 'الوادي الجديد'];
+
+      if (governorate === 'القاهرة' || governorate === 'الجيزة') return 60;
       if (highCost.includes(governorate)) return 120;
       return 70;
     }
 
-    function getDiscount(totalWithShipping, coupon, phone) {
-      if (!coupon || !phone) return 0;
-      coupon = coupon.trim().toUpperCase();
-      if (coupon !== "TEFA4434") return 0;
-      const usedKey = `discount_used_${phone}`;
-      if (localStorage.getItem(usedKey)) return 0; // نفس الرقم استخدم الخصم قبل كدا
-      return totalWithShipping * 0.10;
+    function updateTotals() {
+      const subtotal = cartItems.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
+      const gov = document.getElementById('governorate').value;
+      const shipping = calcShipping(gov, subtotal);
+
+      // الخصم مبدئيًا 0 – هيتحسب صح عند تأكيد الطلب بعد التحقق من الكود والرقم
+      const discount = 0;
+      const grand = subtotal + shipping - discount;
+
+      document.getElementById('subtotal').textContent = subtotal + ' ج';
+      document.getElementById('shipping').textContent = shipping + ' ج';
+      document.getElementById('discount').textContent = discount + ' ج';
+      document.getElementById('grand-total').textContent = grand + ' ج';
     }
 
-    function updateSummary() {
-      const subtotal = getSubtotal();
-      const gov = document.getElementById("governorate").value;
-      const shipping = getShipping(gov);
-      const coupon = document.getElementById("coupon").value || "";
-      const phone = document.getElementById("phone").value || "";
-      const discount = getDiscount(subtotal + shipping, coupon, phone);
-      const total = subtotal + shipping - discount;
+    document.getElementById('governorate').addEventListener('change', updateTotals);
 
-      document.getElementById("summary-subtotal").textContent = formatPrice(subtotal);
-      document.getElementById("summary-shipping").textContent = shipping ? formatPrice(shipping) : "حددي المحافظة";
-      document.getElementById("summary-discount").textContent = discount ? `- ${formatPrice(discount)}` : "0 ج";
-      document.getElementById("summary-total").textContent = formatPrice(Math.max(total, 0));
-    }
+    // ========== إرسال الطلب ==========
+    async function submitOrder() {
+      const status = document.getElementById('status');
+      status.className = 'text-sm mt-3';
 
-    function renderCart() {
-      const itemsContainer = document.getElementById("cart-items");
-      const emptyBox = document.getElementById("empty-cart");
-      const wrapper = document.getElementById("cart-wrapper");
-
-      if (!cart.length) {
-        emptyBox.classList.remove("hidden");
-        wrapper.classList.add("hidden");
-        updateSummary();
-        updateCartBadge();
-        return;
-      } else {
-        emptyBox.classList.add("hidden");
-        wrapper.classList.remove("hidden");
-      }
-
-      itemsContainer.innerHTML = "";
-      cart.forEach((item, index) => {
-        const { name, price, quantity, colorName, colorHex, image } = getItemFields(item);
-        const lineTotal = price * quantity;
-
-        const div = document.createElement("div");
-        div.className = "bg-white rounded-2xl p-3 shadow flex gap-3 items-center";
-
-        div.innerHTML = `
-          <div class="w-16 h-20 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
-            ${image ? `<img src="${image}" class="w-full h-full object-cover" alt="${name}">` :
-              `<div class="w-full h-full flex items-center justify-center text-[11px] text-gray-400">بدون صورة</div>`}
-          </div>
-
-          <div class="flex-1 space-y-1">
-            <div class="flex justify-between items-start gap-2">
-              <div>
-                <h4 class="text-sm font-semibold text-gray-900">${name}</h4>
-                <div class="flex items-center gap-2 mt-1">
-                  ${colorName ? `
-                    <span class="w-4 h-4 rounded-full border border-gray-300 inline-block" style="background-color:${colorHex};"></span>
-                    <span class="text-[11px] text-gray-600">اللون: ${colorName}</span>
-                  ` : ""}
-                </div>
-              </div>
-              <button class="text-xs text-red-500 hover:text-red-700 font-semibold" data-remove="${index}">
-                حذف
-              </button>
-            </div>
-
-            <div class="flex justify-between items-center mt-2">
-              <div class="flex items-center gap-2">
-                <button class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-sm" data-dec="${index}">−</button>
-                <span class="text-sm font-semibold">${quantity}</span>
-                <button class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-sm" data-inc="${index}">+</button>
-              </div>
-              <div class="text-sm font-bold text-gray-900">
-                ${formatPrice(lineTotal)}
-              </div>
-            </div>
-          </div>
-        `;
-
-        itemsContainer.appendChild(div);
-      });
-
-      updateCartBadge();
-      updateSummary();
-    }
-
-    // أزرار زيادة/نقصان/حذف
-    document.addEventListener("click", (e) => {
-      const decIndex = e.target.getAttribute("data-dec");
-      const incIndex = e.target.getAttribute("data-inc");
-      const removeIndex = e.target.getAttribute("data-remove");
-
-      if (decIndex !== null) {
-        const i = Number(decIndex);
-        const { quantity } = getItemFields(cart[i]);
-        if (quantity > 1) {
-          cart[i].quantity = quantity - 1;
-          saveCart();
-          renderCart();
-        }
-      }
-
-      if (incIndex !== null) {
-        const i = Number(incIndex);
-        const { quantity } = getItemFields(cart[i]);
-        cart[i].quantity = quantity + 1;
-        saveCart();
-        renderCart();
-      }
-
-      if (removeIndex !== null) {
-        const i = Number(removeIndex);
-        cart.splice(i, 1);
-        saveCart();
-        renderCart();
-      }
-    });
-
-    document.getElementById("governorate").addEventListener("change", updateSummary);
-    document.getElementById("coupon").addEventListener("input", updateSummary);
-    document.getElementById("phone").addEventListener("input", updateSummary);
-
-    // إرسال الطلب لجوجل شيت
-    document.getElementById("order-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      if (!cart.length) {
-        alert("السلة فاضية، من فضلك اضيفي منتج واحد على الأقل.");
+      if (!cartItems.length) {
+        status.textContent = 'السلة فارغة، أضف منتج أولاً.';
+        status.classList.add('text-red-600');
         return;
       }
 
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const phone2 = document.getElementById("phone2").value.trim();
-      const governorate = document.getElementById("governorate").value;
-      const address = document.getElementById("address").value.trim();
-      const notes = document.getElementById("notes").value.trim();
-      const weight = document.getElementById("weight").value.trim();
-      const height = document.getElementById("height").value.trim();
-      const coupon = document.getElementById("coupon").value.trim().toUpperCase();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const phone2 = document.getElementById('phone2').value.trim();
+      const governorate = document.getElementById('governorate').value;
+      const address = document.getElementById('address').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+      const weight = document.getElementById('weight').value.trim();
+      const height = document.getElementById('height').value.trim();
+      const coupon = document.getElementById('coupon').value.trim().toUpperCase();
 
       if (!name || !phone || !governorate || !address) {
-        alert("من فضلك ادخلي كل بيانات التوصيل الأساسية.");
+        status.textContent = 'من فضلك أكمل البيانات المطلوبة (الاسم - رقم الموبايل - المحافظة - العنوان).';
+        status.classList.add('text-red-600');
         return;
       }
 
-      const subtotal = getSubtotal();
-      const shipping = getShipping(governorate);
-      const discount = getDiscount(subtotal + shipping, coupon, phone);
+      // نحسب الإجمالي مرة أخرى
+      const subtotal = cartItems.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
+      const shipping = calcShipping(governorate, subtotal);
+
+      // خصم 10٪ لأول مرة بنفس الرقم (على هذا الجهاز – عن طريق localStorage)
+      let discount = 0;
+      const discountKey = 'discount_used_' + phone;
+      const alreadyUsed = localStorage.getItem(discountKey) === '1';
+
+      if (coupon === DISCOUNT_CODE && !alreadyUsed) {
+        discount = Math.round(subtotal * 0.10);
+      }
+
       const total = subtotal + shipping - discount;
 
-      if (!shipping) {
-        alert("من فضلك اختاري المحافظة بشكل صحيح.");
-        return;
-      }
-
-      const productsText = cart.map(item => {
-        const { name, quantity, colorName } = getItemFields(item);
-        return `المنتج: ${name} | اللون: ${colorName || "-"} | الكمية: ${quantity}`;
-      }).join(" || ");
+      const productsSummary = cartItems.map(item => {
+        return `${item.productName || 'منتج'} - لون: ${item.colorName || ''} - كمية: ${item.qty || 0} - سعر: ${item.price || 0}`;
+      }).join(' | ');
 
       const orderData = {
         name,
@@ -437,65 +336,58 @@
         phone2,
         governorate,
         address,
-        notes: notes + (weight || height ? ` | وزن: ${weight || "-"} | طول: ${height || "-"}` : ""),
-        products: productsText,
-        shipping,
-        total: Math.max(total, 0),
-        subtotal,
-        discount,
-        coupon
+        notes,
+        weight,
+        height,
+        products: productsSummary,
+        total
       };
 
-      const btn = document.getElementById("submit-btn");
-      const textSpan = document.getElementById("submit-text");
-      const spinner = document.getElementById("submit-spinner");
-
-      btn.disabled = true;
-      btn.classList.add("opacity-75");
-      spinner.classList.remove("hidden");
-      textSpan.textContent = "جاري تأكيد الطلب...";
+      status.textContent = 'جاري إرسال الطلب...';
+      status.classList.remove('text-red-600');
+      status.classList.add('text-gray-700');
 
       try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
         });
 
-        const data = await res.json().catch(() => ({}));
+        // نعتبره نجاح (لأن no-cors مش بيرجع رد واضح)
+        status.textContent = 'تم تسجيل طلبك بنجاح 🥰 سيتم التواصل معك لتأكيد الأوردر.';
+        status.classList.remove('text-gray-700');
+        status.classList.add('text-green-600');
 
-        if (!res.ok || data.status === "error") {
-          throw new Error(data.message || "خطأ غير معروف");
+        // تخزين إن الكود اتستخدم لهذا الرقم (لو كان صحيح)
+        if (discount > 0) {
+          localStorage.setItem(discountKey, '1');
         }
 
-        if (coupon === "TEFA4434" && discount > 0) {
-          localStorage.setItem(`discount_used_${phone}`, "1");
-        }
-
-        cart = [];
-        saveCart();
+        // تفريغ السلة بعد نجاح الطلب
+        cartItems = [];
+        localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+        updateCartBadge();
         renderCart();
 
-        alert("تم تسجيل طلبك بنجاح ❤️ فريق TEFA STORE هيتواصل معاكي لتأكيد الأوردر.");
-        window.location.href = "index.html";
-
-      } catch (error) {
-        console.error(error);
-        alert("حدث خطأ أثناء تسجيل الطلب، لو استمرت المشكلة تواصلي معانا على الواتساب.");
-      } finally {
-        btn.disabled = false;
-        btn.classList.remove("opacity-75");
-        spinner.classList.add("hidden");
-        textSpan.textContent = "تأكيد الطلب الآن";
+        // تشغيل صوت بسيط
+        const ping = document.getElementById('ping-sound');
+        if (ping) ping.play().catch(() => {});
+      } catch (err) {
+        console.error(err);
+        status.textContent = 'حدث خطأ أثناء إرسال الطلب، من فضلك حاول مرة أخرى أو تواصل عبر الواتساب.';
+        status.classList.remove('text-gray-700');
+        status.classList.add('text-red-600');
       }
-    });
+    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      loadCart();
-      renderCart();
-    });
+    // تحميل السلة عند فتح الصفحة
+    loadCart();
   </script>
+
+  <!-- أيقونات مادية (لشكل عربة التسوق) -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
 </body>
 </html>
