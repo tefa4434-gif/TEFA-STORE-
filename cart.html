@@ -156,6 +156,7 @@
       align-items: center;
       gap: 8px;
       margin-top: 4px;
+      flex-wrap: wrap;
     }
 
     .qty-btn {
@@ -175,6 +176,7 @@
       min-width: 24px;
       text-align: center;
       font-size: 14px;
+      font-weight: 600;
     }
 
     .remove-btn {
@@ -236,6 +238,18 @@
       border: 1px solid #e5e7eb;
       font-size: 14px;
       margin-bottom: 10px;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    form input:focus,
+    form select:focus,
+    form textarea:focus {
+      outline: none;
+      background: #fff;
+      border-color: #111827;
+      box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.08);
     }
 
     form textarea {
@@ -253,10 +267,12 @@
     .two-cols {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .two-cols > div {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
     }
 
     .btn-main {
@@ -288,10 +304,12 @@
       display: flex;
       gap: 8px;
       margin-bottom: 8px;
+      flex-wrap: nowrap;
     }
 
     .discount-row input {
       margin-bottom: 0;
+      flex: 1;
     }
 
     .btn-secondary {
@@ -405,19 +423,20 @@
           <option value="">اختار المحافظة</option>
           <option>القاهرة</option>
           <option>الجيزة</option>
+          <option>القليوبية</option>
           <option>الإسكندرية</option>
-          <option>الدقهلية</option>
-          <option>الشرقية</option>
-          <option>الغربية</option>
-          <option>المنوفية</option>
-          <option>كفر الشيخ</option>
           <option>البحيرة</option>
+          <option>كفر الشيخ</option>
+          <option>الدقهلية</option>
           <option>دمياط</option>
           <option>بورسعيد</option>
           <option>الإسماعيلية</option>
           <option>السويس</option>
-          <option>الفيوم</option>
+          <option>الشرقية</option>
+          <option>الغربية</option>
+          <option>المنوفية</option>
           <option>بني سويف</option>
+          <option>الفيوم</option>
           <option>المنيا</option>
           <option>أسيوط</option>
           <option>سوهاج</option>
@@ -429,6 +448,7 @@
           <option>شمال سيناء</option>
           <option>جنوب سيناء</option>
           <option>الوادي الجديد</option>
+          <!-- مدن خاصة بسعر 120 -->
           <option>شرم الشيخ</option>
           <option>الغردقة</option>
         </select>
@@ -553,7 +573,10 @@
       if (item.colorName) {
         const dot = document.createElement("span");
         dot.className = "color-dot";
-        if (item.colorCode) dot.style.background = item.colorCode;
+        if (item.colorCode || item.colorHex || item.color) {
+          dot.style.background =
+            item.colorCode || item.colorHex || item.color;
+        }
         color.appendChild(dot);
         color.appendChild(
           document.createTextNode(" اللون: " + item.colorName)
@@ -611,11 +634,10 @@
   function changeQty(index, delta) {
     const item = cart[index];
     if (!item) return;
-    const newQty = (item.qty || 1) + delta;
-    if (newQty <= 0) {
-      removeItem(index);
-      return;
-    }
+    let newQty = (item.qty || 1) + delta;
+    // نخليها من 1 لـ 20 بس – من غير ما نحذف لو نزلت بالغلط
+    if (newQty < 1) newQty = 1;
+    if (newQty > 20) newQty = 20;
     item.qty = newQty;
     saveCart();
     renderCart();
@@ -710,7 +732,9 @@
       const weight = document.getElementById("weight").value.trim();
 
       if (!name || !phone || !governorate || !address) {
-        alert("من فضلك املأ الحقول الأساسية (الاسم - الموبايل - المحافظة - العنوان).");
+        alert(
+          "من فضلك املأ الحقول الأساسية (الاسم - الموبايل - المحافظة - العنوان)."
+        );
         return;
       }
 
@@ -763,26 +787,6 @@
           body: JSON.stringify(payload),
         });
 
-        // مع no-cors مش هنقدر نقرأ response، فهنفترض النجاح
         alert("تم استلام طلبك بنجاح ❤️ هنكلمك لتأكده في أسرع وقت.");
         // نمسح السلة
-        localStorage.removeItem(CART_KEY);
-        cart = [];
-        renderCart();
-        // نرجع للرئيسية
-        window.location.href = "index.html";
-      } catch (err) {
-        console.error(err);
-        alert(
-          "في مشكلة في الاتصال بالإنترنت أو Google Sheet. لو سمحت كلمنا على واتساب لتأكيد طلبك."
-        );
-        submitBtn.disabled = false;
-        submitBtn.textContent = "تأكيد الطلب الآن";
-      }
-    });
-
-  // تشغيل السلة عند فتح الصفحة
-  loadCart();
-</script>
-</body>
-</html>
+        localStorage.r
