@@ -112,7 +112,7 @@
               <option value="أسوان">أسوان</option>
               <option value="الوادي الجديد">الوادي الجديد</option>
               <option value="مطروح">مطروح</option>
-              <option value="البحر الأحمر">البحر الأحمر</option>
+              <option value="البحر الأحمر">الغردقة / البحر الأحمر</option>
             </select>
           </div>
         </div>
@@ -166,8 +166,42 @@
 
     let cart = [];
 
+    // قراءة السلة بأي فورمات قديم/جديد
+    function getStoredCart() {
+      let raw = localStorage.getItem("tefa_cart") || localStorage.getItem("cart");
+      if (!raw) return [];
+      try {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data)) return data;
+        if (data && Array.isArray(data.items)) return data.items;
+        return [];
+      } catch {
+        return [];
+      }
+    }
+
+    function getItemTotal(item) {
+      const qty = item.quantity ?? item.qty ?? 1;
+      if (item.total != null) return Number(item.total) || 0;
+      if (item.price != null) return (Number(item.price) || 0) * qty;
+      if (item.unitPrice != null) return (Number(item.unitPrice) || 0) * qty;
+      return 0;
+    }
+
+    function getItemName(item) {
+      return item.productName || item.name || item.title || "منتج";
+    }
+
+    function getItemColor(item) {
+      return item.colorName || item.colorLabel || item.color || "";
+    }
+
+    function getItemQty(item) {
+      return item.quantity ?? item.qty ?? 1;
+    }
+
     function loadCart() {
-      cart = JSON.parse(localStorage.getItem("tefa_cart") || "[]");
+      cart = getStoredCart();
       const container = document.getElementById("cart-items");
       const badge = document.getElementById("cart-count-badge");
       container.innerHTML = "";
@@ -179,21 +213,27 @@
         return;
       }
 
-      badge.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalQty = cart.reduce((sum, item) => sum + getItemQty(item), 0);
+      badge.textContent = totalQty;
       badge.classList.remove("hidden");
 
       cart.forEach((item, index) => {
+        const name = getItemName(item);
+        const color = getItemColor(item);
+        const qty = getItemQty(item);
+        const lineTotal = getItemTotal(item);
+
         const row = document.createElement("div");
         row.className = "flex items-center justify-between border-b pb-2";
 
         row.innerHTML = `
           <div class="text-sm">
-            <div class="font-semibold">${item.productName}</div>
-            <div class="text-gray-600">اللون: ${item.colorName}</div>
-            <div class="text-gray-600">الكمية: ${item.quantity}</div>
+            <div class="font-semibold">${name}</div>
+            <div class="text-gray-600">${color ? "اللون: " + color : ""}</div>
+            <div class="text-gray-600">الكمية: ${qty}</div>
           </div>
           <div class="flex items-center gap-3">
-            <span class="font-bold text-sm">${item.total} ج</span>
+            <span class="font-bold text-sm">${lineTotal} ج</span>
             <button class="text-xs text-red-500 underline" data-remove="${index}">حذف</button>
           </div>
         `;
@@ -201,7 +241,6 @@
         container.appendChild(row);
       });
 
-      // أزرار الحذف
       container.querySelectorAll("[data-remove]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-remove"));
@@ -215,14 +254,27 @@
     }
 
     function updateTotals() {
-      const subtotal = cart.reduce((sum, item) => sum + item.total, 0);
+      const subtotal = cart.reduce((sum, item) => sum + getItemTotal(item), 0);
       document.getElementById("subtotal").textContent = subtotal + " ج";
 
       const gov = document.getElementById("governorate").value;
       let shipping = 0;
+
       if (gov) {
-        shipping = (gov === "القاهرة") ? 60 : 70;
+        // القاهرة و الجيزة 60
+        if (gov === "القاهرة" || gov === "الجيزة") {
+          shipping = 60;
+        }
+        // شرم الشيخ – الغردقة – مرسى مطروح – شمال سيناء – جنوب سيناء – الوادي الجديد = 120
+        else if (["جنوب سيناء", "شمال سيناء", "مطروح", "الوادي الجديد", "البحر الأحمر"].includes(gov)) {
+          shipping = 120;
+        }
+        // باقي المحافظات 70
+        else {
+          shipping = 70;
+        }
       }
+
       document.getElementById("shipping").textContent = shipping + " ج";
 
       const couponInput = document.getElementById("coupon");
@@ -240,7 +292,6 @@
     document.getElementById("governorate").addEventListener("change", updateTotals);
     document.getElementById("coupon").addEventListener("input", updateTotals);
 
-    // إرسال الطلب إلى Google Sheet
     document.getElementById("order-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = document.getElementById("form-message");
@@ -263,9 +314,13 @@
 
       const totals = updateTotals();
 
-      const productsText = cart.map(item =>
-        `${item.productName} - ${item.colorName} ×${item.quantity} = ${item.total}ج`
-      ).join("\n");
+      const productsText = cart.map(item => {
+        const n = getItemName(item);
+        const c = getItemColor(item);
+        const q = getItemQty(item);
+        const t = getItemTotal(item);
+        return `${n}${c ? " - " + c : ""} ×${q} = ${t}ج`;
+      }).join("\n");
 
       const orderData = {
         name,
@@ -295,13 +350,9 @@
           msg.classList.remove("text-gray-600");
           msg.classList.add("text-green-600");
 
-          // مسح السلة بعد نجاح الطلب
           localStorage.removeItem("tefa_cart");
           cart = [];
           loadCart();
-
-          // ممكن تعملي تحويل لصفحة الشكر:
-          // window.location.href = "index.html";
         } else {
           throw new Error("خطأ في الاستجابة");
         }
@@ -313,7 +364,6 @@
       }
     });
 
-    // أول ما الصفحة تفتح
     loadCart();
   </script>
 
