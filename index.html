@@ -21,8 +21,8 @@
   <h1 class="text-2xl font-extrabold">TEFA STORE</h1>
 
   <div class="flex items-center gap-4">
-    <!-- لينك لوحة التحكم (تقدر تخليه مخفي لو حابب) -->
-    <a href="admin.html" class="hidden text-xs text-gray-500 md:inline-block">لوحة التحكم</a>
+    <!-- لينك لوحة التحكم -->
+    <a href="admin.html" class="hidden md:inline-block text-xs text-gray-500">لوحة التحكم</a>
 
     <a href="cart.html" class="relative text-3xl">
       🛒
@@ -99,58 +99,14 @@
   </div>
 </section>
 
-<!-- المنتجات -->
+<!-- المنتجات (تُبنى بالـ JS من الموديلات الأساسية + المضافة من لوحة التحكم) -->
 <section class="p-4">
   <h3 class="text-3xl font-extrabold text-center mb-6">
     اختاري الطقم المناسب لك ✨
   </h3>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-
-    <!-- روزالين -->
-    <a href="product.html?id=rozalin" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
-      <img src="rozalin-main.jpg"
-           alt="طقم روزالين"
-           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold mb-1">طقم روزالين 3 قطع</h4>
-      <p class="text-sm text-gray-600 mb-1">خامة روزالين – وان سايز 60–95 ك</p>
-      <p class="line-through text-gray-400 text-sm">999 ج</p>
-      <span class="text-4xl font-extrabold text-black">749 ج</span>
-    </a>
-
-    <!-- فورمال -->
-    <a href="product.html?id=formal" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
-      <img src="formal-main.jpg"
-           alt="طقم فورمال"
-           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold mb-1">طقم فورمال 3 قطع</h4>
-      <p class="text-sm text-gray-600 mb-1">ستايل فورمال أنيق</p>
-      <p class="line-through text-gray-400 text-sm">949 ج</p>
-      <span class="text-4xl font-extrabold text-black">699 ج</span>
-    </a>
-
-    <!-- تونز -->
-    <a href="product.html?id=toonz" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
-      <img src="toonz-main.jpg"
-           alt="تونز قطعتين"
-           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold mb-1">تونز – قطعتين</h4>
-      <p class="text-sm text-gray-600 mb-1">شمواه × شمواه – شتوي شيك</p>
-      <p class="line-through text-gray-400 text-sm">1199 ج</p>
-      <span class="text-4xl font-extrabold text-black">799 ج</span>
-    </a>
-
-    <!-- عباية زراير كبس -->
-    <a href="product.html?id=abaya_btn" class="bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition">
-      <img src="abaya-btn-main.jpg"
-           alt="عباية زراير كبس"
-           class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
-      <h4 class="text-xl font-semibold mb-1">عباية زراير كبس</h4>
-      <p class="text-sm text-gray-600 mb-1">جوخ ليكرا – شتوي أنيق</p>
-      <p class="line-through text-gray-400 text-sm">1049 ج</p>
-      <span class="text-4xl font-extrabولد text-black">749 ج</span>
-    </a>
-
+  <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <!-- البطاقات هتتولد بالـ JS -->
   </div>
 </section>
 
@@ -161,6 +117,76 @@
 </footer>
 
 <script>
+  // ====== موديلات أساسية ثابتة (الأربعة اللي عندك) ======
+  const BASE_PRODUCTS = [
+    {
+      id: "rozalin",
+      name: "طقم روزالين 3 قطع",
+      desc: "خامة روزالين – وان سايز 60–95 ك",
+      price: 749,
+      oldPrice: 999,
+      img: "rozalin-main.jpg"
+    },
+    {
+      id: "formal",
+      name: "طقم فورمال 3 قطع",
+      desc: "ستايل فورمال أنيق",
+      price: 699,
+      oldPrice: 949,
+      img: "formal-main.jpg"
+    },
+    {
+      id: "toonz",
+      name: "تونز – قطعتين",
+      desc: "شمواه × شمواه – شتوي شيك",
+      price: 799,
+      oldPrice: 1199,
+      img: "toonz-main.jpg"
+    },
+    {
+      id: "abaya_btn",
+      name: "عباية زراير كبس",
+      desc: "جوخ ليكرا – شتوي أنيق",
+      price: 749,
+      oldPrice: 1049,
+      img: "abaya-btn-main.jpg"
+    }
+  ];
+
+  // ====== موديلات مضافة من لوحة التحكم ======
+  function loadHomeModels() {
+    try {
+      return JSON.parse(localStorage.getItem("homeModels") || "[]");
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function renderProductsGrid() {
+    const grid = document.getElementById("productsGrid");
+    grid.innerHTML = "";
+
+    const extra = loadHomeModels();   // من لوحة التحكم
+    const all = [...BASE_PRODUCTS, ...extra];
+
+    all.forEach(p => {
+      const card = document.createElement("a");
+      card.className = "bg-white p-3 rounded-3xl shadow text-center hover:shadow-lg transition";
+      card.href = p.id ? `product.html?id=${p.id}` : "#";
+
+      card.innerHTML = `
+        <img src="${p.img}"
+             alt="${p.name}"
+             class="w-full aspect-[3/4] object-cover rounded-2xl mb-3">
+        <h4 class="text-xl font-semibold mb-1">${p.name}</h4>
+        <p class="text-sm text-gray-600 mb-1">${p.desc || ""}</p>
+        ${p.oldPrice ? `<p class="line-through text-gray-400 text-sm">${p.oldPrice} ج</p>` : ""}
+        <span class="text-4xl font-extrabold text-black">${p.price} ج</span>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
   (function () {
     // ====== عداد الزوار (لهذا المتصفح فقط) ======
     const viewsKey = "store_total_views";
@@ -245,6 +271,9 @@
     window.addEventListener("storage", (e) => {
       if (e.key === "cart") updateCartCount();
     });
+
+    // رسم المنتجات
+    renderProductsGrid();
   })();
 </script>
 

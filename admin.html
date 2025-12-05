@@ -73,6 +73,55 @@
       <div id="modelsManagement" class="space-y-4"></div>
     </section>
 
+    <!-- إضافة موديلات جديدة تظهر في الصفحة الرئيسية -->
+    <section class="bg-white rounded-2xl shadow p-4 mb-6">
+      <h2 class="text-xl font-extrabold mb-2">إضافة موديلات جديدة للصفحة الرئيسية</h2>
+      <p class="text-xs text-gray-500 mb-3">
+        الموديلات اللي هتضيفها هنا هتظهر في الصفحة الرئيسية تحت المنتجات الحالية.
+        الصورة لازم يكون اسمها مرفوع في GitHub (مثال: <span class="font-mono">myset-main.jpg</span>).
+      </p>
+
+      <div class="flex flex-col md:flex-row gap-2 mb-3">
+        <input id="newModelName"
+               type="text"
+               placeholder="اسم الموديل"
+               class="flex-1 border rounded-xl p-2 text-sm">
+        <input id="newModelId"
+               type="text"
+               placeholder="معرف المنتج (اختياري للربط مع product.html)"
+               class="flex-1 border rounded-xl p-2 text-xs">
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-2 mb-3">
+        <input id="newModelPrice"
+               type="number"
+               placeholder="السعر بعد الخصم (مثال 749)"
+               class="flex-1 border rounded-xl p-2 text-sm">
+        <input id="newModelOldPrice"
+               type="number"
+               placeholder="السعر قبل الخصم (اختياري)"
+               class="flex-1 border rounded-xl p-2 text-sm">
+        <input id="newModelImg"
+               type="text"
+               placeholder="اسم الصورة (مثال model-main.jpg)"
+               class="flex-1 border rounded-xl p-2 text-sm">
+      </div>
+
+      <textarea id="newModelDesc"
+                rows="2"
+                placeholder="وصف مختصر للموديل (اختياري)"
+                class="w-full border rounded-xl p-2 text-sm mb-3"></textarea>
+
+      <button id="addModelBtn"
+              class="bg-black text-white px-4 py-2 rounded-2xl text-sm font-bold">
+        إضافة موديل
+      </button>
+
+      <div id="homeModelsList" class="mt-4 space-y-2 text-sm">
+        <!-- قائمة بالموديلات المضافة -->
+      </div>
+    </section>
+
     <!-- قائمة الطلبات -->
     <section class="bg-white rounded-2xl shadow p-4 mb-6">
       <h2 class="text-xl font-extrabold mb-2">قائمة الطلبات</h2>
@@ -108,6 +157,7 @@
             <th class="border p-2">الإجمالي</th>
             <th class="border p-2">المنتجات</th>
             <th class="border p-2">الوقت</th>
+            <th class="border p-2">إجراءات</th>
           </tr>
           </thead>
           <tbody id="ordersTableBody">
@@ -164,7 +214,7 @@ loginBtn.addEventListener("click", () => {
 
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("admin_logged_in");
-  location.reload();
+  showLogin();
 });
 
 // ===================== بيانات المنتجات و الألوان =====================
@@ -226,6 +276,18 @@ function saveDisabledColors(map) {
   localStorage.setItem("disabledColors", JSON.stringify(map));
 }
 
+// ===================== موديلات الصفحة الرئيسية (من لوحة التحكم) =====================
+function loadHomeModels() {
+  try {
+    return JSON.parse(localStorage.getItem("homeModels") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+function saveHomeModels(list) {
+  localStorage.setItem("homeModels", JSON.stringify(list));
+}
+
 // ===================== الطلبات =====================
 function loadOrders() {
   try {
@@ -234,11 +296,15 @@ function loadOrders() {
     return [];
   }
 }
+function saveOrders(list) {
+  localStorage.setItem("orders", JSON.stringify(list));
+}
 
 // ===================== تهيئة لوحة التحكم =====================
 function initDashboard() {
   renderStats();
   renderModelsManagement();
+  renderHomeModelsList();
   renderOrdersTable();
 }
 
@@ -322,7 +388,95 @@ function renderModelsManagement() {
   });
 }
 
-// --------- جدول الطلبات ---------
+// --------- قائمة الموديلات المضافة للرئيسية ---------
+function renderHomeModelsList() {
+  const listEl = document.getElementById("homeModelsList");
+  const models = loadHomeModels();
+
+  listEl.innerHTML = "";
+
+  if (!models.length) {
+    listEl.textContent = "لا توجد موديلات مضافة من لوحة التحكم.";
+    return;
+  }
+
+  models.forEach((m, idx) => {
+    const row = document.createElement("div");
+    row.className = "flex justify-between items-center border rounded-xl px-3 py-2";
+
+    const left = document.createElement("div");
+    left.innerHTML = `
+      <div class="font-bold text-sm">${m.name}</div>
+      <div class="text-xs text-gray-500">
+        السعر: ${m.price} ج
+        ${m.oldPrice ? ` | قبل الخصم: ${m.oldPrice} ج` : ""}
+        ${m.id ? ` | معرف المنتج: ${m.id}` : ""}
+      </div>
+    `;
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "text-red-600 text-xs font-bold";
+    delBtn.textContent = "حذف";
+    delBtn.addEventListener("click", () => {
+      const arr = loadHomeModels();
+      arr.splice(idx, 1);
+      saveHomeModels(arr);
+      renderHomeModelsList();
+    });
+
+    row.appendChild(left);
+    row.appendChild(delBtn);
+    listEl.appendChild(row);
+  });
+}
+
+// إضافة موديل جديد
+document.getElementById("addModelBtn").addEventListener("click", () => {
+  const name  = document.getElementById("newModelName").value.trim();
+  const id    = document.getElementById("newModelId").value.trim();
+  const price = parseInt(document.getElementById("newModelPrice").value.trim(), 10);
+  const oldP  = parseInt(document.getElementById("newModelOldPrice").value.trim(), 10);
+  const img   = document.getElementById("newModelImg").value.trim();
+  const desc  = document.getElementById("newModelDesc").value.trim();
+
+  if (!name || !price || !img) {
+    alert("من فضلك أدخل على الأقل: اسم الموديل، السعر، واسم الصورة.");
+    return;
+  }
+
+  const models = loadHomeModels();
+  models.push({
+    id: id || null,
+    name,
+    price,
+    oldPrice: isNaN(oldP) ? null : oldP,
+    img,
+    desc
+  });
+  saveHomeModels(models);
+
+  document.getElementById("newModelName").value = "";
+  document.getElementById("newModelId").value = "";
+  document.getElementById("newModelPrice").value = "";
+  document.getElementById("newModelOldPrice").value = "";
+  document.getElementById("newModelImg").value = "";
+  document.getElementById("newModelDesc").value = "";
+
+  renderHomeModelsList();
+  alert("تم إضافة الموديل للصفحة الرئيسية ✅");
+});
+
+// --------- جدول الطلبات + زر حذف ---------
+function deleteOrderByIndex(originalIndex) {
+  const orders = loadOrders();
+  if (originalIndex < 0 || originalIndex >= orders.length) return;
+  if (!confirm("هل أنت متأكد من حذف هذا الأوردر؟")) return;
+  orders.splice(originalIndex, 1);
+  saveOrders(orders);
+  renderStats();
+  renderOrdersTable();
+}
+
 function renderOrdersTable() {
   const orders       = loadOrders();
   const tbody        = document.getElementById("ordersTableBody");
@@ -350,21 +504,23 @@ function renderOrdersTable() {
     const today = new Date();
     today.setHours(0,0,0,0);
 
-    let filtered = orders.slice();
+    // نخلي مع كل أوردر الـ index الأصلي
+    let indexed = orders.map((o, idx) => ({ order: o, index: idx }));
 
     if (search) {
-      filtered = filtered.filter(o =>
-        (o.name && o.name.toLowerCase().includes(search)) ||
-        (o.phone && String(o.phone).includes(search))
+      indexed = indexed.filter(x =>
+        (x.order.name && x.order.name.toLowerCase().includes(search)) ||
+        (x.order.phone && String(x.order.phone).includes(search))
       );
     }
 
     if (gov) {
-      filtered = filtered.filter(o => o.governorate === gov);
+      indexed = indexed.filter(x => x.order.governorate === gov);
     }
 
     if (dateF === "today") {
-      filtered = filtered.filter(o => {
+      indexed = indexed.filter(x => {
+        const o = x.order;
         if (!o.createdAt) return false;
         const d = new Date(o.createdAt);
         if (isNaN(d)) return false;
@@ -374,7 +530,10 @@ function renderOrdersTable() {
     }
 
     tbody.innerHTML = "";
-    filtered.forEach((o, idx) => {
+    indexed.forEach((item, displayIdx) => {
+      const o   = item.order;
+      const idx = item.index;
+
       const tr = document.createElement("tr");
 
       const productsText = (o.items || o.products || [])
@@ -389,21 +548,27 @@ function renderOrdersTable() {
         : "-";
 
       tr.innerHTML = `
-        <td class="border p-2">${idx + 1}</td>
+        <td class="border p-2">${displayIdx + 1}</td>
         <td class="border p-2">${o.name || "-"}</td>
         <td class="border p-2">${o.phone || "-"}</td>
         <td class="border p-2">${o.governorate || "-"}</td>
         <td class="border p-2">${total} ج</td>
         <td class="border p-2 text-xs">${productsText || "-"}</td>
         <td class="border p-2 text-xs">${timeStr}</td>
+        <td class="border p-2">
+          <button class="text-red-600 text-xs font-bold"
+                  onclick="deleteOrderByIndex(${idx})">
+            حذف
+          </button>
+        </td>
       `;
       tbody.appendChild(tr);
     });
 
-    if (!filtered.length) {
+    if (!indexed.length) {
       summaryEl.textContent = "لا توجد طلبات مطابقة للفلاتر الحالية.";
     } else {
-      summaryEl.textContent = `إجمالي الطلبات المعروضة: ${filtered.length}`;
+      summaryEl.textContent = `إجمالي الطلبات المعروضة: ${indexed.length}`;
     }
   }
 
