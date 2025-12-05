@@ -165,27 +165,71 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyo642ysmxGm2Mhuvjoq76T2CaZaCoNtNegxDD83AqdszaELVOXyut_jTipSJuLEWHh/exec";
 
     let cart = [];
+    let cartKey = null; // المفتاح الحقيقي اللي هنكتشفه
 
-    // قراءة السلة من localStorage (مفتاح قديم/جديد)
-    function getStoredCart() {
-      let raw = localStorage.getItem("tefa_cart") || localStorage.getItem("cart");
-      if (!raw) return [];
-      try {
-        const data = JSON.parse(raw);
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.items)) return data.items;
-        return [];
-      } catch {
-        return [];
+    // نحاول نكتشف مفتاح السلة من localStorage
+    function detectCart() {
+      const preferredKeys = ["tefa_cart", "cart", "cartItems"];
+      for (const key of preferredKeys) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        try {
+          const data = JSON.parse(raw);
+          if (Array.isArray(data) && data.length && typeof data[0] === "object") {
+            const f = data[0];
+            if ("productName" in f || "color" in f || "colorName" in f || "productId" in f) {
+              cartKey = key;
+              return data;
+            }
+          }
+          if (data && Array.isArray(data.items) && data.items.length) {
+            const f = data.items[0];
+            if ("productName" in f || "color" in f || "colorName" in f || "productId" in f) {
+              cartKey = key;
+              return data.items;
+            }
+          }
+        } catch {}
       }
+
+      // لو ما لقيناش من المفاتيح المشهورة، نلف على كل مفاتيح localStorage
+      for (const key in localStorage) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        try {
+          const data = JSON.parse(raw);
+          if (Array.isArray(data) && data.length && typeof data[0] === "object") {
+            const f = data[0];
+            if ("productName" in f || "color" in f || "colorName" in f || "productId" in f) {
+              cartKey = key;
+              return data;
+            }
+          }
+          if (data && Array.isArray(data.items) && data.items.length) {
+            const f = data.items[0];
+            if ("productName" in f || "color" in f || "colorName" in f || "productId" in f) {
+              cartKey = key;
+              return data.items;
+            }
+          }
+        } catch {}
+      }
+
+      cartKey = null;
+      return [];
     }
 
     function saveCart() {
-      if (cart.length === 0) {
+      if (!cart.length) {
+        if (cartKey) localStorage.removeItem(cartKey);
         localStorage.removeItem("tefa_cart");
         localStorage.removeItem("cart");
+        localStorage.removeItem("cartItems");
       } else {
         const str = JSON.stringify(cart);
+        const keyToUse = cartKey || "tefa_cart";
+        localStorage.setItem(keyToUse, str);
+        // نعمل نسخ احتياطية لمفاتيح تانية علشان توافق الصفحات القديمة
         localStorage.setItem("tefa_cart", str);
         localStorage.setItem("cart", str);
       }
@@ -224,7 +268,7 @@
     }
 
     function loadCart() {
-      cart = getStoredCart();
+      cart = detectCart();
       const container = document.getElementById("cart-items");
       container.innerHTML = "";
 
@@ -259,7 +303,6 @@
         container.appendChild(row);
       });
 
-      // أزرار الحذف
       container.querySelectorAll("[data-remove]").forEach(btn => {
         btn.addEventListener("click", () => {
           const i = parseInt(btn.getAttribute("data-remove"));
@@ -362,11 +405,10 @@
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", // نتجاهل CORS ومش هنقرأ الاستجابة
+          mode: "no-cors", // مش هنقرأ الاستجابة، بس هنضمن الإرسال
           body: JSON.stringify(orderData)
         });
 
-        // لو وصلنا هنا نعتبره نجاح
         msg.textContent = "تم تسجيل الطلب بنجاح ❤️ سيتم التواصل معك لتأكيد الشحن.";
         msg.classList.remove("text-gray-600");
         msg.classList.add("text-green-600");
