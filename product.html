@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -67,7 +68,6 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      visibility: hidden;
     }
 
     /* Product layout */
@@ -95,8 +95,6 @@
     .product-image-wrapper img {
       width: 100%;
       display: block;
-      max-height: 360px;          /* 🔥 تظبيط حجم الصور */
-      object-fit: cover;          /* عشان كل الألوان تبقى نفس المقاس */
     }
 
     .product-info-title {
@@ -236,7 +234,6 @@
       align-items: center;
       gap: 6px;
       z-index: 50;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
   </style>
@@ -301,7 +298,7 @@
 
   <div class="toast" id="toast">تمت إضافة اللون إلى السلة بنجاح 🥰</div>
 
-  <!-- صوت بسيط عند اختيار اللون / الإضافة -->
+  <!-- صوت بسيط عند الإضافة -->
   <audio id="add-sound">
     <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
   </audio>
@@ -329,26 +326,6 @@
       if (!badge) return;
       badge.textContent = count;
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
-    }
-
-    // توست + صوت – مع لون الخلفية لو متوفر
-    function showToast(message, colorHex) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.style.backgroundColor = colorHex || '#111';
-      toast.style.display = 'flex';
-
-      const sound = document.getElementById('add-sound');
-      if (sound && sound.play) {
-        try {
-          sound.currentTime = 0;
-          sound.play().catch(() => {});
-        } catch (e) {}
-      }
-
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 1800);
     }
 
     // تعريف المنتجات والألوان
@@ -426,6 +403,15 @@
       return params.get(name);
     }
 
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 1800);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const productKey = getQueryParam('product') || 'rozalin';
       const product = PRODUCTS[productKey] || PRODUCTS['rozalin'];
@@ -449,7 +435,7 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // رسم دوائر الألوان + رسالة وصوت عند الاختيار
+      // رسم دوائر الألوان
       product.colors.forEach(color => {
         const dot = document.createElement('button');
         dot.type = 'button';
@@ -464,9 +450,6 @@
           selectedColorObj = color;
           selectedColorText.textContent = 'اللون المختار: ' + color.label;
           imgEl.src = color.image || product.mainImage;
-
-          // رسالة بنفس لون اللون المختار + صوت
-          showToast('تم اختيار اللون ' + color.label + ' 🥰', color.hex);
         });
 
         colorsRow.appendChild(dot);
@@ -488,7 +471,7 @@
       // إضافة للسلة
       document.getElementById('add-to-cart-btn').addEventListener('click', () => {
         if (!selectedColorObj) {
-          showToast('من فضلك اختاري لون الأول 💜', '#111');
+          alert('من فضلك اختاري لون الأول 💜');
           return;
         }
         const qty = parseInt(qtyValueEl.textContent, 10) || 1;
@@ -509,6 +492,7 @@
             name: product.name,
             price: product.price,
             qty: qty,
+            // أسماء مختلفة عشان أي كود في cart.html يلاقي اللي محتاجه
             colorKey: selectedColorKey,
             colorName: selectedColorObj.label,
             colorLabel: selectedColorObj.label,
@@ -521,8 +505,13 @@
 
         saveCart(cart);
 
-        // رسالة إضافة للسلة بنفس لون اللون
-        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
+        // صوت بسيط
+        const sound = document.getElementById('add-sound');
+        if (sound && sound.play) {
+          try { sound.currentTime = 0; sound.play().catch(() => {}); } catch (e) {}
+        }
+
+        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰');
       });
 
       updateCartCount();

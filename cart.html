@@ -156,7 +156,6 @@
       align-items: center;
       gap: 8px;
       margin-top: 4px;
-      flex-wrap: wrap;
     }
 
     .qty-btn {
@@ -176,7 +175,6 @@
       min-width: 24px;
       text-align: center;
       font-size: 14px;
-      font-weight: 600;
     }
 
     .remove-btn {
@@ -238,18 +236,6 @@
       border: 1px solid #e5e7eb;
       font-size: 14px;
       margin-bottom: 10px;
-      background: #f9fafb;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease,
-        background 0.15s ease;
-    }
-
-    form input:focus,
-    form select:focus,
-    form textarea:focus {
-      outline: none;
-      background: #fff;
-      border-color: #111827;
-      box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.08);
     }
 
     form textarea {
@@ -267,12 +253,10 @@
     .two-cols {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
     }
 
     .two-cols > div {
-      flex: 1 1 0;
-      min-width: 0;
+      flex: 1;
     }
 
     .btn-main {
@@ -304,12 +288,10 @@
       display: flex;
       gap: 8px;
       margin-bottom: 8px;
-      flex-wrap: nowrap;
     }
 
     .discount-row input {
       margin-bottom: 0;
-      flex: 1;
     }
 
     .btn-secondary {
@@ -423,20 +405,19 @@
           <option value="">اختار المحافظة</option>
           <option>القاهرة</option>
           <option>الجيزة</option>
-          <option>القليوبية</option>
           <option>الإسكندرية</option>
-          <option>البحيرة</option>
-          <option>كفر الشيخ</option>
           <option>الدقهلية</option>
+          <option>الشرقية</option>
+          <option>الغربية</option>
+          <option>المنوفية</option>
+          <option>كفر الشيخ</option>
+          <option>البحيرة</option>
           <option>دمياط</option>
           <option>بورسعيد</option>
           <option>الإسماعيلية</option>
           <option>السويس</option>
-          <option>الشرقية</option>
-          <option>الغربية</option>
-          <option>المنوفية</option>
-          <option>بني سويف</option>
           <option>الفيوم</option>
+          <option>بني سويف</option>
           <option>المنيا</option>
           <option>أسيوط</option>
           <option>سوهاج</option>
@@ -501,11 +482,11 @@
 </main>
 
 <script>
-  // 🔗 لينك Google Apps Script
+  // 🔗 لينك Google Apps Script الجديد
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbwPgm3Ez315GP5_E4SyM-NOjId3Whah4tdrXCRCHF1wYlk_CVwEgs4kd8WHCpJ50ggpiw/exec";
 
-  // 🔑 المفتاح الموحد للسلة
+  // 🔑 اسم المفتاح في localStorage – مهم يكون نفس الاسم في index و product
   const CART_KEY = "tefa_cart";
 
   const cartCountEl = document.getElementById("cartCount");
@@ -524,19 +505,14 @@
   let cart = [];
   let discountValue = 0;
 
-  // دايماً نقرأ السلة من localStorage
-  function getStoredCart() {
+  function loadCart() {
     try {
       const stored = localStorage.getItem(CART_KEY);
-      const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      cart = stored ? JSON.parse(stored) : [];
     } catch (e) {
-      return [];
+      cart = [];
     }
-  }
-
-  function loadCart() {
-    cart = getStoredCart();
+    if (!Array.isArray(cart)) cart = [];
     updateCartBadge();
     renderCart();
   }
@@ -547,20 +523,15 @@
   }
 
   function updateCartBadge() {
-    const currentCart = getStoredCart();
-    const count = currentCart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
     cartCountEl.textContent = count;
   }
 
   function renderCart() {
-    cart = getStoredCart();
     cartItemsEl.innerHTML = "";
     if (cart.length === 0) {
       emptyCartEl.style.display = "block";
       totalsBoxEl.style.display = "none";
-      itemsTotalEl.textContent = "0 ج";
-      shippingTotalEl.textContent = "0 ج";
-      grandTotalEl.textContent = "0 ج";
       return;
     }
     emptyCartEl.style.display = "none";
@@ -582,10 +553,7 @@
       if (item.colorName) {
         const dot = document.createElement("span");
         dot.className = "color-dot";
-        if (item.colorCode || item.colorHex || item.color) {
-          dot.style.background =
-            item.colorCode || item.colorHex || item.color;
-        }
+        if (item.colorCode) dot.style.background = item.colorCode;
         color.appendChild(dot);
         color.appendChild(
           document.createTextNode(" اللون: " + item.colorName)
@@ -641,19 +609,19 @@
   }
 
   function changeQty(index, delta) {
-    cart = getStoredCart();
     const item = cart[index];
     if (!item) return;
-    let newQty = (item.qty || 1) + delta;
-    if (newQty < 1) newQty = 1;
-    if (newQty > 20) newQty = 20;
+    const newQty = (item.qty || 1) + delta;
+    if (newQty <= 0) {
+      removeItem(index);
+      return;
+    }
     item.qty = newQty;
     saveCart();
     renderCart();
   }
 
   function removeItem(index) {
-    cart = getStoredCart();
     cart.splice(index, 1);
     saveCart();
     renderCart();
@@ -677,8 +645,6 @@
   }
 
   function updateTotals() {
-    cart = getStoredCart();
-
     const itemsTotal = cart.reduce(
       (sum, item) => sum + (item.price || 0) * (item.qty || 1),
       0
@@ -718,6 +684,7 @@
       updateTotals();
       return;
     }
+    // خصم 10٪ على المنتجات فقط
     discountValue = 0.1;
     alert("تم تطبيق كود الخصم 10٪ بنجاح 🎉");
     updateTotals();
@@ -728,8 +695,6 @@
     .getElementById("orderForm")
     .addEventListener("submit", async (e) => {
       e.preventDefault();
-      cart = getStoredCart();
-
       if (cart.length === 0) {
         alert("السلة فاضية، اختار منتج واحد على الأقل.");
         return;
@@ -745,9 +710,7 @@
       const weight = document.getElementById("weight").value.trim();
 
       if (!name || !phone || !governorate || !address) {
-        alert(
-          "من فضلك املأ الحقول الأساسية (الاسم - الموبايل - المحافظة - العنوان)."
-        );
+        alert("من فضلك املأ الحقول الأساسية (الاسم - الموبايل - المحافظة - العنوان).");
         return;
       }
 
@@ -760,6 +723,7 @@
         )
         .join(" | ");
 
+      // الأرقام المعروضة في صفحة السلة
       const itemsTotal = cart.reduce(
         (sum, item) => sum + (item.price || 0) * (item.qty || 1),
         0
@@ -790,10 +754,35 @@
       submitBtn.textContent = "جاري إرسال الطلب ...";
 
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors",
+          mode: "no-cors", // نتجنب مشاكل CORS مع Apps Script
           headers: {
             "Content-Type": "application/json",
           },
-    
+          body: JSON.stringify(payload),
+        });
+
+        // مع no-cors مش هنقدر نقرأ response، فهنفترض النجاح
+        alert("تم استلام طلبك بنجاح ❤️ هنكلمك لتأكده في أسرع وقت.");
+        // نمسح السلة
+        localStorage.removeItem(CART_KEY);
+        cart = [];
+        renderCart();
+        // نرجع للرئيسية
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error(err);
+        alert(
+          "في مشكلة في الاتصال بالإنترنت أو Google Sheet. لو سمحت كلمنا على واتساب لتأكيد طلبك."
+        );
+        submitBtn.disabled = false;
+        submitBtn.textContent = "تأكيد الطلب الآن";
+      }
+    });
+
+  // تشغيل السلة عند فتح الصفحة
+  loadCart();
+</script>
+</body>
+</html>
