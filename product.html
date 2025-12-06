@@ -154,7 +154,7 @@
       border: 2px solid transparent;
       cursor: pointer;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease, filter 0.1s ease, opacity 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
     }
     .color-dot:hover {
       transform: scale(1.05);
@@ -162,11 +162,6 @@
     .color-dot.selected {
       border-color: #111;
       box-shadow: 0 0 0 2px #1113;
-    }
-    .color-dot.disabled {
-      filter: grayscale(1);
-      opacity: 0.4;
-      cursor: not-allowed;
     }
 
     .selected-color-text {
@@ -322,7 +317,6 @@
 
   <script>
     const CART_KEY = 'tefa_cart';
-    const COLOR_STATUS_KEY = 'tefa_color_status_v1'; // نفس المفتاح بتاع admin
 
     function getCart() {
       try {
@@ -346,18 +340,8 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // قراءة حالة الألوان من admin
-    function loadColorStatus() {
-      try {
-        return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
-      } catch (e) {
-        return {};
-      }
-    }
-
-    // تعريف المنتجات والألوان
+    // تعريف المنتجات والألوان (نفس اللي في index من غير لعب)
     const PRODUCTS = {
-      // 1) طقم روزالين
       rozalin: {
         key: 'rozalin',
         name: 'طقم روزالين 3 قطع',
@@ -366,7 +350,6 @@
         price: 749,
         oldPrice: 999,
         mainImage: 'rozalin-main.jpg',
-        // ترتيب الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون
         colors: [
           { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
           { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
@@ -376,8 +359,6 @@
           { key: 'simon', label: 'سيمون', hex: '#f8a8a0', image: 'rozalin-simon.jpg' },
         ]
       },
-
-      // 2) طقم فورمال
       formal: {
         key: 'formal',
         name: 'طقم فورمال 3 قطع',
@@ -394,8 +375,6 @@
           { key: 'black',    label: 'أسود',     hex: '#111111', image: 'formal-black.jpg' },
         ]
       },
-
-      // 3) عباية زراير كبس
       abaya: {
         key: 'abaya',
         name: 'عباية زراير كبس',
@@ -413,8 +392,6 @@
           { key: 'darkgray', label: 'رمادي غامق',  hex: '#4b5563', image: 'abaya-darkgray.jpg' },
         ]
       },
-
-      // 4) طقم تونز
       toonz: {
         key: 'toonz',
         name: 'طقم تونز قطعتين',
@@ -431,8 +408,6 @@
           { key: 'pink',    label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' },
         ]
       },
-
-      // 5) دريس قطعتين بالطو جوخ CD05
       coatdress: {
         key: 'coatdress',
         name: 'دريس قطعتين بالطو جوخ',
@@ -450,8 +425,6 @@
           { key: 'black',    label: 'أسود',      hex: '#111111', image: 'coatdress-black.jpg' },
         ]
       },
-
-      // 6) كوليكشن درسات قطيفة مضلع VG06
       velvetdress: {
         key: 'velvetdress',
         name: 'كوليكشن درسات قطيفة مضلع',
@@ -469,8 +442,6 @@
           { key: 'offwhite', label: 'أوف وايت',  hex: '#fef9c3', image: 'velvetdress-offwhite.jpg' },
         ]
       },
-
-      // 7) دريس سوستة كابيشو فرو ZC07
       zipcoat: {
         key: 'zipcoat',
         name: 'دريس سوستة كابيشو فرو',
@@ -487,8 +458,6 @@
           { key: 'black',    label: 'أسود',      hex: '#111111', image: 'zipcoat-black.jpg' },
         ]
       },
-
-      // 8) دريس سادة كم بلونة مع حزام BD08
       beltballoon: {
         key: 'beltballoon',
         name: 'دريس سادة كم بلونة مع حزام',
@@ -506,6 +475,14 @@
           { key: 'black',    label: 'أسود',      hex: '#111111', image: 'beltballoon-black.jpg' },
         ]
       }
+    };
+
+    // لو index بيبعث كود قديم (cd05, vg06, zc07, bd08) نربطها بالمفاتيح الجديدة
+    const PRODUCT_ALIAS = {
+      cd05: 'coatdress',
+      vg06: 'velvetdress',
+      zc07: 'zipcoat',
+      bd08: 'beltballoon',
     };
 
     function getQueryParam(name) {
@@ -530,7 +507,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const productKey = getQueryParam('product') || 'rozalin';
+      let productKey = getQueryParam('product') || 'rozalin';
+
+      // لو الكود من النوع CD05 / cd05 ... نحوله
+      const lower = productKey.toLowerCase();
+      if (PRODUCT_ALIAS[lower]) {
+        productKey = PRODUCT_ALIAS[lower];
+      }
+
       const product = PRODUCTS[productKey] || PRODUCTS['rozalin'];
 
       const imgEl = document.getElementById('product-image');
@@ -552,10 +536,7 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      const colorStatus = loadColorStatus();
-      const productStatus = colorStatus[product.key] || {};
-
-      // رسم دوائر الألوان
+      // رسم دوائر الألوان (كلها شغالة)
       product.colors.forEach(color => {
         const dot = document.createElement('button');
         dot.type = 'button';
@@ -563,22 +544,14 @@
         dot.style.backgroundColor = color.hex;
         dot.setAttribute('aria-label', color.label);
 
-        const enabled = typeof productStatus[color.label] === 'undefined'
-          ? true
-          : !!productStatus[color.label];
-
-        if (!enabled) {
-          dot.classList.add('disabled');
-        } else {
-          dot.addEventListener('click', () => {
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-            dot.classList.add('selected');
-            selectedColorKey = color.key;
-            selectedColorObj = color;
-            selectedColorText.textContent = 'اللون المختار: ' + color.label;
-            imgEl.src = color.image || product.mainImage;
-          });
-        }
+        dot.addEventListener('click', () => {
+          document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+          dot.classList.add('selected');
+          selectedColorKey = color.key;
+          selectedColorObj = color;
+          selectedColorText.textContent = 'اللون المختار: ' + color.label;
+          imgEl.src = color.image || product.mainImage;
+        });
 
         colorsRow.appendChild(dot);
       });
@@ -606,7 +579,6 @@
 
         const cart = getCart();
 
-        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );
@@ -623,4 +595,27 @@
             colorKey: selectedColorKey,
             colorName: selectedColorObj.label,
             colorLabel: selectedColorObj.label,
-            colorTex
+            colorText: selectedColorObj.label,
+            colorHex: selectedColorObj.hex,
+            color: selectedColorObj.hex,
+            colorCode: selectedColorObj.hex,
+            image: selectedColorObj.image || product.mainImage
+          });
+        }
+
+        saveCart(cart);
+
+        const sound = document.getElementById('add-sound');
+        if (sound && sound.play) {
+          try {
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+          } catch (e) {}
+        }
+
+        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
+      });
+
+      updateCartCount();
+      window.addEventListener('storage', (e) => {
+        if (e.key === CART_KEY) updat
