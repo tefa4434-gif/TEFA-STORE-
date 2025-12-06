@@ -317,7 +317,6 @@
 
   <script>
     const CART_KEY = 'tefa_cart';
-    const COLOR_STATUS_KEY = 'tefa_color_status_v1'; // نفس المفتاح الموجود في admin
 
     function getCart() {
       try {
@@ -341,24 +340,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // قراءة حالة الألوان من لوحة التحكم
-    function loadColorStatus() {
-      try {
-        return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function isColorEnabled(status, productId, colorLabel) {
-      // لو مفيش أي إعداد للمنتج أو للون → يبقى اللون شغّال (true)
-      if (!status[productId] || typeof status[productId][colorLabel] === 'undefined') {
-        return true;
-      }
-      return !!status[productId][colorLabel];
-    }
-
-    // نفس أسماء الموديلات اللي عندك في index
+    // تعريف كل الموديلات و ألوانها
     const PRODUCTS = {
       rozalin: {
         key: 'rozalin',
@@ -539,36 +521,25 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      const colorStatus = loadColorStatus();
+      // رسم دوائر الألوان
+      product.colors.forEach(color => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'color-dot';
+        dot.style.backgroundColor = color.hex;
+        dot.setAttribute('aria-label', color.label);
 
-      // فلترة الألوان حسب لوحة التحكم (لو مش متسجل → اللون شغّال)
-      const visibleColors = (product.colors || []).filter(color =>
-        isColorEnabled(colorStatus, product.key, color.label)
-      );
-
-      if (!visibleColors.length) {
-        selectedColorText.textContent = "كل ألوان هذا الموديل متوقفة حالياً من لوحة التحكم.";
-      } else {
-        // رسم دوائر الألوان
-        visibleColors.forEach(color => {
-          const dot = document.createElement('button');
-          dot.type = 'button';
-          dot.className = 'color-dot';
-          dot.style.backgroundColor = color.hex;
-          dot.setAttribute('aria-label', color.label);
-
-          dot.addEventListener('click', () => {
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-            dot.classList.add('selected');
-            selectedColorKey = color.key;
-            selectedColorObj = color;
-            selectedColorText.textContent = 'اللون المختار: ' + color.label;
-            imgEl.src = color.image || product.mainImage;
-          });
-
-          colorsRow.appendChild(dot);
+        dot.addEventListener('click', () => {
+          document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+          dot.classList.add('selected');
+          selectedColorKey = color.key;
+          selectedColorObj = color;
+          selectedColorText.textContent = 'اللون المختار: ' + color.label;
+          imgEl.src = color.image || product.mainImage;
         });
-      }
+
+        colorsRow.appendChild(dot);
+      });
 
       // كمية
       const qtyValueEl = document.getElementById('qty-value');
@@ -593,7 +564,6 @@
 
         const cart = getCart();
 
-        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );
@@ -608,6 +578,30 @@
             price: product.price,
             qty: qty,
             colorKey: selectedColorKey,
-            colorName: selectedColorObj.label, // cart.html بيستخدمها
-            colorCode: selectedColorObj.hex,   // cart.html بيستخدمها للـ dot
-            image: s
+            colorName: selectedColorObj.label,
+            colorCode: selectedColorObj.hex,
+            image: selectedColorObj.image || product.mainImage
+          });
+        }
+
+        saveCart(cart);
+
+        const sound = document.getElementById('add-sound');
+        if (sound && sound.play) {
+          try {
+            sound.currentTime = 0;
+            sound.play().catch(() => {});
+          } catch (e) {}
+        }
+
+        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
+      });
+
+      updateCartCount();
+      window.addEventListener('storage', (e) => {
+        if (e.key === CART_KEY) updateCartCount();
+      });
+    });
+  </script>
+</body>
+</html>
