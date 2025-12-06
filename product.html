@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>اختيار الألوان - TEFA STORE</title>
+  <title>اختاري اللون - TEFA STORE</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -69,7 +70,6 @@
       font-weight: 700;
     }
 
-    /* Product layout */
     .product-page {
       margin-top: 12px;
       background: #ffffff;
@@ -106,12 +106,17 @@
     .product-info-title {
       font-size: 20px;
       font-weight: 800;
+      margin-bottom: 2px;
+    }
+    .product-code {
+      font-size: 12px;
+      color: #6b7280;
       margin-bottom: 4px;
     }
     .product-info-sub {
       font-size: 13px;
       color: #555;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .product-info-line {
       font-size: 13px;
@@ -148,13 +153,13 @@
       gap: 10px;
     }
     .color-dot {
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
       border: 2px solid transparent;
       cursor: pointer;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease, opacity 0.1s;
     }
     .color-dot:hover {
       transform: scale(1.05);
@@ -162,6 +167,10 @@
     .color-dot.selected {
       border-color: #111;
       box-shadow: 0 0 0 2px #1113;
+    }
+    .color-dot.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
 
     .selected-color-text {
@@ -251,376 +260,388 @@
   </style>
 </head>
 <body>
-  <!-- الهيدر -->
-  <header>
-    <div class="header-inner">
-      <div>
-        <div class="store-name">TEFA STORE</div>
-        <div class="store-sub">اختاري اللون والكمية وبعدين كملي الطلب من السلة</div>
-      </div>
-      <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
-        <span>🛒</span>
-        <div class="cart-badge" id="cart-count">0</div>
-      </a>
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="store-name">TEFA STORE</div>
+      <div class="store-sub">اختاري اللون والكمية وبعدين كمّلي الطلب من السلة</div>
     </div>
-  </header>
+    <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
+      <span>🛒</span>
+      <div class="cart-badge" id="cart-count">0</div>
+    </a>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="product-page">
-      <div class="product-image-wrapper">
-        <img id="product-image" src="" alt="صورة المنتج المختار">
+<main class="container">
+  <section class="product-page">
+    <div class="product-image-wrapper">
+      <img id="product-image" src="" alt="صورة المنتج المختار">
+    </div>
+
+    <div>
+      <h1 class="product-info-title" id="product-name">اسم المنتج</h1>
+      <p class="product-code" id="product-code"></p>
+      <p class="product-info-sub" id="product-desc"></p>
+      <p class="product-info-line" id="product-extra"></p>
+
+      <div class="product-price-row">
+        <span class="product-price" id="product-price"></span>
+        <span class="product-oldprice" id="product-oldprice"></span>
       </div>
 
-      <div>
-        <h1 class="product-info-title" id="product-name">اسم المنتج</h1>
-        <p class="product-info-sub" id="product-desc"></p>
-        <p class="product-info-line" id="product-extra"></p>
+      <div class="colors-label">اختاري اللون (دوائر ألوان):</div>
+      <div class="colors-row" id="colors-row"></div>
+      <div class="selected-color-text" id="selected-color-text">لم يتم اختيار لون بعد.</div>
 
-        <div class="product-price-row">
-          <span class="product-price" id="product-price"></span>
-          <span class="product-oldprice" id="product-oldprice"></span>
+      <div class="qty-row">
+        <span>الكمية:</span>
+        <div class="qty-controls">
+          <button type="button" class="qty-btn" id="qty-minus">−</button>
+          <div class="qty-value" id="qty-value">1</div>
+          <button type="button" class="qty-btn" id="qty-plus">+</button>
         </div>
-
-        <div class="colors-label">اختاري اللون (دوائر ألوان):</div>
-        <div class="colors-row" id="colors-row"></div>
-        <div class="selected-color-text" id="selected-color-text">لم يتم اختيار لون بعد.</div>
-
-        <div class="qty-row">
-          <span>الكمية:</span>
-          <div class="qty-controls">
-            <button type="button" class="qty-btn" id="qty-minus">−</button>
-            <div class="qty-value" id="qty-value">1</div>
-            <button type="button" class="qty-btn" id="qty-plus">+</button>
-          </div>
-        </div>
-
-        <button class="btn btn-primary" id="add-to-cart-btn">
-          إضافة إلى السلة
-        </button>
-        <a href="cart.html" class="btn btn-secondary">
-          إكمال الطلب من السلة
-        </a>
-
-        <p class="note">
-          تقدري تضيفي كل الألوان اللي عايزاها لنفس الموديل، وبعدها من صفحة السلة تدخلي بياناتك وتأكيد الأوردر ✨
-        </p>
       </div>
-    </section>
-  </main>
 
-  <div class="toast" id="toast">تمت إضافة اللون إلى السلة بنجاح 🥰</div>
+      <button class="btn btn-primary" id="add-to-cart-btn">
+        إضافة إلى السلة
+      </button>
+      <a href="cart.html" class="btn btn-secondary">
+        إكمال الطلب من السلة
+      </a>
 
-  <!-- صوت بسيط عند الإضافة (حطي ملف notify.mp3 جنب الصفحة) -->
-  <audio id="add-sound">
-    <source src="notify.mp3" type="audio/mpeg">
-  </audio>
+      <p class="note">
+        تقدري تضيفي كل الألوان اللي عايزاها لنفس الموديل، وبعدها من صفحة السلة تدخلي بياناتك وتأكيد الأوردر ✨
+      </p>
+    </div>
+  </section>
+</main>
 
-  <script>
-    const CART_KEY = 'tefa_cart';
+<div class="toast" id="toast">تمت إضافة اللون إلى السلة بنجاح 🥰</div>
 
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      } catch (e) {
-        return [];
+<audio id="add-sound">
+  <source src="notify.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const CART_KEY = "tefa_cart";
+  const COLOR_STATUS_KEY = "tefa_color_status_v1";
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    updateCartCount();
+  }
+  function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
+    const badge = document.getElementById("cart-count");
+    if (!badge) return;
+    badge.textContent = count;
+    badge.style.visibility = count > 0 ? "visible" : "hidden";
+  }
+
+  function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  function loadColorStatus() {
+    try {
+      return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function showToast(message, colorHex) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.background = colorHex || "#111";
+    toast.style.color = "#fff";
+    toast.style.display = "flex";
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 1800);
+  }
+
+  // ===== تعريف كل الموديلات + الصور =====
+  // تأكد إن أسماء الصور هنا نفس اللي في GitHub (تقدر تعدلها لو مختلفة)
+  const PRODUCTS = {
+    rozalin: {
+      key: "rozalin",
+      code: "RZ01",
+      name: "طقم روزالين 3 قطع",
+      desc: "خامة روزالين مستورد عالي الجودة، ملمس ناعم وقصة مريحة وشيك.",
+      extra: "المقاس: وان سايز تلبيس من 60 لـ 95 كيلو تقريباً.",
+      price: 749,
+      oldPrice: 999,
+      mainImage: "rozalin-main.jpg",
+      colors: [
+        { key: "kafeh", label: "كافيه", hex: "#8b5a2b", image: "rozalin-kafeh.jpg" },
+        { key: "beige", label: "بيج",   hex: "#e3c8a3", image: "rozalin-beige.jpg" },
+        { key: "mov",   label: "موف",   hex: "#5b185e", image: "rozalin-mov.jpg" },
+        { key: "zyti",  label: "زيتي",  hex: "#3f5f3a", image: "rozalin-zyti.jpg" },
+        { key: "black", label: "أسود",  hex: "#111111", image: "rozalin-black.jpg" },
+        { key: "simon", label: "سيمون", hex: "#f8a8a0", image: "rozalin-simon.jpg" }
+      ]
+    },
+    formal: {
+      key: "formal",
+      code: "FM02",
+      name: "طقم فورمال 3 قطع",
+      desc: "طقم فورمال 3 قطع خامة روزالين مستورد عالي الجودة.",
+      extra: "المقاس: وان سايز تلبيس من 65 لـ 85 كيلو تقريباً.",
+      price: 699,
+      oldPrice: 949,
+      mainImage: "formal-main.jpg",
+      colors: [
+        { key: "ment",     label: "منت",      hex: "#3f7f6d", image: "formal-ment.jpg" },
+        { key: "babyblue", label: "بيبي بلو", hex: "#9fd3ff", image: "formal-babyblue.jpg" },
+        { key: "beige",    label: "بيج",      hex: "#e3c8a3", image: "formal-beige.jpg" },
+        { key: "havan",    label: "هافان",    hex: "#8b5a2b", image: "formal-havan.jpg" },
+        { key: "black",    label: "أسود",     hex: "#111111", image: "formal-black.jpg" }
+      ]
+    },
+    abaya: {
+      key: "abaya",
+      code: "AB03",
+      name: "عباية زراير كبس",
+      desc: "عباية شيك بخامة جوخ ليكرا مستورد عالي الجودة.",
+      extra: "المقاس: وان سايز تلبيس لحد 80 كيلو تقريباً.",
+      price: 749,
+      oldPrice: 1049,
+      mainImage: "abaya-main.jpg",
+      colors: [
+        { key: "black",    label: "أسود",       hex: "#111111", image: "abaya-black.jpg" },
+        { key: "green",    label: "زيتي",       hex: "#4b6b4b", image: "abaya-green.jpg" },
+        { key: "lightgray",label: "رمادي فاتح", hex: "#d1d5db", image: "abaya-lightgray.jpg" },
+        { key: "burgundy", label: "عنابي",      hex: "#6a102b", image: "abaya-burgundy.jpg" },
+        { key: "caramel",  label: "كاراميل",    hex: "#c57a3a", image: "abaya-caramel.jpg" },
+        { key: "darkgray", label: "رمادي غامق", hex: "#4b5563", image: "abaya-darkgray.jpg" }
+      ]
+    },
+    toonz: {
+      key: "toonz",
+      code: "TZ04",
+      name: "طقم تونز قطعتين",
+      desc: "طقم تونز قطعتين خامة شمواه ناعمة جداً.",
+      extra: "المقاس: من 60 لـ 90 كيلو تقريباً.",
+      price: 799,
+      oldPrice: 1199,
+      mainImage: "toonz-main.jpg",
+      colors: [
+        { key: "beige",  label: "بيج",      hex: "#e3c8a3", image: "toonz-beige.jpg" },
+        { key: "olive",  label: "زيتي",     hex: "#3f5f3a", image: "toonz-olive.jpg" },
+        { key: "wine",   label: "نبيتي",    hex: "#7f1d1d", image: "toonz-wine.jpg" },
+        { key: "purple", label: "موف",      hex: "#6b21a8", image: "toonz-purple.jpg" },
+        { key: "pink",   label: "بنفسجي",   hex: "#f9a8d4", image: "toonz-pink.jpg" }
+      ]
+    },
+
+    /* ==== الموديل الجديد: دريس قطعتين بالطو جوخ ==== */
+    coatdress: {
+      key: "coatdress",
+      code: "CD05",
+      name: "دريس قطعتين بالطو جوخ",
+      desc: "بيزك ريب مع بالطو جوخ ليكرا مستورد عالي الجودة.",
+      extra: "المقاس: ون سايز تلبيس لحد 85 ك تقريباً.",
+      price: 849,
+      oldPrice: 1049,
+      mainImage: "coatdress-main.jpg",
+      colors: [
+        { key: "rose",      label: "روز",       hex: "#f5c0c7", image: "coatdress-rose.jpg" },
+        { key: "offwhite",  label: "أوف وايت",  hex: "#f5f5f5", image: "coatdress-offwhite.jpg" },
+        { key: "brown",     label: "بني",       hex: "#7b4a2a", image: "coatdress-brown.jpg" },
+        { key: "havan",     label: "هافان",     hex: "#b1824a", image: "coatdress-havan.jpg" },
+        { key: "black",     label: "أسود",      hex: "#111111", image: "coatdress-black.jpg" },
+        { key: "olive",     label: "زيتي",      hex: "#3f5f3a", image: "coatdress-olive.jpg" }
+      ]
+    },
+
+    /* ==== كوليكشن درسات قطيفة مضلع ==== */
+    velvetset: {
+      key: "velvetset",
+      code: "VG06",
+      name: "كوليكشن درسات قطيفة مضلع",
+      desc: "خامة قطيفة مضلع مستوردة – قصات واسعة وشيك.",
+      extra: "المقاس: من 65 لـ 85 كيلو تقريباً.",
+      price: 649,
+      oldPrice: 949,
+      mainImage: "velvetset-main.jpg",
+      colors: [
+        { key: "khaki",  label: "كحلي",   hex: "#1f2937", image: "velvetset-navy.jpg" },
+        { key: "camel",  label: "جملي",   hex: "#b68a4a", image: "velvetset-camel.jpg" },
+        { key: "green",  label: "زيتي",   hex: "#3f5f3a", image: "velvetset-green.jpg" },
+        { key: "wine",   label: "نبيتي",  hex: "#7f1d1d", image: "velvetset-wine.jpg" },
+        { key: "black",  label: "أسود",   hex: "#111111", image: "velvetset-black.jpg" },
+        { key: "beige",  label: "بيج",    hex: "#e3c8a3", image: "velvetset-beige.jpg" }
+      ]
+    },
+
+    /* ==== دريس سوسته كابتشو فرو ==== */
+    zipfur: {
+      key: "zipfur",
+      code: "ZC07",
+      name: "دريس سوسته كابتشو فرو",
+      desc: "جوخ ليكرا مستورد مع كابتشو فرو عملي في الشتاء.",
+      extra: "المقاس: ون سايز تلبيس لحد 85 ك تقريباً.",
+      price: 649,
+      oldPrice: 849,
+      mainImage: "zipfur-main.jpg",
+      colors: [
+        { key: "camel",  label: "جملي",   hex: "#b68a4a", image: "zipfur-camel.jpg" },
+        { key: "olive",  label: "زيتي",   hex: "#3f5f3a", image: "zipfur-olive.jpg" },
+        { key: "beige",  label: "بيج",    hex: "#e3c8a3", image: "zipfur-beige.jpg" },
+        { key: "wine",   label: "نبيتي",  hex: "#7f1d1d", image: "zipfur-wine.jpg" },
+        { key: "black1", label: "أسود 1", hex: "#111111", image: "zipfur-black1.jpg" },
+        { key: "black2", label: "أسود 2", hex: "#000000", image: "zipfur-black2.jpg" }
+      ]
+    },
+
+    /* ==== دريس سادة حزام شفاف كم بلونة ==== */
+    beltplain: {
+      key: "beltplain",
+      code: "BD08",
+      name: "دريس سادة كم بلونة مع حزام",
+      desc: "دريس بسيط وشيك بكم بلونة وحزام شفاف.",
+      extra: "المقاس: ون سايز تلبيس لحد 85 ك تقريباً.",
+      price: 599,
+      oldPrice: 799,
+      mainImage: "beltplain-main.jpg",
+      colors: [
+        { key: "green",  label: "زيتي",   hex: "#3f5f3a", image: "beltplain-green.jpg" },
+        { key: "navy",   label: "كحلي",   hex: "#1f2937", image: "beltplain-navy.jpg" },
+        { key: "camel",  label: "جملي",   hex: "#b68a4a", image: "beltplain-camel.jpg" },
+        { key: "beige",  label: "بيج",    hex: "#e3c8a3", image: "beltplain-beige.jpg" },
+        { key: "wine",   label: "نبيتي",  hex: "#7f1d1d", image: "beltplain-wine.jpg" },
+        { key: "black",  label: "أسود",   hex: "#111111", image: "beltplain-black.jpg" }
+      ]
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const productKey = getQueryParam("product") || "rozalin";
+    const product = PRODUCTS[productKey] || PRODUCTS["rozalin"];
+
+    const imgEl = document.getElementById("product-image");
+    const nameEl = document.getElementById("product-name");
+    const codeEl = document.getElementById("product-code");
+    const descEl = document.getElementById("product-desc");
+    const extraEl = document.getElementById("product-extra");
+    const priceEl = document.getElementById("product-price");
+    const oldPriceEl = document.getElementById("product-oldprice");
+    const colorsRow = document.getElementById("colors-row");
+    const selectedColorText = document.getElementById("selected-color-text");
+
+    nameEl.textContent = product.name;
+    codeEl.textContent = product.code ? "كود: " + product.code : "";
+    descEl.textContent = product.desc || "";
+    extraEl.textContent = product.extra || "";
+    priceEl.textContent = product.price + " ج";
+    oldPriceEl.textContent = product.oldPrice ? product.oldPrice + " ج" : "";
+    imgEl.src = product.mainImage;
+
+    const colorStatus = loadColorStatus();
+    const productStatus = colorStatus[productKey] || {};
+
+    let selectedColorObj = null;
+    let selectedColorKey = null;
+
+    product.colors.forEach(color => {
+      const enabled = typeof productStatus[color.name] === "boolean"
+        ? productStatus[color.name]
+        : typeof productStatus[color.label] === "boolean"
+          ? productStatus[color.label]
+          : true;
+
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "color-dot";
+      dot.style.backgroundColor = color.hex;
+      dot.setAttribute("aria-label", color.label);
+
+      if (!enabled) {
+        dot.classList.add("disabled");
       }
-    }
 
-    function saveCart(cart) {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-      updateCartCount();
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-      const badge = document.getElementById('cart-count');
-      if (!badge) return;
-      badge.textContent = count;
-      badge.style.visibility = count > 0 ? 'visible' : 'hidden';
-    }
-
-    // كل المنتجات + صور الألوان
-    const PRODUCTS = {
-      rozalin: {
-        key: 'rozalin',
-        code: 'RZ01',
-        name: 'طقم روزالين 3 قطع',
-        desc: 'خامة روزالين مستورد عالي الجودة، ملمس ناعم وقصة مريحة وشيك.',
-        extra: 'المقاس: وان سايز تلبيس من 60 لـ 95 كيلو تقريباً.',
-        price: 749,
-        oldPrice: 999,
-        mainImage: 'rozalin-main.jpg',
-        colors: [
-          { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
-          { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
-          { key: 'mov',   label: 'موف',   hex: '#5b185e', image: 'rozalin-mov.jpg' },
-          { key: 'zyti',  label: 'زيتي',  hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
-          { key: 'black', label: 'أسود',  hex: '#111111', image: 'rozalin-black.jpg' },
-          { key: 'simon', label: 'سيمون', hex: '#f8a8a0', image: 'rozalin-simon.jpg' }
-        ]
-      },
-      formal: {
-        key: 'formal',
-        code: 'FR02',
-        name: 'طقم فورمال 3 قطع',
-        desc: 'طقم فورمال 3 قطع خامة روزالين مستورد عالي الجودة.',
-        extra: 'المقاس: وان سايز تلبيس من 65 لـ 85 كيلو تقريباً.',
-        price: 699,
-        oldPrice: 949,
-        mainImage: 'formal-main.jpg',
-        colors: [
-          { key: 'ment',     label: 'منت',      hex: '#3f7f6d', image: 'formal-ment.jpg' },
-          { key: 'babyblue', label: 'بيبي بلو', hex: '#9fd3ff', image: 'formal-babyblue.jpg' },
-          { key: 'beige',    label: 'بيج',      hex: '#e3c8a3', image: 'formal-beige.jpg' },
-          { key: 'havan',    label: 'هافان',    hex: '#8b5a2b', image: 'formal-havan.jpg' },
-          { key: 'black',    label: 'أسود',     hex: '#111111', image: 'formal-black.jpg' }
-        ]
-      },
-      abaya: {
-        key: 'abaya',
-        code: 'AB03',
-        name: 'عباية زراير كبس',
-        desc: 'عباية شيك بخامة جوخ ليكرا مستورد عالي الجودة.',
-        extra: 'المقاس: وان سايز تلبيس لحد 80 كيلو تقريباً.',
-        price: 749,
-        oldPrice: 1049,
-        mainImage: 'abaya-main.jpg',
-        colors: [
-          { key: 'black',    label: 'أسود',        hex: '#111111', image: 'abaya-black.jpg' },
-          { key: 'green',    label: 'زيتي',        hex: '#4b6b4b', image: 'abaya-green.jpg' },
-          { key: 'burgundy', label: 'عنابي',       hex: '#6a102b', image: 'abaya-burgundy.jpg' },
-          { key: 'lightgray',label: 'رمادي فاتح',  hex: '#d1d5db', image: 'abaya-lightgray.jpg' },
-          { key: 'caramel',  label: 'كاراميل',     hex: '#c57a3a', image: 'abaya-caramel.jpg' },
-          { key: 'darkgray', label: 'رمادي غامق',  hex: '#4b5563', image: 'abaya-darkgray.jpg' }
-        ]
-      },
-      toonz: {
-        key: 'toonz',
-        code: 'TZ04',
-        name: 'طقم تونز قطعتين',
-        desc: 'طقم تونز قطعتين خامة شمواه في شمواه ناعمة جداً.',
-        extra: 'المقاس: من 60 لـ 90 كيلو تقريباً.',
-        price: 799,
-        oldPrice: 1199,
-        mainImage: 'toonz-main.jpg',
-        colors: [
-          { key: 'beige',   label: 'بيج',      hex: '#e3c8a3', image: 'toonz-beige.jpg' },
-          { key: 'olive',   label: 'زيتي',     hex: '#3f5f3a', image: 'toonz-olive.jpg' },
-          { key: 'wine',    label: 'نبيتي',    hex: '#7f1d1d', image: 'toonz-wine.jpg' },
-          { key: 'purple',  label: 'موف',      hex: '#6b21a8', image: 'toonz-purple.jpg' },
-          { key: 'pink',    label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' }
-        ]
-      },
-
-      /* الموديلات الجديدة */
-
-      coatdress: {
-        key: 'coatdress',
-        code: 'CD05',
-        name: 'دريس قطعتين بالطو جوخ',
-        desc: 'بيزك ريب مع بالطو جوخ ليكرا مستورد – طقم شيك للخروجات والمشاوير.',
-        extra: 'المقاس: وان سايز تلبيس لحد 85 كيلو تقريباً.',
-        price: 849,
-        oldPrice: 1049,
-        mainImage: 'coatdress-main.jpg',
-        colors: [
-          { key: 'rose',     label: 'روز',       hex: '#f9a8d4', image: 'coatdress-rose.jpg' },
-          { key: 'offwhite', label: 'أوف وايت',  hex: '#f5f5f4', image: 'coatdress-offwhite.jpg' },
-          { key: 'havan',    label: 'هافان',     hex: '#b45309', image: 'coatdress-havan.jpg' },
-          { key: 'brown',    label: 'بني',       hex: '#78350f', image: 'coatdress-brown.jpg' },
-          { key: 'black',    label: 'أسود',      hex: '#111827', image: 'coatdress-black.jpg' },
-          { key: 'olive',    label: 'زيتي',      hex: '#4b7350', image: 'coatdress-olive.jpg' }
-        ]
-      },
-
-      velvetset: {
-        key: 'velvetset',
-        code: 'VG06',
-        name: 'كوليكشن درسات قطيفة مضلع',
-        desc: 'خامة قطيفة مضلع مستوردة – قصات واسعة وشيك للخروجات والمناسبات.',
-        extra: 'المقاس: من 65 لـ 85 كيلو تقريباً.',
-        price: 649,
-        oldPrice: 949,
-        mainImage: 'velvetset-main.jpg',
-        colors: [
-          { key: 'green',  label: 'زيتي',      hex: '#166534', image: 'velvetset-green.jpg' },
-          { key: 'navy',   label: 'كحلي',      hex: '#1d3557', image: 'velvetset-navy.jpg' },
-          { key: 'camel',  label: 'جملي',      hex: '#d4a373', image: 'velvetset-camel.jpg' },
-          { key: 'beige',  label: 'بيج',       hex: '#e7d4b5', image: 'velvetset-beige.jpg' },
-          { key: 'maroon', label: 'نبيتي',     hex: '#7f1d1d', image: 'velvetset-maroon.jpg' },
-          { key: 'black',  label: 'أسود',      hex: '#111827', image: 'velvetset-black.jpg' }
-        ]
-      },
-
-      zippercoat: {
-        key: 'zippercoat',
-        code: 'ZC07',
-        name: 'دريس سوستة كابيشو فرو',
-        desc: 'جوخ ليكرا مستورد مع كابيشو فرو – مريح ودافي جداً.',
-        extra: 'المقاس: وان سايز تلبيس لحد 85 كيلو تقريباً.',
-        price: 649,
-        oldPrice: 849,
-        mainImage: 'zippercoat-main.jpg',
-        colors: [
-          { key: 'camel',  label: 'جملي',      hex: '#d4a373', image: 'zippercoat-camel.jpg' },
-          { key: 'olive',  label: 'زيتي',      hex: '#4b7350', image: 'zippercoat-olive.jpg' },
-          { key: 'beige',  label: 'بيج',       hex: '#e7d4b5', image: 'zippercoat-beige.jpg' },
-          { key: 'maroon', label: 'نبيتي',     hex: '#7f1d1d', image: 'zippercoat-maroon.jpg' },
-          { key: 'black1', label: 'أسود 1',    hex: '#111827', image: 'zippercoat-black1.jpg' },
-          { key: 'black2', label: 'أسود 2',    hex: '#020617', image: 'zippercoat-black2.jpg' }
-        ]
-      },
-
-      beltdress: {
-        key: 'beltdress',
-        code: 'BD08',
-        name: 'دريس ساده كم بلونة مع حزام',
-        desc: 'قطيفة مضلع مستوردة بكم بلونة وحزام شيك في الوسط.',
-        extra: 'المقاس: وان سايز تلبيس لحد 85 كيلو تقريباً.',
-        price: 599,
-        oldPrice: 799,
-        mainImage: 'beltdress-main.jpg',
-        colors: [
-          { key: 'green',  label: 'زيتي',   hex: '#166534', image: 'beltdress-green.jpg' },
-          { key: 'navy',   label: 'كحلي',   hex: '#1d3557', image: 'beltdress-navy.jpg' },
-          { key: 'camel',  label: 'جملي',   hex: '#d4a373', image: 'beltdress-camel.jpg' },
-          { key: 'beige',  label: 'بيج',    hex: '#e7d4b5', image: 'beltdress-beige.jpg' },
-          { key: 'maroon', label: 'نبيتي',  hex: '#7f1d1d', image: 'beltdress-maroon.jpg' },
-          { key: 'black',  label: 'أسود',   hex: '#111827', image: 'beltdress-black.jpg' }
-        ]
-      }
-    };
-
-    function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
-
-    function showToast(message, colorHex) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      if (colorHex) {
-        toast.style.background = colorHex;
-        toast.style.color = '#fff';
-      } else {
-        toast.style.background = '#111';
-        toast.style.color = '#fff';
-      }
-      toast.style.display = 'flex';
-      setTimeout(() => {
-        toast.style.display = 'none';
-      }, 1800);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const productKey = getQueryParam('product') || 'rozalin';
-      const product = PRODUCTS[productKey] || PRODUCTS['rozalin'];
-
-      const imgEl = document.getElementById('product-image');
-      const nameEl = document.getElementById('product-name');
-      const descEl = document.getElementById('product-desc');
-      const extraEl = document.getElementById('product-extra');
-      const priceEl = document.getElementById('product-price');
-      const oldPriceEl = document.getElementById('product-oldprice');
-      const colorsRow = document.getElementById('colors-row');
-      const selectedColorText = document.getElementById('selected-color-text');
-
-      nameEl.textContent = product.name;
-      descEl.textContent = product.desc;
-      extraEl.textContent = product.extra;
-      priceEl.textContent = product.price + ' ج';
-      oldPriceEl.textContent = product.oldPrice + ' ج';
-      imgEl.src = product.mainImage;
-
-      let selectedColorKey = null;
-      let selectedColorObj = null;
-
-      // رسم دوائر الألوان
-      product.colors.forEach(color => {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'color-dot';
-        dot.style.backgroundColor = color.hex;
-        dot.setAttribute('aria-label', color.label);
-
-        dot.addEventListener('click', () => {
-          document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-          dot.classList.add('selected');
-          selectedColorKey = color.key;
-          selectedColorObj = color;
-          selectedColorText.textContent = 'اللون المختار: ' + color.label;
-          imgEl.src = color.image || product.mainImage;
-        });
-
-        colorsRow.appendChild(dot);
+      dot.addEventListener("click", () => {
+        if (!enabled) return;
+        document.querySelectorAll(".color-dot").forEach(d => d.classList.remove("selected"));
+        dot.classList.add("selected");
+        selectedColorKey = color.key;
+        selectedColorObj = color;
+        selectedColorText.textContent = "اللون المختار: " + color.label;
+        imgEl.src = color.image || product.mainImage;
       });
 
-      // كمية
-      const qtyValueEl = document.getElementById('qty-value');
-      document.getElementById('qty-plus').addEventListener('click', () => {
-        let v = parseInt(qtyValueEl.textContent, 10) || 1;
-        if (v < 20) v++;
-        qtyValueEl.textContent = v;
-      });
-      document.getElementById('qty-minus').addEventListener('click', () => {
-        let v = parseInt(qtyValueEl.textContent, 10) || 1;
-        if (v > 1) v--;
-        qtyValueEl.textContent = v;
-      });
-
-      // إضافة للسلة
-      document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-        if (!selectedColorObj) {
-          alert('من فضلك اختاري لون الأول 💜');
-          return;
-        }
-        const qty = parseInt(qtyValueEl.textContent, 10) || 1;
-
-        const cart = getCart();
-
-        const existing = cart.find(
-          item => item.productKey === product.key && item.colorKey === selectedColorKey
-        );
-
-        if (existing) {
-          existing.qty += qty;
-        } else {
-          cart.push({
-            id: Date.now(),
-            productKey: product.key,
-            code: product.code || '',
-            name: product.name,
-            price: product.price,
-            qty: qty,
-            colorKey: selectedColorKey,
-            colorName: selectedColorObj.label,
-            colorLabel: selectedColorObj.label,
-            colorText: selectedColorObj.label,
-            colorHex: selectedColorObj.hex,
-            color: selectedColorObj.hex,
-            image: selectedColorObj.image || product.mainImage
-          });
-        }
-
-        saveCart(cart);
-
-        const sound = document.getElementById('add-sound');
-        if (sound && sound.play) {
-          try {
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
-          } catch (e) {}
-        }
-
-        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
-      });
-
-      updateCartCount();
-      window.addEventListener('storage', (e) => {
-        if (e.key === CART_KEY) updateCartCount();
-      });
+      colorsRow.appendChild(dot);
     });
-  </script>
+
+    const qtyValueEl = document.getElementById("qty-value");
+    document.getElementById("qty-plus").addEventListener("click", () => {
+      let v = parseInt(qtyValueEl.textContent, 10) || 1;
+      if (v < 20) v++;
+      qtyValueEl.textContent = v;
+    });
+    document.getElementById("qty-minus").addEventListener("click", () => {
+      let v = parseInt(qtyValueEl.textContent, 10) || 1;
+      if (v > 1) v--;
+      qtyValueEl.textContent = v;
+    });
+
+    document.getElementById("add-to-cart-btn").addEventListener("click", () => {
+      if (!selectedColorObj) {
+        alert("من فضلك اختاري لون الأول 💜");
+        return;
+      }
+      const qty = parseInt(qtyValueEl.textContent, 10) || 1;
+      const cart = getCart();
+
+      const existing = cart.find(
+        item => item.productKey === product.key && item.colorKey === selectedColorKey
+      );
+
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({
+          id: Date.now(),
+          productKey: product.key,
+          name: product.name,
+          price: product.price,
+          qty: qty,
+          colorKey: selectedColorKey,
+          colorName: selectedColorObj.label,
+          colorCode: selectedColorObj.hex,   // cart.html بيستخدمها للنقطة
+          image: selectedColorObj.image || product.mainImage
+        });
+      }
+
+      saveCart(cart);
+
+      const sound = document.getElementById("add-sound");
+      if (sound && sound.play) {
+        try {
+          sound.currentTime = 0;
+          sound.play().catch(() => {});
+        } catch (e) {}
+      }
+
+      showToast(
+        "تمت إضافة اللون " + selectedColorObj.label + " إلى السلة بنجاح 🥰",
+        selectedColorObj.hex
+      );
+    });
+
+    updateCartCount();
+    window.addEventListener("storage", (e) => {
+      if (e.key === CART_KEY) updateCartCount();
+    });
+  });
+</script>
 </body>
 </html>
