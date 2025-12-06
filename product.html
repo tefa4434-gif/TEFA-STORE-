@@ -317,8 +317,7 @@
 
   <script>
     const CART_KEY = 'tefa_cart';
-
-    // مفتاح التحكم في الألوان من لوحة التحكم
+    // نفس المفتاح اللي في لوحة التحكم
     const COLOR_STATUS_KEY = 'tefa_color_status_v1';
 
     function getCart() {
@@ -346,7 +345,7 @@
     // قراءة حالة الألوان من لوحة التحكم
     function loadColorStatus() {
       try {
-        return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY) || '{}');
+        return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
       } catch (e) {
         return {};
       }
@@ -363,12 +362,12 @@
         oldPrice: 999,
         mainImage: 'rozalin-main.jpg',
         colors: [
-          { key: 'kafeh', label: 'كافيه',   hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
-          { key: 'beige', label: 'بيج',     hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
-          { key: 'mov',   label: 'موف',     hex: '#5b185e', image: 'rozalin-mov.jpg' },
-          { key: 'zyti',  label: 'زيتي',    hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
-          { key: 'black', label: 'أسود',    hex: '#111111', image: 'rozalin-black.jpg' },
-          { key: 'simon', label: 'سيمون',   hex: '#f8a8a0', image: 'rozalin-simon.jpg' },
+          { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
+          { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
+          { key: 'mov',   label: 'موف',   hex: '#5b185e', image: 'rozalin-mov.jpg' },
+          { key: 'zyti',  label: 'زيتي',  hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
+          { key: 'black', label: 'أسود',  hex: '#111111', image: 'rozalin-black.jpg' },
+          { key: 'simon', label: 'سيمون', hex: '#f8a8a0', image: 'rozalin-simon.jpg' },
         ]
       },
       formal: {
@@ -514,16 +513,6 @@
       const productKey = getQueryParam('product') || 'rozalin';
       const product = PRODUCTS[productKey] || PRODUCTS['rozalin'];
 
-      const colorStatusAll = loadColorStatus();
-      const productStatus = colorStatusAll[product.key] || {};
-
-      // الألوان المفعّلة حسب لوحة التحكم
-      let activeColors = product.colors.filter(c => productStatus[c.label] !== false);
-      // لو أول مرة ومافيش حاجة متسجلة أو طلعوا صفر → نرجّع كل الألوان
-      if (!activeColors.length) {
-        activeColors = product.colors;
-      }
-
       const imgEl = document.getElementById('product-image');
       const nameEl = document.getElementById('product-name');
       const descEl = document.getElementById('product-desc');
@@ -543,8 +532,18 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // رسم دوائر الألوان المتاحة
-      activeColors.forEach(color => {
+      // نقرأ حالة الألوان من لوحة التحكم لهذا الموديل
+      const allStatus = loadColorStatus();
+      const productStatus = allStatus[product.key] || {};
+
+      // رسم دوائر الألوان
+      product.colors.forEach(color => {
+        // لو اللون موجود في اللوحة ومتوقّف = متظهرهوش
+        const isDisabled =
+          Object.prototype.hasOwnProperty.call(productStatus, color.label) &&
+          productStatus[color.label] === false;
+        if (isDisabled) return;
+
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'color-dot';
@@ -615,3 +614,6 @@
             sound.currentTime = 0;
             sound.play().catch(() => {});
           } catch (e) {}
+        }
+
+        showT
