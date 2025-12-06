@@ -4,355 +4,220 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TEFA STORE - أطقم و درسات حريمي</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f3f3;
-      color: #111;
-      line-height: 1.6;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#f3f3f3;
+      color:#111;
+      line-height:1.6;
     }
-    a { text-decoration: none; color: inherit; }
+    a{text-decoration:none;color:inherit}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+    .container{max-width:900px;margin:0 auto;padding:0 16px 24px}
 
     /* Top bar */
-    .top-bar {
-      background: #111;
-      color: #fff;
-      padding: 6px 12px;
-      font-size: 13px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
+    .top-bar{
+      background:#111;
+      color:#fff;
+      padding:6px 12px;
+      font-size:13px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
     }
-    .countdown {
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
+    .countdown{font-weight:600;letter-spacing:.5px}
 
     /* Header */
-    header {
-      background: #f3f3f3;
-      padding: 12px 16px 8px;
-      border-bottom: 1px solid #ddd;
+    header{
+      background:#f3f3f3;
+      padding:12px 16px;
+      border-bottom:1px solid #ddd;
     }
-    .header-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+    .header-inner{
+      max-width:900px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
-    .store-name {
-      font-size: 24px;
-      font-weight: 800;
+    .store-name{font-size:24px;font-weight:800}
+    .store-sub{font-size:13px;color:#555;margin-top:2px}
+
+    .cart-icon-wrapper{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;height:40px;
+      border-radius:999px;
+      background:#111;
+      color:#fff;
     }
-    .store-sub {
-      font-size: 13px;
-      color: #555;
-      margin-top: 2px;
+    .cart-icon-wrapper span{font-size:20px}
+    .cart-badge{
+      position:absolute;top:-4px;left:-4px;
+      min-width:18px;height:18px;
+      padding:0 4px;
+      border-radius:999px;
+      background:#ff3b30;
+      color:#fff;
+      font-size:11px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
     }
 
-    .cart-icon-wrapper {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      background: #111;
-      color: #fff;
+    /* Search bar */
+    .search-box{
+      margin:10px auto 0;
+      max-width:900px;
+      padding:0 16px 6px;
     }
-    .cart-icon-wrapper span {
-      font-size: 20px;
+    .search-inner{
+      background:#fff;
+      border-radius:999px;
+      border:1px solid #ddd;
+      padding:6px 12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      box-shadow:0 4px 10px rgba(0,0,0,.03);
     }
-    .cart-badge {
-      position: absolute;
-      top: -4px;
-      left: -4px;
-      min-width: 18px;
-      height: 18px;
-      padding: 0 4px;
-      border-radius: 999px;
-      background: #ff3b30;
-      color: #fff;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
+    .search-icon{font-size:16px}
+    .search-input{
+      border:none;
+      outline:none;
+      flex:1;
+      font-size:13px;
+      background:transparent;
     }
 
-    /* Search bar under logo */
-    .search-wrap {
-      max-width: 900px;
-      margin: 6px auto 0;
-      padding: 0 16px 8px;
+    /* Hero */
+    .hero{
+      background:#fff;
+      margin-top:10px;
+      border-radius:18px;
+      padding:20px 18px 18px;
+      box-shadow:0 8px 18px rgba(0,0,0,.06);
     }
-    .search-input {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      padding: 8px 14px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:13px;
+      background:#fff4e5;color:#b45309;
+      padding:4px 10px;border-radius:999px;
+      margin-bottom:10px;
     }
-    .search-input span {
-      font-size: 15px;
-      opacity: 0.7;
+    .hero-title{font-size:24px;font-weight:900;margin-bottom:8px}
+    .hero-title span{color:#b91c1c}
+    .hero-text{font-size:15px;color:#444;margin-bottom:10px}
+    .hero-bullets{font-size:14px;color:#333;margin:6px 0 10px}
+    .hero-bullets li{margin-bottom:3px}
+    .hero-guarantee{margin-top:6px;font-size:15px;font-weight:700;color:#111}
+    .hero-guarantee span{color:#16a34a}
+    .hero-actions{
+      display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;
     }
-    .search-input input {
-      border: none;
-      outline: none;
-      width: 100%;
-      font-size: 13px;
-      background: transparent;
+    .btn{
+      border:none;cursor:pointer;border-radius:999px;
+      font-weight:600;padding:10px 16px;font-size:14px;
+      display:inline-flex;align-items:center;justify-content:center;gap:6px;
     }
-    .search-hint {
-      font-size: 11px;
-      color: #777;
-      margin-top: 3px;
-      padding-inline: 4px;
-    }
-
-    /* Hero section */
-    .hero {
-      background: #ffffff;
-      margin-top: 12px;
-      border-radius: 18px;
-      padding: 20px 18px 18px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      background: #fff4e5;
-      color: #b45309;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-    .hero-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-    .hero-title span {
-      color: #b91c1c;
-    }
-    .hero-text {
-      font-size: 15px;
-      color: #444;
-      margin-bottom: 10px;
-    }
-    .hero-bullets {
-      font-size: 14px;
-      color: #333;
-      margin: 6px 0 10px;
-    }
-    .hero-bullets li {
-      margin-bottom: 3px;
-    }
-    .hero-guarantee {
-      margin-top: 6px;
-      font-size: 15px;
-      font-weight: 700;
-      color: #111;
-    }
-    .hero-guarantee span {
-      color: #16a34a;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .btn {
-      border: none;
-      cursor: pointer;
-      border-radius: 999px;
-      font-weight: 600;
-      padding: 10px 16px;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .btn-primary {
-      background: #111;
-      color: #fff;
-      flex: 1;
-    }
-    .btn-outline {
-      background: #fff;
-      color: #111;
-      border: 1px solid #ddd;
-      flex: 1;
-    }
+    .btn-primary{background:#111;color:#fff;flex:1}
+    .btn-outline{background:#fff;color:#111;border:1px solid #ddd;flex:1}
 
     /* Features */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(0,1fr));
-      gap: 10px;
-      margin-top: 16px;
+    .features{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+      gap:10px;
+      margin-top:16px;
     }
-    .feature-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 12px;
-      text-align: center;
-      font-size: 13px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    .feature-card{
+      background:#fff;
+      border-radius:16px;
+      padding:12px;
+      text-align:center;
+      font-size:13px;
+      box-shadow:0 4px 10px rgba(0,0,0,.03);
     }
-    .feature-icon {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-    .feature-title {
-      font-weight: 700;
-      margin-bottom: 3px;
-    }
-    .feature-text {
-      color: #555;
-      font-size: 12px;
-    }
+    .feature-icon{font-size:18px;margin-bottom:4px}
+    .feature-title{font-weight:700;margin-bottom:3px}
+    .feature-text{color:#555;font-size:12px}
 
     /* Discount banner */
-    .discount-banner {
-      margin-top: 16px;
-      background: #0f172a;
-      color: #fff;
-      border-radius: 16px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-size: 14px;
+    .discount-banner{
+      margin-top:16px;
+      background:#0f172a;
+      color:#fff;
+      border-radius:16px;
+      padding:12px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      font-size:14px;
     }
-    .discount-code {
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-    .discount-small {
-      font-size: 12px;
-      color: #e5e7eb;
-    }
+    .discount-code{font-weight:800;font-size:16px;letter-spacing:1px}
+    .discount-small{font-size:12px;color:#e5e7eb}
 
     /* Products */
-    .section-title {
-      margin-top: 20px;
-      margin-bottom: 6px;
-      font-size: 18px;
-      font-weight: 800;
+    .section-title{
+      margin-top:20px;margin-bottom:6px;
+      font-size:18px;font-weight:800;
     }
-    .section-sub {
-      font-size: 13px;
-      color: #555;
-      margin-bottom: 10px;
-    }
-    .products-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-    @media (min-width: 720px) {
-      .hero-title { font-size: 28px; }
-      .products-grid { grid-template-columns: 1fr 1fr; }
+    .section-sub{font-size:13px;color:#555;margin-bottom:10px}
+
+    .products-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media (min-width:720px){
+      .hero-title{font-size:28px}
+      .products-grid{grid-template-columns:1fr 1fr}
     }
 
-    .product-card {
-      background: #ffffff;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+    .product-card{
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 8px 16px rgba(0,0,0,.05);
+      display:flex;
+      flex-direction:column;
+      height:100%;
     }
-    .product-img-wrapper {
-      position: relative;
-      background: #e5e5e5;
-      cursor: pointer;
+    .product-img-wrapper{position:relative;background:#e5e5e5}
+    .product-img-wrapper img{width:100%;display:block}
+    .product-discount-tag{
+      position:absolute;top:8px;right:8px;
+      background:#b91c1c;color:#fff;
+      padding:3px 8px;font-size:11px;border-radius:999px;
     }
-    .product-img-wrapper img {
-      width: 100%;
-      display: block;
+    .product-body{
+      padding:10px 12px 12px;
+      flex:1;display:flex;flex-direction:column;gap:4px;
     }
-    .product-discount-tag {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: #b91c1c;
-      color: #fff;
-      padding: 3px 8px;
-      font-size: 11px;
-      border-radius: 999px;
+    .product-header-line{
+      display:flex;justify-content:space-between;align-items:center;
+      font-size:11px;color:#6b7280;margin-bottom:2px;
     }
+    .product-code{font-weight:700}
+    .product-name{font-size:16px;font-weight:800}
+    .product-desc{font-size:12px;color:#555}
+    .product-price-row{
+      display:flex;align-items:baseline;gap:6px;
+      font-size:14px;margin-top:4px;
+    }
+    .product-price{font-size:17px;font-weight:800;color:#16a34a}
+    .product-oldprice{font-size:12px;color:#9ca3af;text-decoration:line-through}
+    .product-note{font-size:12px;color:#555}
+    .product-footer{margin-top:8px}
+    .product-footer .btn-primary{width:100%;font-size:14px}
 
-    .product-body {
-      padding: 10px 12px 12px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .product-code {
-      font-size: 11px;
-      color: #6b7280;
-    }
-    .product-name {
-      font-size: 16px;
-      font-weight: 800;
-    }
-    .product-desc {
-      font-size: 12px;
-      color: #555;
-    }
-    .product-price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-    .product-price {
-      font-size: 17px;
-      font-weight: 800;
-      color: #16a34a;
-    }
-    .product-oldprice {
-      font-size: 12px;
-      color: #9ca3af;
-      text-decoration: line-through;
-    }
-    .product-note {
-      font-size: 12px;
-      color: #555;
-    }
-
-    .product-footer {
-      margin-top: 8px;
-    }
-    .product-footer .btn-primary {
-      width: 100%;
-      font-size: 14px;
+    .no-results{
+      margin-top:10px;
+      font-size:13px;
+      color:#6b7280;
+      text-align:center;
+      display:none;
     }
   </style>
 </head>
@@ -360,7 +225,7 @@
   <!-- شريط العد التنازلي -->
   <div class="top-bar">
     <span>⏰ ينتهي عرض الخصم خلال:</span>
-    <span class="countdown" id="countdown">-- : -- : -- : --</span>
+    <span class="countdown" id="countdown">--</span>
   </div>
 
   <!-- الهيدر -->
@@ -368,7 +233,7 @@
     <div class="header-inner">
       <div>
         <div class="store-name">TEFA STORE</div>
-        <div class="store-sub">متجر أطقم ودرسات حريمي روزالين و قطيفة وجوخ جاهزة للخروجات والمناسبات</div>
+        <div class="store-sub">متجر أطقم و درسات حريمي جاهزة للخروجات والمناسبات</div>
       </div>
       <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
         <span>🛒</span>
@@ -377,14 +242,12 @@
     </div>
   </header>
 
-  <!-- بحث تحت الشعار مباشرة -->
-  <div class="search-wrap">
-    <div class="search-input">
-      <span>🔍</span>
-      <input id="search-input" placeholder="ابحثي باسم الموديل أو كود الموديل (مثال: CD05)..." />
-    </div>
-    <div class="search-hint">
-      كل موديل له كود خاص بيه مكتوب تحت الصورة – تقدري تدوري بالكود أو بالاسم.
+  <!-- مربع البحث تحت اللوجو مباشرة -->
+  <div class="search-box">
+    <div class="search-inner">
+      <span class="search-icon">🔍</span>
+      <input id="searchInput" class="search-input"
+             placeholder="ابحثي بكود الموديل أو الاسم مثلاً: CD05 أو روزالين" />
     </div>
   </div>
 
@@ -392,24 +255,27 @@
     <!-- الهيرو -->
     <section class="hero">
       <div class="hero-badge">
-        <span>🔥 خصم على الأطقم والدريسات الكاملة</span>
+        <span>🔥 خصم على الأطقم و الدرسات الكاملة</span>
       </div>
-      <h1 class="hero-title">أطقم و دريسات حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
+      <h1 class="hero-title">أطقم و درسات حريمي <span>جاهزة على اللبس</span></h1>
       <p class="hero-text">
-        خامات مستوردة عالية الجودة، قصات واسعة وشيك، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
+        خامات روزالين و جوخ و قطيفة مضلع مستوردة، قصات مريحة وشيك مع شحن حتى باب البيت
+        والدفع عند الاستلام لكل محافظات مصر.
       </p>
       <ul class="hero-bullets">
         <li>• خامة ناعمة وثابتة اللون.</li>
-        <li>• أطقم ودرسات جاهزة على اللبس بدون حيرة تنسيق.</li>
+        <li>• موديلات جاهزة على اللبس بدون حيرة تنسيق.</li>
         <li>• شحن سريع + دفع عند الاستلام.</li>
       </ul>
       <p class="hero-guarantee">
-        اطلب وانت مطمئن و <span>عاين براحتك قبل الاستلام 🥰❤️</span>
+        اطلبـي وانتِ مطمئنة و <span>عايني براحتك قبل الاستلام 🥰❤️</span>
       </p>
 
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary">تصفح الموديلات الآن</a>
-        <a href="https://wa.me/201157834203" target="_blank" class="btn btn-outline">استفسار على واتساب</a>
+        <a href="#products" class="btn btn-primary">تصفحـي الموديلات الآن</a>
+        <a href="https://wa.me/201157834203" target="_blank" class="btn btn-outline">
+          استفسار على واتساب
+        </a>
       </div>
     </section>
 
@@ -417,18 +283,24 @@
     <section class="features">
       <div class="feature-card">
         <div class="feature-icon">✨</div>
-        <div class="feature-title">خامات مستوردة</div>
-        <div class="feature-text">روزالين – جوخ ليكرا – قطيفة مضلع – خامات ناعمة وشيك جداً في اللبس.</div>
+        <div class="feature-title">خامات مستوردة عالية الجودة</div>
+        <div class="feature-text">
+          روزالين – جوخ ليكرا – قطيفة مضلع، ملمس ناعم وثبات لون ممتاز.
+        </div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💳</div>
         <div class="feature-title">دفع عند الاستلام</div>
-        <div class="feature-text">ادفعي لما تعايني وتطمني على الموديل والمقاس قدام المندوب.</div>
+        <div class="feature-text">
+          ادفعي لما تعايني وتطمني على الطقم و المقاس قدام المندوب.
+        </div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🚚</div>
         <div class="feature-title">شحن لكل المحافظات</div>
-        <div class="feature-text">60 ج للقاهرة والجيزة – 70 ج لباقي المحافظات – 120 ج (شرم/غردقة/مطروح/سيناء/الوادي).</div>
+        <div class="feature-text">
+          60 ج للقاهرة والجيزة – 70 ج لباقي المحافظات – 120 ج (شرم/غردقة/مطروح/سيناء/الوادي).
+        </div>
       </div>
     </section>
 
@@ -441,204 +313,252 @@
 
     <!-- المنتجات -->
     <section id="products">
-      <h2 class="section-title">الموديلات المتاحة</h2>
-      <p class="section-sub">اختاري الموديل واللون والكمية اللي تريحك، وبعدين كمّلي بياناتك من السلة.</p>
+      <h2 class="section-title">منتجاتنا</h2>
+      <p class="section-sub">
+        اختاري الموديل واللون و الكمية اللي تريحك، وبعدها من السلة كمّلي بياناتك لتأكيد الأوردر.
+      </p>
 
-      <div class="products-grid" id="products-grid">
+      <div class="products-grid" id="productsGrid">
         <!-- 1) طقم روزالين -->
-        <article class="product-card"
-                 data-product-id="rozalin"
-                 data-code="RZ01"
-                 data-name="طقم روزالين 3 قطع">
-          <div class="product-img-wrapper" data-link="product.html?product=rozalin">
+        <article class="product-card" data-code="RZ01" data-name="طقم روزالين 3 قطع">
+          <div class="product-img-wrapper">
             <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
-            <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
+            <div class="product-discount-tag">خصم من 999ج إلى 749ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: RZ01</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: RZ01</span>
+              <span>خامة روزالين مستورد</span>
+            </div>
             <div class="product-name">طقم روزالين 3 قطع</div>
             <div class="product-desc">
-              خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لـ 95 كيلو.
+              خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لـ 95 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">749 ج</span>
               <span class="product-oldprice">999 ج</span>
             </div>
-            <div class="product-note">ألوان: موف – كافيه – زيتي – أسود – بيج – سيمون.</div>
+            <div class="product-note">
+              ألوان: موف – كافيه – زيتي – أسود – بيج – سيمون.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=rozalin" class="btn btn-primary">شوفي الألوان واطلبي 💕</a>
+              <a href="product.html?product=rozalin" class="btn btn-primary">
+                شوفي الألوان واطلبي 💕
+              </a>
             </div>
           </div>
         </article>
 
         <!-- 2) طقم فورمال -->
-        <article class="product-card"
-                 data-product-id="formal"
-                 data-code="FR02"
-                 data-name="طقم فورمال 3 قطع">
-          <div class="product-img-wrapper" data-link="product.html?product=formal">
+        <article class="product-card" data-code="FR02" data-name="طقم فورمال 3 قطع">
+          <div class="product-img-wrapper">
             <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
             <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: FR02</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: FR02</span>
+              <span>روزالين مستورد</span>
+            </div>
             <div class="product-name">طقم فورمال 3 قطع</div>
             <div class="product-desc">
-              خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لـ 85 كيلو.
+              طقم فورمال شيك جداً بخامة روزالين مستورد – وان سايز تلبيس من 65 لـ 85 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">699 ج</span>
               <span class="product-oldprice">949 ج</span>
             </div>
-            <div class="product-note">ألوان: منت – بيبي بلو – بيج – هافان – أسود.</div>
+            <div class="product-note">
+              ألوان: منت – بيبي بلو – بيج – هافان – أسود.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=formal" class="btn btn-primary">شوفي الألوان واطلبي 🌈</a>
+              <a href="product.html?product=formal" class="btn btn-primary">
+                شوفي الألوان واطلبي 🌈
+              </a>
             </div>
           </div>
         </article>
 
         <!-- 3) عباية زراير كبس -->
-        <article class="product-card"
-                 data-product-id="abaya"
-                 data-code="AB03"
-                 data-name="عباية زراير كبس">
-          <div class="product-img-wrapper" data-link="product.html?product=abaya">
+        <article class="product-card" data-code="AB03" data-name="عباية زراير كبس">
+          <div class="product-img-wrapper">
             <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
             <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: AB03</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: AB03</span>
+              <span>جوخ ليكرا مستورد</span>
+            </div>
             <div class="product-name">عباية زراير كبس</div>
             <div class="product-desc">
-              جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.
+              عباية شيك بخامة جوخ ليكرا مستورد – وان سايز تلبيس لحد 80 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">749 ج</span>
               <span class="product-oldprice">1049 ج</span>
             </div>
-            <div class="product-note">ألوان: أسود – زيتي – عنابي – رمادي فاتح – كراميل – رمادي غامق.</div>
+            <div class="product-note">
+              ألوان: أسود – زيتي – عنابي – رمادي فاتح – كراميل – رمادي غامق.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=abaya" class="btn btn-primary">شوفي الألوان واطلبي ✨</a>
+              <a href="product.html?product=abaya" class="btn btn-primary">
+                شوفي الألوان واطلبي ✨
+              </a>
             </div>
           </div>
         </article>
 
-        <!-- 4) طقم تونز قطعتين -->
-        <article class="product-card"
-                 data-product-id="toonz"
-                 data-code="TZ04"
-                 data-name="طقم تونز قطعتين">
-          <div class="product-img-wrapper" data-link="product.html?product=toonz">
+        <!-- 4) طقم تونز -->
+        <article class="product-card" data-code="TZ04" data-name="طقم تونز قطعتين">
+          <div class="product-img-wrapper">
             <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
             <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: TZ04</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: TZ04</span>
+              <span>شمواه ناعمة</span>
+            </div>
             <div class="product-name">طقم تونز قطعتين</div>
             <div class="product-desc">
-              خامة شمواه ناعمة – سايز من 60 لـ 90 كيلو مرتاح.
+              خامة شمواه في شمواه ناعمة جداً – سايز من 60 لـ 90 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">799 ج</span>
               <span class="product-oldprice">1199 ج</span>
             </div>
-            <div class="product-note">ألوان: بيج – زيتي – نبيتي – موف – بنفسجي.</div>
+            <div class="product-note">
+              ألوان: بيج – زيتي – نبيتي – موف – بنفسجي.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=toonz" class="btn btn-primary">شوفي الألوان واطلبي 😍</a>
+              <a href="product.html?product=toonz" class="btn btn-primary">
+                شوفي الألوان واطلبي 😍
+              </a>
             </div>
           </div>
         </article>
 
         <!-- 5) دريس قطعتين بالطو جوخ -->
-        <article class="product-card"
-                 data-product-id="coatdress"
-                 data-code="CD05"
-                 data-name="دريس قطعتين بالطو جوخ">
-          <div class="product-img-wrapper" data-link="product.html?product=coatdress">
+        <article class="product-card" data-code="CD05" data-name="دريس قطعتين بالطو جوخ">
+          <div class="product-img-wrapper">
             <img src="coatdress-main.jpg" alt="دريس قطعتين بالطو جوخ" loading="lazy">
             <div class="product-discount-tag">خصم من 1049ج إلى 849ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: CD05</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: CD05</span>
+              <span>بيزك دريس ريب + بالطو جوخ</span>
+            </div>
             <div class="product-name">دريس قطعتين بالطو جوخ</div>
             <div class="product-desc">
-              بيزك دريس ريب مع بالطو جوخ ليكرا مستورد – ون سايز تلبيس لحد 85 ك.
+              بيزك دريس ريب مع بالطو جوخ ليكرا مستورد عالي الجودة – ون سايز تلبيس لحد 85 ك. مرتاح.
             </div>
             <div class="product-price-row">
               <span class="product-price">849 ج</span>
               <span class="product-oldprice">1049 ج</span>
             </div>
-            <div class="product-note">ألوان: روز – روز غامق – أوف وايت – بني – هافان – زيتي – أسود.</div>
+            <div class="product-note">
+              ألوان: روز – أوف وايت – بني – هافان – أسود – زيتي.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=coatdress" class="btn btn-primary">شوفي الألوان واطلبي 🤎</a>
+              <a href="product.html?product=coatdress" class="btn btn-primary">
+                شوفي الألوان واطلبي 🤎
+              </a>
             </div>
           </div>
         </article>
 
         <!-- 6) كوليكشن درسات قطيفة مضلع -->
-        <article class="product-card"
-                 data-product-id="velvetset"
-                 data-code="VG06"
-                 data-name="كوليكشن درسات قطيفة مضلع">
-          <div class="product-img-wrapper" data-link="product.html?product=velvetset">
+        <article class="product-card" data-code="VG06" data-name="كوليكشن درسات قطيفة مضلع">
+          <div class="product-img-wrapper">
             <img src="velvet-main.jpg" alt="كوليكشن درسات قطيفة مضلع" loading="lazy">
             <div class="product-discount-tag">خصم من 949ج إلى 649ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: VG06</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: VG06</span>
+              <span>قطيفة مضلع مستوردة</span>
+            </div>
             <div class="product-name">كوليكشن درسات قطيفة مضلع</div>
             <div class="product-desc">
-              خامة قطيفة مضلع مستوردة، قصات واسعة وشيك، تلبيس من 65 لـ 85 كيلو.
+              خامة قطيفة مضلع مستوردة – قصات واسعة وشيك، تلبيس من 65 لـ 85 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">649 ج</span>
               <span class="product-oldprice">949 ج</span>
             </div>
-            <div class="product-note">ألوان: كحلي – زيتي – بيج – نبيتي – أسود – أوف وايت.</div>
+            <div class="product-note">
+              ألوان: كحلي – زيتي – بيج – نبيتي – أسود – أوف وايت.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=velvetset" class="btn btn-primary">شوفي الألوان واطلبي 🌸</a>
+              <a href="product.html?product=velvetset" class="btn btn-primary">
+                شوفي الألوان واطلبي 🌸
+              </a>
             </div>
           </div>
         </article>
 
         <!-- 7) دريس سوسته كابتشو فرو -->
-        <article class="product-card"
-                 data-product-id="zipcoat"
-                 data-code="ZC07"
-                 data-name="دريس سوسته كابتشو فرو">
-          <div class="product-img-wrapper" data-link="product.html?product=zipcoat">
-            <img src="zipcoat-main.jpg" alt="دريس سوسته كابتشو فرو" loading="lazy">
+        <article class="product-card" data-code="ZC07" data-name="دريس سوسته كابتشو فرو">
+          <div class="product-img-wrapper">
+            <img src="zipperfur-main.jpg" alt="دريس سوسته كابتشو فرو" loading="lazy">
             <div class="product-discount-tag">خصم من 849ج إلى 649ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: ZC07</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: ZC07</span>
+              <span>جوخ ليكرا + كابتشو فرو</span>
+            </div>
             <div class="product-name">دريس سوسته كابتشو فرو</div>
             <div class="product-desc">
-              جوخ ليكرا مستورد مع كابتشو فرو – ون سايز تلبيس لحد 85 كيلو.
+              جوخ ليكرا مستورد مع كابتشو فرو ناعم – ون سايز تلبيس لحد 85 كيلو تقريباً.
             </div>
             <div class="product-price-row">
               <span class="product-price">649 ج</span>
               <span class="product-oldprice">849 ج</span>
             </div>
-            <div class="product-note">ألوان: جملي – زيتي – بيج – نبيتي – أسود.</div>
+            <div class="product-note">
+              ألوان: جملي – زيتي – بيج – نبيتي – أسود.
+            </div>
             <div class="product-footer">
-              <a href="product.html?product=zipcoat" class="btn btn-primary">شوفي الألوان واطلبي ❄️</a>
+              <a href="product.html?product=zipperfur" class="btn btn-primary">
+                شوفي الألوان واطلبي ❄️
+              </a>
             </div>
           </div>
         </article>
 
-        <!-- 8) دريس ساده كم بلونة مع حزام -->
-        <article class="product-card"
-                 data-product-id="baloondress"
-                 data-code="BD08"
-                 data-name="دريس ساده كم بلونة مع حزام">
-          <div class="product-img-wrapper" data-link="product.html?product=baloondress">
-            <img src="baloondress-main.jpg" alt="دريس ساده كم بلونة مع حزام" loading="lazy">
+        <!-- 8) دريس ساده كم بلونه مع حزام -->
+        <article class="product-card" data-code="BD08" data-name="دريس ساده كم بلونه مع حزام">
+          <div class="product-img-wrapper">
+            <img src="beltdress-main.jpg" alt="دريس ساده كم بلونه مع حزام" loading="lazy">
             <div class="product-discount-tag">خصم من 799ج إلى 599ج</div>
           </div>
           <div class="product-body">
-            <div class="product-code">كود: BD08</div>
-            <div class="product-name">دريس ساده كم بلونة مع حزام</div>
+            <div class="product-header-line">
+              <span class="product-code">كود: BD08</span>
+              <span>قطيفة مضلع مستوردة</span>
+            </div>
+            <div class="product-name">دريس ساده كم بلونه مع حزام</div>
             <div class="product-desc">
-              قطيفة مضلع مستوردة، كم بلونة مع حزام شفاف – ون سايز تلبيس لحد 85 كيلو.
-        
+              دريس ساده شيك بحزام شفاف وكم بلونة – خامة قطيفة مضلع مستوردة – ون سايز تلبيس لحد 85 ك.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">599 ج</span>
+              <span class="product-oldprice">799 ج</span>
+            </div>
+            <div class="product-note">
+              ألوان: زيتي – كحلي – جملي – بيج – نبيتي – أسود.
+            </div>
+            <div class="product-footer">
+              <a href="product.html?product=beltdress" class="btn btn-primary">
+                شوفي الألوان واطلبي 🧡
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p id="noResults" class="no-results">
+        مفيش موديلات مطابقة لبحثك، جرّبي كود
