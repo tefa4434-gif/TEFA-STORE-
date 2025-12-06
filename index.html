@@ -126,7 +126,6 @@
       font-size: 14px;
       color: #333;
       margin: 6px 0 10px;
-      padding-right: 18px;
     }
     .hero-bullets li {
       margin-bottom: 3px;
@@ -163,14 +162,12 @@
       background: #111;
       color: #fff;
       flex: 1;
-      text-align: center;
     }
     .btn-outline {
       background: #fff;
       color: #111;
       border: 1px solid #ddd;
       flex: 1;
-      text-align: center;
     }
 
     /* Features */
@@ -257,6 +254,7 @@
     .product-img-wrapper {
       position: relative;
       background: #e5e5e5;
+      cursor: pointer;
     }
     .product-img-wrapper img {
       width: 100%;
@@ -318,22 +316,12 @@
       font-size: 14px;
     }
 
-    /* Footer contact */
+    /* footer contact */
     .footer-contact {
-      margin-top: 24px;
-      padding: 14px 16px 18px;
       text-align: center;
       font-size: 13px;
-      color: #444;
-      border-top: 1px solid #ddd;
-      background: #f9fafb;
-    }
-    .footer-contact strong {
-      font-weight: 700;
-    }
-    .footer-contact a {
-      color: #111;
-      font-weight: 700;
+      color: #555;
+      margin: 20px 0 10px;
     }
   </style>
 </head>
@@ -366,7 +354,7 @@
       </div>
       <h1 class="hero-title">أطقم حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
       <p class="hero-text">
-        3 قطع بخامة روزالين وفورمال مستوردة، قصة مريحة وشيك، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
+        3 قطع بخامة روزالين وفورمال ومستورد عالي الجودة، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
       </p>
       <ul class="hero-bullets">
         <li>• خامة ناعمة وثابتة اللون.</li>
@@ -417,11 +405,9 @@
       <div class="products-grid">
         <!-- روزالين -->
         <article class="product-card">
-          <a href="product.html?product=rozalin">
-            <div class="product-img-wrapper">
-              <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
-              <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
-            </div>
+          <a href="product.html?product=rozalin" class="product-img-wrapper">
+            <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
+            <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
           </a>
           <div class="product-body">
             <div class="product-name">طقم روزالين 3 قطع</div>
@@ -441,11 +427,9 @@
 
         <!-- فورمال -->
         <article class="product-card">
-          <a href="product.html?product=formal">
-            <div class="product-img-wrapper">
-              <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
-              <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
-            </div>
+          <a href="product.html?product=formal" class="product-img-wrapper">
+            <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
+            <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
           </a>
           <div class="product-body">
             <div class="product-name">طقم فورمال 3 قطع</div>
@@ -465,11 +449,9 @@
 
         <!-- عباية زراير كبس -->
         <article class="product-card">
-          <a href="product.html?product=abaya">
-            <div class="product-img-wrapper">
-              <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
-              <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
-            </div>
+          <a href="product.html?product=abaya" class="product-img-wrapper">
+            <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
+            <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
           </a>
           <div class="product-body">
             <div class="product-name">عباية زراير كبس</div>
@@ -489,11 +471,9 @@
 
         <!-- تونز قطعتين -->
         <article class="product-card">
-          <a href="product.html?product=toonz">
-            <div class="product-img-wrapper">
-              <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
-              <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
-            </div>
+          <a href="product.html?product=toonz" class="product-img-wrapper">
+            <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
+            <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
           </a>
           <div class="product-body">
             <div class="product-name">طقم تونز قطعتين</div>
@@ -510,14 +490,36 @@
             </div>
           </div>
         </article>
+
+        <!-- الموديل الجديد: دريس قطعتين بالطو جوخ -->
+        <article class="product-card">
+          <a href="product.html?product=dresstwo" class="product-img-wrapper">
+            <img src="dresstwo-main.jpg" alt="دريس قطعتين بالطو جوخ" loading="lazy">
+            <div class="product-discount-tag">خصم من 1049ج إلى 849ج</div>
+          </a>
+          <div class="product-body">
+            <div class="product-name">دريس قطعتين بالطو جوخ</div>
+            <div class="product-desc">
+              بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة، ستايل شيك ومناسب للخروجات.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">849 ج</span>
+              <span class="product-oldprice">1049 ج</span>
+            </div>
+            <div class="product-note">
+              ألوان: جملي – بينك – أوف وايت – بني – أسود – زيتي.
+            </div>
+            <div class="product-footer">
+              <a href="product.html?product=dresstwo" class="btn btn-primary">شوفي الألوان واطلبي ☁️</a>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
-    <!-- واتساب للتواصل والاقتراحات -->
-    <footer class="footer-contact">
-      للتواصل والاقتراحات عبر واتساب:  
-      <strong><a href="https://wa.me/201029942139" target="_blank">01029942139</a></strong>
-    </footer>
+    <p class="footer-contact">
+      للتواصل والاقتراحات: واتساب / موبايل 01029942139
+    </p>
   </main>
 
   <script>
@@ -541,7 +543,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // عد تنازلي 3 أيام من أول زيارة (ثابت بسيط للصفحة)
+    // عد تنازلي 3 أيام من أول زيارة
     function initCountdown() {
       const targetMs = Date.now() + 3 * 24 * 60 * 60 * 1000;
       const el = document.getElementById('countdown');
