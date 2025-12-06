@@ -340,14 +340,24 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    /* 🔐 نفس مفتاح لوحة التحكم للألوان */
+    /* 🔑 نفس المفتاح المستخدم في admin.html */
     const COLOR_STATUS_KEY = "tefa_color_status_v1";
+
     function loadColorStatus() {
       try {
         return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
       } catch (e) {
         return {};
       }
+    }
+
+    // ✅ أي لون مش متسجل في لوحة التحكم = شغّال افتراضياً
+    function isColorActive(productKey, colorLabel) {
+      const status = loadColorStatus();
+      const productStatus = status[productKey];
+      if (!productStatus) return true; // مفيش إعدادات = كل الألوان شغالة
+      if (typeof productStatus[colorLabel] === "undefined") return true; // اللون مش متسجل = شغال
+      return !!productStatus[colorLabel]; // true = شغال, false = مقفول
     }
 
     // نفس أسماء الموديلات اللي عندك في index
@@ -531,22 +541,10 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // 🟢 نجيب حالة الألوان من لوحة التحكم
-      const colorStatusAll = loadColorStatus();
-      const productStatus = colorStatusAll[product.key] || {};
-
-      // رسم دوائر الألوان (مع احترام لوحة التحكم)
+      // رسم دوائر الألوان مع مراعاة حالة اللون من لوحة التحكم
       product.colors.forEach(color => {
-        // لو اللون مش متسجل في admin → يعتبر شغال
-        const enabled =
-          typeof productStatus[color.label] === "undefined"
-            ? true
-            : !!productStatus[color.label];
-
-        if (!enabled) {
-          // اللون متوقف من لوحة التحكم → ما نعرضهوش
-          return;
-        }
+        const enabled = isColorActive(product.key, color.label);
+        if (!enabled) return; // لو اللون متوقف في لوحة التحكم ما يظهرش
 
         const dot = document.createElement('button');
         dot.type = 'button';
@@ -612,8 +610,4 @@
 
         saveCart(cart);
 
-        const sound = document.getElementById('add-sound');
-        if (sound && sound.play) {
-          try {
-            sound.currentTime = 0;
-            sound.play().catch(() => {})
+        const sound = document.getElementB
