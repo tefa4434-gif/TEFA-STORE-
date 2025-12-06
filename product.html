@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -351,6 +352,7 @@
         price: 749,
         oldPrice: 999,
         mainImage: 'rozalin-main.jpg',
+        // ترتيب الألوان: كافيه – بيج – موف – زيتي – أسود – سيمون
         colors: [
           { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
           { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
@@ -409,22 +411,21 @@
           { key: 'pink',    label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' },
         ]
       },
-      dresstwo: {
-        key: 'dresstwo',
-        name: 'دريس قطعتين بالطو جوخ',
-        desc: 'دريس قطعتين مكوَّن من بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة.',
-        extra: 'المقاس: وان سايز تلبيس لحد 85 كيلو تقريباً.',
+      coatdress: {
+        key: 'coatdress',
+        name: 'دريس بالطو قطعتين',
+        desc: 'الموديل مكوّن من بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة.',
+        extra: 'المقاس: وان سايز تلبيس لحد 85 ك تقريباً.',
         price: 849,
         oldPrice: 1049,
-        mainImage: 'dresstwo-main.jpg',
-        // نفس ترتيب الألوان في الصورة: جملي – بينك – أوف وايت – بني – أسود – زيتي
+        mainImage: 'coatdress-main.jpg',
         colors: [
-          { key: 'camel',   label: 'جملي',     hex: '#a66a3b', image: 'dresstwo-camel.jpg' },
-          { key: 'pink',    label: 'بينك',     hex: '#e8b2bb', image: 'dresstwo-pink.jpg' },
-          { key: 'offwhite',label: 'أوف وايت', hex: '#f5f0e6', image: 'dresstwo-offwhite.jpg' },
-          { key: 'brown',   label: 'بني',      hex: '#5b3a2a', image: 'dresstwo-brown.jpg' },
-          { key: 'black',   label: 'أسود',     hex: '#111111', image: 'dresstwo-black.jpg' },
-          { key: 'khaki',   label: 'زيتي',     hex: '#3d4831', image: 'dresstwo-khaki.jpg' }
+          { key: 'brown',    label: 'بني',        hex: '#8b5a2b', image: 'coatdress-brown.jpg' },
+          { key: 'rose',     label: 'روز',        hex: '#e9a4b8', image: 'coatdress-rose.jpg' },
+          { key: 'offwhite', label: 'أوف وايت',   hex: '#f5f3ea', image: 'coatdress-offwhite.jpg' },
+          { key: 'havan',    label: 'هافان',      hex: '#6b4a2b', image: 'coatdress-havan.jpg' },
+          { key: 'black',    label: 'أسود',       hex: '#111111', image: 'coatdress-black.jpg' },
+          { key: 'olive',    label: 'زيتي',       hex: '#3f4f2f', image: 'coatdress-olive.jpg' },
         ]
       }
     };
@@ -516,7 +517,7 @@
 
         const cart = getCart();
 
-        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
+        // لو نفس المنتج ونفس اللون موجود، نزود الكمية بس
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );

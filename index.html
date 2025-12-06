@@ -254,7 +254,6 @@
     .product-img-wrapper {
       position: relative;
       background: #e5e5e5;
-      cursor: pointer;
     }
     .product-img-wrapper img {
       width: 100%;
@@ -315,14 +314,6 @@
       width: 100%;
       font-size: 14px;
     }
-
-    /* footer contact */
-    .footer-contact {
-      text-align: center;
-      font-size: 13px;
-      color: #555;
-      margin: 20px 0 10px;
-    }
   </style>
 </head>
 <body>
@@ -337,7 +328,7 @@
     <div class="header-inner">
       <div>
         <div class="store-name">TEFA STORE</div>
-        <div class="store-sub">متجر أطقم حريمي روزالين و فورمال جاهزة للخروجات والمناسبات</div>
+        <div class="store-sub">متجر أطقم حريمي جاهزة للخروجات والمناسبات</div>
       </div>
       <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
         <span>🛒</span>
@@ -354,7 +345,7 @@
       </div>
       <h1 class="hero-title">أطقم حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
       <p class="hero-text">
-        3 قطع بخامة روزالين وفورمال ومستورد عالي الجودة، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
+        أطقم وعبايات حريمي بخامات مستوردة، قصات مريحة وشيك، مع شحن لحد باب البيت لكل محافظات مصر والدفع عند الاستلام.
       </p>
       <ul class="hero-bullets">
         <li>• خامة ناعمة وثابتة اللون.</li>
@@ -375,8 +366,8 @@
     <section class="features">
       <div class="feature-card">
         <div class="feature-icon">✨</div>
-        <div class="feature-title">روزالين عالي الجودة</div>
-        <div class="feature-text">ملمس ناعم وشيك جداً في اللبس، خامة تقيلة ومناسبة للخروجات والمناسبات.</div>
+        <div class="feature-title">خامات عالية الجودة</div>
+        <div class="feature-text">خامات مستوردة ناعمة وثابتة اللون ومناسبة للخروجات والمناسبات.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💳</div>
@@ -491,39 +482,38 @@
           </div>
         </article>
 
-        <!-- الموديل الجديد: دريس قطعتين بالطو جوخ -->
+        <!-- الموديل الجديد: دريس قطعتين + بالطو جوخ -->
         <article class="product-card">
-          <a href="product.html?product=dresstwo" class="product-img-wrapper">
-            <img src="dresstwo-main.jpg" alt="دريس قطعتين بالطو جوخ" loading="lazy">
+          <a href="product.html?product=coatdress" class="product-img-wrapper">
+            <img src="coatdress-main.jpg" alt="موديل دريس قطعتين مع بالطو جوخ" loading="lazy">
             <div class="product-discount-tag">خصم من 1049ج إلى 849ج</div>
           </a>
           <div class="product-body">
-            <div class="product-name">دريس قطعتين بالطو جوخ</div>
+            <div class="product-name">دريس قطعتين مع بالطو جوخ</div>
             <div class="product-desc">
-              بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة، ستايل شيك ومناسب للخروجات.
+              بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة، طالع شيك جداً ومناسب للمشاوير والخروجات.
             </div>
             <div class="product-price-row">
               <span class="product-price">849 ج</span>
               <span class="product-oldprice">1049 ج</span>
             </div>
-            <div class="product-note">
-              ألوان: جملي – بينك – أوف وايت – بني – أسود – زيتي.
-            </div>
+            <div class="product-note">وان سايز تلبيس لحد 85 ك مرتاح – ألوان متعددة على حسب التوفر.</div>
             <div class="product-footer">
-              <a href="product.html?product=dresstwo" class="btn btn-primary">شوفي الألوان واطلبي ☁️</a>
+              <a href="product.html?product=coatdress" class="btn btn-primary">شوفي الألوان واطلبي ☁️</a>
             </div>
           </div>
         </article>
+
       </div>
     </section>
 
-    <p class="footer-contact">
-      للتواصل والاقتراحات: واتساب / موبايل 01029942139
+    <!-- تذييل بسيط للتواصل -->
+    <p style="text-align:center;font-size:12px;color:#555;margin-top:20px;">
+      للتواصل والاقتراحات على واتساب: <strong>01029942139</strong>
     </p>
   </main>
 
   <script>
-    // مفتاح السلة الموحد
     const CART_KEY = 'tefa_cart';
 
     function getCart() {
