@@ -154,7 +154,7 @@
       border: 2px solid transparent;
       cursor: pointer;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease, opacity 0.1s ease;
     }
     .color-dot:hover {
       transform: scale(1.05);
@@ -162,6 +162,11 @@
     .color-dot.selected {
       border-color: #111;
       box-shadow: 0 0 0 2px #1113;
+    }
+    .color-dot.disabled {
+      opacity: .25;
+      cursor: not-allowed;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
     }
 
     .selected-color-text {
@@ -317,6 +322,8 @@
 
   <script>
     const CART_KEY = 'tefa_cart';
+    // نفس المفتاح المستخدم في admin.html
+    const COLOR_STATUS_KEY = 'tefa_color_status_v1';
 
     function getCart() {
       try {
@@ -340,7 +347,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // تعريف كل الموديلات + صور الألوان
+    // نفس أسماء الموديلات اللي عندك في index + الجديدة
     const PRODUCTS = {
       rozalin: {
         key: 'rozalin',
@@ -351,12 +358,12 @@
         oldPrice: 999,
         mainImage: 'rozalin-main.jpg',
         colors: [
-          { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
-          { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
-          { key: 'mov',   label: 'موف',   hex: '#5b185e', image: 'rozalin-mov.jpg' },
-          { key: 'zyti',  label: 'زيتي',  hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
-          { key: 'black', label: 'أسود',  hex: '#111111', image: 'rozalin-black.jpg' },
-          { key: 'simon', label: 'سيمون', hex: '#f8a8a0', image: 'rozalin-simon.jpg' }
+          { key: 'كافيه',   label: 'كافيه',   hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
+          { key: 'بيج',     label: 'بيج',     hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
+          { key: 'موف',     label: 'موف',     hex: '#5b185e', image: 'rozalin-mov.jpg' },
+          { key: 'زيتي',    label: 'زيتي',    hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
+          { key: 'أسود',    label: 'أسود',    hex: '#111111', image: 'rozalin-black.jpg' },
+          { key: 'سيمون',   label: 'سيمون',   hex: '#f8a8a0', image: 'rozalin-simon.jpg' },
         ]
       },
       formal: {
@@ -368,11 +375,11 @@
         oldPrice: 949,
         mainImage: 'formal-main.jpg',
         colors: [
-          { key: 'ment',     label: 'منت',      hex: '#3f7f6d', image: 'formal-ment.jpg' },
-          { key: 'babyblue', label: 'بيبي بلو', hex: '#9fd3ff', image: 'formal-babyblue.jpg' },
-          { key: 'beige',    label: 'بيج',      hex: '#e3c8a3', image: 'formal-beige.jpg' },
-          { key: 'havan',    label: 'هافان',    hex: '#8b5a2b', image: 'formal-havan.jpg' },
-          { key: 'black',    label: 'أسود',     hex: '#111111', image: 'formal-black.jpg' }
+          { key: 'منت',      label: 'منت',      hex: '#3f7f6d', image: 'formal-ment.jpg' },
+          { key: 'بيبي بلو', label: 'بيبي بلو', hex: '#9fd3ff', image: 'formal-babyblue.jpg' },
+          { key: 'بيج',      label: 'بيج',      hex: '#e3c8a3', image: 'formal-beige.jpg' },
+          { key: 'هافان',    label: 'هافان',    hex: '#8b5a2b', image: 'formal-havan.jpg' },
+          { key: 'أسود',     label: 'أسود',     hex: '#111111', image: 'formal-black.jpg' },
         ]
       },
       abaya: {
@@ -384,12 +391,12 @@
         oldPrice: 1049,
         mainImage: 'abaya-main.jpg',
         colors: [
-          { key: 'black',    label: 'أسود',        hex: '#111111', image: 'abaya-black.jpg' },
-          { key: 'green',    label: 'زيتي',        hex: '#4b6b4b', image: 'abaya-green.jpg' },
-          { key: 'burgundy', label: 'نبيتي',       hex: '#6a102b', image: 'abaya-burgundy.jpg' },
-          { key: 'lightgray',label: 'رمادي فاتح',  hex: '#d1d5db', image: 'abaya-lightgray.jpg' },
-          { key: 'caramel',  label: 'كاراميل',     hex: '#c57a3a', image: 'abaya-caramel.jpg' },
-          { key: 'darkgray', label: 'رمادي غامق',  hex: '#4b5563', image: 'abaya-darkgray.jpg' }
+          { key: 'أسود',        label: 'أسود',        hex: '#111111', image: 'abaya-black.jpg' },
+          { key: 'زيتي',        label: 'زيتي',        hex: '#4b6b4b', image: 'abaya-green.jpg' },
+          { key: 'نبيتي',       label: 'نبيتي',       hex: '#6a102b', image: 'abaya-burgundy.jpg' },
+          { key: 'رمادي فاتح',  label: 'رمادي فاتح',  hex: '#d1d5db', image: 'abaya-lightgray.jpg' },
+          { key: 'كاراميل',     label: 'كاراميل',     hex: '#c57a3a', image: 'abaya-caramel.jpg' },
+          { key: 'رمادي غامق',  label: 'رمادي غامق',  hex: '#4b5563', image: 'abaya-darkgray.jpg' },
         ]
       },
       toonz: {
@@ -401,11 +408,11 @@
         oldPrice: 1199,
         mainImage: 'toonz-main.jpg',
         colors: [
-          { key: 'beige',   label: 'بيج',      hex: '#e3c8a3', image: 'toonz-beige.jpg' },
-          { key: 'olive',   label: 'زيتي',     hex: '#3f5f3a', image: 'toonz-olive.jpg' },
-          { key: 'wine',    label: 'نبيتي',    hex: '#7f1d1d', image: 'toonz-wine.jpg' },
-          { key: 'purple',  label: 'موف',      hex: '#6b21a8', image: 'toonz-purple.jpg' },
-          { key: 'pink',    label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' }
+          { key: 'بيج',      label: 'بيج',      hex: '#e3c8a3', image: 'toonz-beige.jpg' },
+          { key: 'زيتي',     label: 'زيتي',     hex: '#3f5f3a', image: 'toonz-olive.jpg' },
+          { key: 'نبيتي',    label: 'نبيتي',    hex: '#7f1d1d', image: 'toonz-wine.jpg' },
+          { key: 'موف',      label: 'موف',      hex: '#6b21a8', image: 'toonz-purple.jpg' },
+          { key: 'بنفسجي',   label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' },
         ]
       },
       coatdress: {
@@ -417,29 +424,29 @@
         oldPrice: 1049,
         mainImage: 'coatdress-main.jpg',
         colors: [
-          { key: 'rose',     label: 'روز',       hex: '#f4a6b7', image: 'coatdress-rose.jpg' },
-          { key: 'offwhite', label: 'أوف وايت',  hex: '#fef9c3', image: 'coatdress-offwhite.jpg' },
-          { key: 'havan',    label: 'هافان',     hex: '#8b5a2b', image: 'coatdress-havan.jpg' },
-          { key: 'brown',    label: 'بني',       hex: '#6b4f2a', image: 'coatdress-brown.jpg' },
-          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'coatdress-olive.jpg' },
-          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'coatdress-black.jpg' }
+          { key: 'روز',       label: 'روز',       hex: '#f4a6b7', image: 'coatdress-rose.jpg' },
+          { key: 'أوف وايت',  label: 'أوف وايت',  hex: '#fef9c3', image: 'coatdress-offwhite.jpg' },
+          { key: 'هافان',     label: 'هافان',     hex: '#8b5a2b', image: 'coatdress-havan.jpg' },
+          { key: 'بني',       label: 'بني',       hex: '#6b4f2a', image: 'coatdress-brown.jpg' },
+          { key: 'زيتي',      label: 'زيتي',      hex: '#3f5f3a', image: 'coatdress-olive.jpg' },
+          { key: 'أسود',      label: 'أسود',      hex: '#111111', image: 'coatdress-black.jpg' },
         ]
       },
       velvetdress: {
         key: 'velvetdress',
         name: 'دريس قطيفة مضلع – كوليكشن محجبات',
-        desc: 'تألقي بأحدث كوليكشن محجبات خامة قطيفة مضلع مستوردة.',
+        desc: 'تألقي بأحدث كوليكشن محجبات بخامة قطيفة مضلع مستوردة.',
         extra: 'المقاس: من 65 لـ 85 كيلو تقريباً.',
         price: 649,
         oldPrice: 949,
         mainImage: 'velvetdress-main.jpg',
         colors: [
-          { key: 'navy',     label: 'كحلي',      hex: '#1f2937', image: 'velvetdress-navy.jpg' },
-          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'velvetdress-olive.jpg' },
-          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'velvetdress-beige.jpg' },
-          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'velvetdress-wine.jpg' },
-          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'velvetdress-black.jpg' },
-          { key: 'offwhite', label: 'أوف وايت',  hex: '#fef9c3', image: 'velvetdress-offwhite.jpg' }
+          { key: 'كحلي',      label: 'كحلي',      hex: '#1f2937', image: 'velvetdress-navy.jpg' },
+          { key: 'زيتي',      label: 'زيتي',      hex: '#3f5f3a', image: 'velvetdress-olive.jpg' },
+          { key: 'بيج',       label: 'بيج',       hex: '#e3c8a3', image: 'velvetdress-beige.jpg' },
+          { key: 'نبيتي',     label: 'نبيتي',     hex: '#7f1d1d', image: 'velvetdress-wine.jpg' },
+          { key: 'أسود',      label: 'أسود',      hex: '#111111', image: 'velvetdress-black.jpg' },
+          { key: 'أوف وايت',  label: 'أوف وايت',  hex: '#fef9c3', image: 'velvetdress-offwhite.jpg' },
         ]
       },
       zipcoat: {
@@ -451,11 +458,11 @@
         oldPrice: 849,
         mainImage: 'zipcoat-main.jpg',
         colors: [
-          { key: 'camel',    label: 'جملي',      hex: '#b98a58', image: 'zipcoat-camel.jpg' },
-          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'zipcoat-olive.jpg' },
-          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'zipcoat-beige.jpg' },
-          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'zipcoat-wine.jpg' },
-          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'zipcoat-black.jpg' }
+          { key: 'جملي',      label: 'جملي',      hex: '#b98a58', image: 'zipcoat-camel.jpg' },
+          { key: 'زيتي',      label: 'زيتي',      hex: '#3f5f3a', image: 'zipcoat-olive.jpg' },
+          { key: 'بيج',       label: 'بيج',       hex: '#e3c8a3', image: 'zipcoat-beige.jpg' },
+          { key: 'نبيتي',     label: 'نبيتي',     hex: '#7f1d1d', image: 'zipcoat-wine.jpg' },
+          { key: 'أسود',      label: 'أسود',      hex: '#111111', image: 'zipcoat-black.jpg' },
         ]
       },
       beltballoon: {
@@ -467,12 +474,12 @@
         oldPrice: 799,
         mainImage: 'beltballoon-main.jpg',
         colors: [
-          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'beltballoon-olive.jpg' },
-          { key: 'navy',     label: 'كحلي',      hex: '#1f2937', image: 'beltballoon-navy.jpg' },
-          { key: 'camel',    label: 'جملي',      hex: '#b98a58', image: 'beltballoon-camel.jpg' },
-          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'beltballoon-beige.jpg' },
-          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'beltballoon-wine.jpg' },
-          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'beltballoon-black.jpg' }
+          { key: 'زيتي',      label: 'زيتي',      hex: '#3f5f3a', image: 'beltballoon-olive.jpg' },
+          { key: 'كحلي',      label: 'كحلي',      hex: '#1f2937', image: 'beltballoon-navy.jpg' },
+          { key: 'جملي',      label: 'جملي',      hex: '#b98a58', image: 'beltballoon-camel.jpg' },
+          { key: 'بيج',       label: 'بيج',       hex: '#e3c8a3', image: 'beltballoon-beige.jpg' },
+          { key: 'نبيتي',     label: 'نبيتي',     hex: '#7f1d1d', image: 'beltballoon-wine.jpg' },
+          { key: 'أسود',      label: 'أسود',      hex: '#111111', image: 'beltballoon-black.jpg' },
         ]
       }
     };
@@ -480,6 +487,14 @@
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
+    }
+
+    function loadColorStatus() {
+      try {
+        return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY) || "{}");
+      } catch(e) {
+        return {};
+      }
     }
 
     function showToast(message, colorHex) {
@@ -521,22 +536,40 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // رسم دوائر الألوان
+      // نجيب حالة الألوان من لوحة التحكم
+      const colorStatus = loadColorStatus();
+      const modelStatus = colorStatus[product.key] || {};
+
+      // لو مفيش حاجة متسجلة للموديل ده => كل الألوان شغالة
+      const hasAnySetting = Object.keys(modelStatus).length > 0;
+
       product.colors.forEach(color => {
+        // إسم اللون في لوحة التحكم هو نفس label (عربي)
+        let enabled = true;
+        if (hasAnySetting) {
+          // لو في إعدادات، اللون يتوقف بس لو القيمة false صريحة
+          const val = modelStatus[color.label];
+          if (val === false) enabled = false;
+        }
+
         const dot = document.createElement('button');
         dot.type = 'button';
         dot.className = 'color-dot';
         dot.style.backgroundColor = color.hex;
         dot.setAttribute('aria-label', color.label);
 
-        dot.addEventListener('click', () => {
-          document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-          dot.classList.add('selected');
-          selectedColorKey = color.key;
-          selectedColorObj = color;
-          selectedColorText.textContent = 'اللون المختار: ' + color.label;
-          imgEl.src = color.image || product.mainImage;
-        });
+        if (!enabled) {
+          dot.classList.add('disabled');
+        } else {
+          dot.addEventListener('click', () => {
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+            dot.classList.add('selected');
+            selectedColorKey = color.key;
+            selectedColorObj = color;
+            selectedColorText.textContent = 'اللون المختار: ' + color.label;
+            imgEl.src = color.image || product.mainImage;
+          });
+        }
 
         colorsRow.appendChild(dot);
       });
@@ -564,7 +597,6 @@
 
         const cart = getCart();
 
-        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );
@@ -581,31 +613,4 @@
             colorKey: selectedColorKey,
             colorName: selectedColorObj.label,
             colorCode: selectedColorObj.hex,
-            image: selectedColorObj.image || product.mainImage
-          });
-        }
-
-        saveCart(cart);
-
-        const sound = document.getElementById('add-sound');
-        if (sound && sound.play) {
-          try {
-            sound.currentTime = 0;
-            sound.play().catch(() => {});
-          } catch (e) {}
-        }
-
-        showToast(
-          'تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰',
-          selectedColorObj.hex
-        );
-      });
-
-      updateCartCount();
-      window.addEventListener('storage', (e) => {
-        if (e.key === CART_KEY) updateCartCount();
-      });
-    });
-  </script>
-</body>
-</html>
+            image: selectedColorObj.ima
