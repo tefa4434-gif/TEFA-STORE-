@@ -154,7 +154,7 @@
       border: 2px solid transparent;
       cursor: pointer;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease, opacity 0.1s ease;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
     }
     .color-dot:hover {
       transform: scale(1.05);
@@ -162,10 +162,6 @@
     .color-dot.selected {
       border-color: #111;
       box-shadow: 0 0 0 2px #1113;
-    }
-    .color-dot.disabled {
-      opacity: 0.25;
-      cursor: not-allowed;
     }
 
     .selected-color-text {
@@ -314,14 +310,14 @@
 
   <div class="toast" id="toast">تمت إضافة اللون إلى السلة بنجاح 🥰</div>
 
-  <!-- صوت بسيط عند الإضافة (حطي ملف notify.mp3 جنب الصفحة) -->
+  <!-- صوت بسيط عند الإضافة (خلي ملف notify.mp3 جنب الصفحة) -->
   <audio id="add-sound">
     <source src="notify.mp3" type="audio/mpeg">
   </audio>
 
   <script>
     const CART_KEY = 'tefa_cart';
-    const COLOR_STATUS_KEY = 'tefa_color_status_v1'; // نفس المفتاح اللي في admin
+    const COLOR_STATUS_KEY = 'tefa_color_status_v1'; // نفس المفتاح في صفحة admin
 
     function getCart() {
       try {
@@ -345,6 +341,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
+    // تحميل حالة الألوان من لوحة التحكم
     function loadColorStatus() {
       try {
         return JSON.parse(localStorage.getItem(COLOR_STATUS_KEY)) || {};
@@ -353,77 +350,139 @@
       }
     }
 
-    // تعريف المنتجات والألوان
+    // نفس أسماء الموديلات اللي عندك في index
     const PRODUCTS = {
       rozalin: {
         key: 'rozalin',
-        code: 'CD05',
-        name: 'دريس قطعتين بالبطو جوخ',
-        desc: 'بيزك ريب مع بالطو جوخ ليكرا مستورد – ون سايز تلبيس لحد 85 ك تقريباً.',
-        extra: 'ألوان: روز – أوف وايت – بني – هافان – أسود – زيتي.',
-        price: 849,
-        oldPrice: 1049,
-        mainImage: 'coatdress-main.jpg',
+        name: 'طقم روزالين 3 قطع',
+        desc: 'خامة روزالين مستورد عالي الجودة، ملمس ناعم وقصة مريحة وشيك.',
+        extra: 'المقاس: وان سايز تلبيس من 60 لـ 95 كيلو تقريباً.',
+        price: 749,
+        oldPrice: 999,
+        mainImage: 'rozalin-main.jpg',
         colors: [
-          { key: 'rose',    label: 'روز',       hex: '#c47b7f', image: 'coatdress-rose.jpg' },
-          { key: 'offwhite',label: 'أوف وايت', hex: '#f3eadf', image: 'coatdress-offwhite.jpg' },
-          { key: 'brown',   label: 'بني',       hex: '#5d4031', image: 'coatdress-brown.jpg' },
-          { key: 'havan',   label: 'هافان',     hex: '#8b5a2b', image: 'coatdress-havan.jpg' },
-          { key: 'black',   label: 'أسود',      hex: '#111111', image: 'coatdress-black.jpg' },
-          { key: 'olive',   label: 'زيتي',      hex: '#3f5f3a', image: 'coatdress-olive.jpg' }
+          { key: 'kafeh', label: 'كافيه', hex: '#8b5a2b', image: 'rozalin-kafeh.jpg' },
+          { key: 'beige', label: 'بيج',   hex: '#e3c8a3', image: 'rozalin-beige.jpg' },
+          { key: 'mov',   label: 'موف',   hex: '#5b185e', image: 'rozalin-mov.jpg' },
+          { key: 'zyti',  label: 'زيتي',  hex: '#3f5f3a', image: 'rozalin-zyti.jpg' },
+          { key: 'black', label: 'أسود',  hex: '#111111', image: 'rozalin-black.jpg' },
+          { key: 'simon', label: 'سيمون', hex: '#f8a8a0', image: 'rozalin-simon.jpg' },
         ]
       },
       formal: {
         key: 'formal',
-        code: 'VG06',
-        name: 'كوليكشن درسات قطيفة مضلع – كوليكشن محجبات',
-        desc: 'تألقي بأحدث كوليكشن محجبات خامة قطيفة مضلع مستوردة.',
-        extra: 'المقاس: من 65 لـ 85 كيلو تقريباً.',
-        price: 649,
+        name: 'طقم فورمال 3 قطع',
+        desc: 'طقم فورمال 3 قطع خامة روزالين مستورد عالي الجودة.',
+        extra: 'المقاس: وان سايز تلبيس من 65 لـ 85 كيلو تقريباً.',
+        price: 699,
         oldPrice: 949,
-        mainImage: 'velvetset-main.jpg',
-        // كحلي – زيتي – بيج – أسود – أوف وايت (شيلنا نبيتي)
+        mainImage: 'formal-main.jpg',
         colors: [
-          { key: 'kahli',   label: 'كحلي',      hex: '#0f172a', image: 'velvetset-kahli.jpg' },
-          { key: 'olive',   label: 'زيتي',      hex: '#3f5f3a', image: 'velvetset-olive.jpg' },
-          { key: 'beige',   label: 'بيج',       hex: '#e3c8a3', image: 'velvetset-beige.jpg' },
-          { key: 'black',   label: 'أسود',      hex: '#111111', image: 'velvetset-black.jpg' },
-          { key: 'offwhite',label: 'أوف وايت', hex: '#f3eadf', image: 'velvetset-offwhite.jpg' }
+          { key: 'ment',     label: 'منت',      hex: '#3f7f6d', image: 'formal-ment.jpg' },
+          { key: 'babyblue', label: 'بيبي بلو', hex: '#9fd3ff', image: 'formal-babyblue.jpg' },
+          { key: 'beige',    label: 'بيج',      hex: '#e3c8a3', image: 'formal-beige.jpg' },
+          { key: 'havan',    label: 'هافان',    hex: '#8b5a2b', image: 'formal-havan.jpg' },
+          { key: 'black',    label: 'أسود',     hex: '#111111', image: 'formal-black.jpg' },
         ]
       },
       abaya: {
         key: 'abaya',
-        code: 'ZC07',
-        name: 'دريس سوستة كابيشو فرو',
-        desc: 'جوخ ليكرا مستورد مع كابيشو فرو ناعم – ون سايز تلبيس لحد 85 ك تقريباً.',
-        extra: 'ألوان: جملي – زيتي – بيج – نبيتي – أسود.',
-        price: 649,
-        oldPrice: 849,
-        mainImage: 'ziphoodie-main.jpg',
+        name: 'عباية زراير كبس',
+        desc: 'عباية شيك بخامة جوخ ليكرا مستورد عالي الجودة.',
+        extra: 'المقاس: وان سايز تلبيس لحد 80 كيلو تقريباً.',
+        price: 749,
+        oldPrice: 1049,
+        mainImage: 'abaya-main.jpg',
         colors: [
-          { key: 'camel',  label: 'جملي',  hex: '#b98a55', image: 'ziphoodie-brown.jpg' },
-          { key: 'olive',  label: 'زيتي',  hex: '#3f5f3a', image: 'ziphoodie-olive.jpg' },
-          { key: 'beige',  label: 'بيج',   hex: '#e3c8a3', image: 'ziphoodie-beige.jpg' },
-          { key: 'maroon', label: 'نبيتي', hex: '#7f1d1d', image: 'ziphoodie-maroon.jpg' },
-          { key: 'black',  label: 'أسود',  hex: '#111111', image: 'ziphoodie-black.jpg' }
+          { key: 'black',    label: 'أسود',        hex: '#111111', image: 'abaya-black.jpg' },
+          { key: 'green',    label: 'زيتي',        hex: '#4b6b4b', image: 'abaya-green.jpg' },
+          { key: 'burgundy', label: 'نبيتي',       hex: '#6a102b', image: 'abaya-burgundy.jpg' },
+          { key: 'lightgray',label: 'رمادي فاتح',  hex: '#d1d5db', image: 'abaya-lightgray.jpg' },
+          { key: 'caramel',  label: 'كاراميل',     hex: '#c57a3a', image: 'abaya-caramel.jpg' },
+          { key: 'darkgray', label: 'رمادي غامق',  hex: '#4b5563', image: 'abaya-darkgray.jpg' },
         ]
       },
       toonz: {
         key: 'toonz',
-        code: 'BD08',
+        name: 'طقم تونز قطعتين',
+        desc: 'طقم تونز قطعتين خامة شمواه في شمواه ناعمة جداً.',
+        extra: 'المقاس: من 60 لـ 90 كيلو تقريباً.',
+        price: 799,
+        oldPrice: 1199,
+        mainImage: 'toonz-main.jpg',
+        colors: [
+          { key: 'beige',   label: 'بيج',      hex: '#e3c8a3', image: 'toonz-beige.jpg' },
+          { key: 'olive',   label: 'زيتي',     hex: '#3f5f3a', image: 'toonz-olive.jpg' },
+          { key: 'wine',    label: 'نبيتي',    hex: '#7f1d1d', image: 'toonz-wine.jpg' },
+          { key: 'purple',  label: 'موف',      hex: '#6b21a8', image: 'toonz-purple.jpg' },
+          { key: 'pink',    label: 'بنفسجي',   hex: '#f9a8d4', image: 'toonz-pink.jpg' },
+        ]
+      },
+      coatdress: {
+        key: 'coatdress',
+        name: 'دريس قطعتين + بالطو جوخ',
+        desc: 'بيزك دريس ريب مع بالطو جوخ ليكرا مستورد عالي الجودة.',
+        extra: 'المقاس: ون سايز تلبيس لحد 85 كيلو تقريباً.',
+        price: 849,
+        oldPrice: 1049,
+        mainImage: 'coatdress-main.jpg',
+        colors: [
+          { key: 'rose',     label: 'روز',       hex: '#f4a6b7', image: 'coatdress-rose.jpg' },
+          { key: 'offwhite', label: 'أوف وايت',  hex: '#fef9c3', image: 'coatdress-offwhite.jpg' },
+          { key: 'havan',    label: 'هافان',     hex: '#8b5a2b', image: 'coatdress-havan.jpg' },
+          { key: 'brown',    label: 'بني',       hex: '#6b4f2a', image: 'coatdress-brown.jpg' },
+          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'coatdress-olive.jpg' },
+          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'coatdress-black.jpg' },
+        ]
+      },
+      velvetdress: {
+        key: 'velvetdress',
+        name: 'دريس قطيفة مضلع – كوليكشن محجبات',
+        desc: 'تألقي بأحدث كوليكشن محجبات خامة قطيفة مضلع مستوردة.',
+        extra: 'المقاس: من 65 لـ 85 كيلو تقريباً.',
+        price: 649,
+        oldPrice: 949,
+        mainImage: 'velvetdress-main.jpg',
+        colors: [
+          { key: 'navy',     label: 'كحلي',      hex: '#1f2937', image: 'velvetdress-navy.jpg' },
+          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'velvetdress-olive.jpg' },
+          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'velvetdress-beige.jpg' },
+          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'velvetdress-wine.jpg' },
+          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'velvetdress-black.jpg' },
+          { key: 'offwhite', label: 'أوف وايت',  hex: '#fef9c3', image: 'velvetdress-offwhite.jpg' },
+        ]
+      },
+      zipcoat: {
+        key: 'zipcoat',
+        name: 'دريس سوستة كابيشو فرو',
+        desc: 'دريس سوستة مع كابيشو فرو خامة جوخ ليكرا مستورد.',
+        extra: 'المقاس: ون سايز تلبيس لحد 85 كيلو تقريباً.',
+        price: 649,
+        oldPrice: 849,
+        mainImage: 'zipcoat-main.jpg',
+        colors: [
+          { key: 'camel',    label: 'جملي',      hex: '#b98a58', image: 'zipcoat-camel.jpg' },
+          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'zipcoat-olive.jpg' },
+          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'zipcoat-beige.jpg' },
+          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'zipcoat-wine.jpg' },
+          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'zipcoat-black.jpg' },
+        ]
+      },
+      beltballoon: {
+        key: 'beltballoon',
         name: 'دريس سادة كم بلونة مع حزام',
-        desc: 'دريس شيك بسوستة من الخلف بحزام شفاف وكم بلونة، خامة قطيفة مضلع مستوردة.',
-        extra: 'المقاس: ون سايز لحد 85 ك تقريباً.',
+        desc: 'دريس سادة بحزام شفاف وكم بلونة خامة قطيفة مضلع مستوردة.',
+        extra: 'المقاس: ون سايز تلبيس لحد 85 كيلو تقريباً.',
         price: 599,
         oldPrice: 799,
-        mainImage: 'beltdress-main.jpg',
+        mainImage: 'beltballoon-main.jpg',
         colors: [
-          { key: 'olive',  label: 'زيتي',  hex: '#3f5f3a', image: 'beltdress-olive.jpg' },
-          { key: 'blue',   label: 'نبيتي', hex: '#1d3b70', image: 'beltdress-blue.jpg' },
-          { key: 'camel',  label: 'جملي',  hex: '#c79a57', image: 'beltdress-camel.jpg' },
-          { key: 'beige',  label: 'بيج',   hex: '#e3c8a3', image: 'beltdress-beige.jpg' },
-          { key: 'maroon', label: 'نبيتي غامق', hex: '#7f1d1d', image: 'beltdress-maroon.jpg' },
-          { key: 'black',  label: 'أسود',  hex: '#111111', image: 'beltdress-black.jpg' }
+          { key: 'olive',    label: 'زيتي',      hex: '#3f5f3a', image: 'beltballoon-olive.jpg' },
+          { key: 'navy',     label: 'كحلي',      hex: '#1f2937', image: 'beltballoon-navy.jpg' },
+          { key: 'camel',    label: 'جملي',      hex: '#b98a58', image: 'beltballoon-camel.jpg' },
+          { key: 'beige',    label: 'بيج',       hex: '#e3c8a3', image: 'beltballoon-beige.jpg' },
+          { key: 'wine',     label: 'نبيتي',     hex: '#7f1d1d', image: 'beltballoon-wine.jpg' },
+          { key: 'black',    label: 'أسود',      hex: '#111111', image: 'beltballoon-black.jpg' },
         ]
       }
     };
@@ -476,13 +535,11 @@
       const colorStatusMap = loadColorStatus();
       const productStatus = colorStatusMap[product.key] || {};
 
-      // رسم دوائر الألوان
+      // رسم دوائر الألوان (مع احترام الإيقاف من لوحة التحكم)
       product.colors.forEach(color => {
-        // لو اللون متسجل في لوحة التحكم و متعلّم عليه "مقفول" (false) يبقى مقفول
-        let enabled = true;
-        if (Object.prototype.hasOwnProperty.call(productStatus, color.label)) {
-          enabled = !!productStatus[color.label];
-        }
+        // لو في admin اللون متعلم عليه "متوقف" => ما نعرضوش
+        const enabled = (productStatus[color.label] !== false);
+        if (!enabled) return;
 
         const dot = document.createElement('button');
         dot.type = 'button';
@@ -490,18 +547,14 @@
         dot.style.backgroundColor = color.hex;
         dot.setAttribute('aria-label', color.label);
 
-        if (!enabled) {
-          dot.classList.add('disabled');
-        } else {
-          dot.addEventListener('click', () => {
-            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-            dot.classList.add('selected');
-            selectedColorKey = color.key;
-            selectedColorObj = color;
-            selectedColorText.textContent = 'اللون المختار: ' + color.label;
-            imgEl.src = color.image || product.mainImage;
-          });
-        }
+        dot.addEventListener('click', () => {
+          document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+          dot.classList.add('selected');
+          selectedColorKey = color.key;
+          selectedColorObj = color;
+          selectedColorText.textContent = 'اللون المختار: ' + color.label;
+          imgEl.src = color.image || product.mainImage;
+        });
 
         colorsRow.appendChild(dot);
       });
@@ -529,6 +582,7 @@
 
         const cart = getCart();
 
+        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );
@@ -543,11 +597,8 @@
             price: product.price,
             qty: qty,
             colorKey: selectedColorKey,
-            colorName: selectedColorObj.label,
-            colorLabel: selectedColorObj.label,
-            colorText: selectedColorObj.label,
-            colorHex: selectedColorObj.hex,
-            color: selectedColorObj.hex,
+            colorName: selectedColorObj.label, // cart.html بيستخدمها
+            colorCode: selectedColorObj.hex,   // cart.html بيستخدمها للـ dot
             image: selectedColorObj.image || product.mainImage
           });
         }
@@ -562,14 +613,5 @@
           } catch (e) {}
         }
 
-        showToast('تمت إضافة اللون ' + selectedColorObj.label + ' إلى السلة بنجاح 🥰', selectedColorObj.hex);
-      });
-
-      updateCartCount();
-      window.addEventListener('storage', (e) => {
-        if (e.key === CART_KEY) updateCartCount();
-      });
-    });
-  </script>
-</body>
-</html>
+        showToast(
+          'تمت إضافة اللون ' + selectedColorObj.label + ' إلى 
