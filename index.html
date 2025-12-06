@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TEFA STORE - أطقم روزالين و فورمال</title>
+  <title>TEFA STORE - أطقم و درسات حريمي</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -88,6 +89,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
+      visibility: hidden;
     }
 
     /* Hero section */
@@ -220,9 +222,39 @@
       color: #e5e7eb;
     }
 
+    /* Search bar */
+    .search-box {
+      margin-top: 14px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      border: 1px solid #e5e7eb;
+    }
+    .search-box-icon {
+      font-size: 16px;
+      color: #6b7280;
+    }
+    .search-box input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 13px;
+      flex: 1;
+    }
+    .search-hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
     /* Products */
     .section-title {
-      margin-top: 20px;
+      margin-top: 16px;
       margin-bottom: 6px;
       font-size: 18px;
       font-weight: 800;
@@ -237,8 +269,7 @@
       grid-template-columns: 1fr;
       gap: 14px;
     }
-    @media (min-width: 720px) {
-      .hero-title { font-size: 28px; }
+    @media (min-width: 520px) {
       .products-grid { grid-template-columns: 1fr 1fr; }
     }
 
@@ -254,6 +285,7 @@
     .product-img-wrapper {
       position: relative;
       background: #e5e5e5;
+      cursor: pointer;
     }
     .product-img-wrapper img {
       width: 100%;
@@ -277,9 +309,20 @@
       flex-direction: column;
       gap: 6px;
     }
+    .product-name-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: baseline;
+    }
     .product-name {
       font-size: 16px;
       font-weight: 800;
+    }
+    .product-code {
+      font-size: 11px;
+      color: #6b7280;
+      font-weight: 700;
     }
     .product-desc {
       font-size: 12px;
@@ -314,6 +357,18 @@
       width: 100%;
       font-size: 14px;
     }
+
+    /* Footer contact */
+    .footer-contact {
+      margin-top: 18px;
+      font-size: 13px;
+      text-align: center;
+      color: #4b5563;
+    }
+    .footer-contact a {
+      color: #111;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -328,7 +383,7 @@
     <div class="header-inner">
       <div>
         <div class="store-name">TEFA STORE</div>
-        <div class="store-sub">متجر أطقم حريمي جاهزة للخروجات والمناسبات</div>
+        <div class="store-sub">متجر أطقم و درسات حريمي روزالين و شتوي جاهزة للخروجات والمناسبات</div>
       </div>
       <a href="cart.html" class="cart-icon-wrapper" aria-label="سلة الطلبات">
         <span>🛒</span>
@@ -341,15 +396,15 @@
     <!-- الهيرو -->
     <section class="hero">
       <div class="hero-badge">
-        <span>🔥 خصم على الأطقم الكاملة</span>
+        <span>🔥 خصم على الأطقم و الدرسات الكاملة</span>
       </div>
-      <h1 class="hero-title">أطقم حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
+      <h1 class="hero-title">أطقم و درسات حريمي جاهزة <span>للخروجات والمناسبات</span></h1>
       <p class="hero-text">
-        أطقم وعبايات حريمي بخامات مستوردة، قصات مريحة وشيك، مع شحن لحد باب البيت لكل محافظات مصر والدفع عند الاستلام.
+        خامات روزالين و جوخ و قطيفة مستوردة، قصات مريحة وشيك، مع شحن حتى باب البيت لكل محافظات مصر والدفع عند الاستلام.
       </p>
       <ul class="hero-bullets">
         <li>• خامة ناعمة وثابتة اللون.</li>
-        <li>• أطقم جاهزة على اللبس بدون حيرة تنسيق.</li>
+        <li>• موديلات جاهزة على اللبس بدون حيرة تنسيق.</li>
         <li>• شحن سريع + دفع عند الاستلام.</li>
       </ul>
       <p class="hero-guarantee">
@@ -357,8 +412,8 @@
       </p>
 
       <div class="hero-actions">
-        <a href="#products" class="btn btn-primary">تصفح الأطقم الآن</a>
-        <a href="https://wa.me/201157834203" target="_blank" class="btn btn-outline">استفسار على واتساب</a>
+        <a href="#products" class="btn btn-primary">تصفح الموديلات الآن</a>
+        <a href="https://wa.me/201029942139" target="_blank" class="btn btn-outline">استفسار على واتساب</a>
       </div>
     </section>
 
@@ -367,7 +422,7 @@
       <div class="feature-card">
         <div class="feature-icon">✨</div>
         <div class="feature-title">خامات عالية الجودة</div>
-        <div class="feature-text">خامات مستوردة ناعمة وثابتة اللون ومناسبة للخروجات والمناسبات.</div>
+        <div class="feature-text">روزالين – جوخ ليكرا – قطيفة مضلع مستوردة، خامة تقيلة وشيك.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💳</div>
@@ -388,20 +443,32 @@
       <div class="discount-small">الخصم بيتطبق تلقائياً لأول طلب بنفس رقم الموبايل.</div>
     </section>
 
+    <!-- بحث برقم الموديل -->
+    <div class="search-box">
+      <span class="search-box-icon">🔍</span>
+      <input id="searchInput" placeholder="ابحث برقم الموديل (مثال: RZ01, CD05) أو باسم الموديل" />
+    </div>
+    <p class="search-hint">
+      📌 كود كل موديل مكتوب على الكرتة الخاصة به (مثال: RZ01، FR02، CD05 ...).
+    </p>
+
     <!-- المنتجات -->
     <section id="products">
-      <h2 class="section-title">منتجاتنا</h2>
-      <p class="section-sub">اختاري الموديل واللون والكمية اللي تريحك، وبعدين كمّلي بياناتك من السلة.</p>
+      <h2 class="section-title">الموديلات المتاحة</h2>
+      <p class="section-sub">اختاري الموديل واللون والكمية، وبعدها كمّلي بياناتك من السلة.</p>
 
-      <div class="products-grid">
+      <div class="products-grid" id="productsGrid">
         <!-- روزالين -->
-        <article class="product-card">
-          <a href="product.html?product=rozalin" class="product-img-wrapper">
+        <article class="product-card" data-code="RZ01" data-name="طقم روزالين 3 قطع">
+          <div class="product-img-wrapper" data-link="product.html?product=rozalin">
             <img src="rozalin-main.jpg" alt="طقم روزالين 3 قطع" loading="lazy">
             <div class="product-discount-tag">خصم كبير من 999ج إلى 749ج</div>
-          </a>
+          </div>
           <div class="product-body">
-            <div class="product-name">طقم روزالين 3 قطع</div>
+            <div class="product-name-row">
+              <div class="product-name">طقم روزالين 3 قطع</div>
+              <div class="product-code">كود: RZ01</div>
+            </div>
             <div class="product-desc">
               خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 60 لـ 95 كيلو.
             </div>
@@ -409,7 +476,7 @@
               <span class="product-price">749 ج</span>
               <span class="product-oldprice">999 ج</span>
             </div>
-            <div class="product-note">ألوان: موف – كافية – زيتي – أسود – بيج – سيمون.</div>
+            <div class="product-note">ألوان: موف – كافيه – زيتي – أسود – بيج – سيمون.</div>
             <div class="product-footer">
               <a href="product.html?product=rozalin" class="btn btn-primary">شوفي الألوان واطلبي 💕</a>
             </div>
@@ -417,13 +484,16 @@
         </article>
 
         <!-- فورمال -->
-        <article class="product-card">
-          <a href="product.html?product=formal" class="product-img-wrapper">
+        <article class="product-card" data-code="FR02" data-name="طقم فورمال 3 قطع">
+          <div class="product-img-wrapper" data-link="product.html?product=formal">
             <img src="formal-main.jpg" alt="طقم فورمال 3 قطع" loading="lazy">
             <div class="product-discount-tag">خصم من 949ج إلى 699ج</div>
-          </a>
+          </div>
           <div class="product-body">
-            <div class="product-name">طقم فورمال 3 قطع</div>
+            <div class="product-name-row">
+              <div class="product-name">طقم فورمال 3 قطع</div>
+              <div class="product-code">كود: FR02</div>
+            </div>
             <div class="product-desc">
               خامة روزالين مستورد عالي الجودة – وان سايز تلبيس من 65 لـ 85 كيلو.
             </div>
@@ -439,13 +509,16 @@
         </article>
 
         <!-- عباية زراير كبس -->
-        <article class="product-card">
-          <a href="product.html?product=abaya" class="product-img-wrapper">
+        <article class="product-card" data-code="AB03" data-name="عباية زراير كبس">
+          <div class="product-img-wrapper" data-link="product.html?product=abaya">
             <img src="abaya-main.jpg" alt="عباية زراير كبس" loading="lazy">
             <div class="product-discount-tag">خصم من 1049ج إلى 749ج</div>
-          </a>
+          </div>
           <div class="product-body">
-            <div class="product-name">عباية زراير كبس</div>
+            <div class="product-name-row">
+              <div class="product-name">عباية زراير كبس</div>
+              <div class="product-code">كود: AB03</div>
+            </div>
             <div class="product-desc">
               جوخ ليكرا مستورد عالي الجودة – وان سايز تلبيس لحد 80 كيلو مرتاح.
             </div>
@@ -461,13 +534,16 @@
         </article>
 
         <!-- تونز قطعتين -->
-        <article class="product-card">
-          <a href="product.html?product=toonz" class="product-img-wrapper">
+        <article class="product-card" data-code="TZ04" data-name="طقم تونز قطعتين">
+          <div class="product-img-wrapper" data-link="product.html?product=toonz">
             <img src="toonz-main.jpg" alt="طقم تونز قطعتين" loading="lazy">
             <div class="product-discount-tag">خصم من 1199ج إلى 799ج</div>
-          </a>
+          </div>
           <div class="product-body">
-            <div class="product-name">طقم تونز قطعتين</div>
+            <div class="product-name-row">
+              <div class="product-name">طقم تونز قطعتين</div>
+              <div class="product-code">كود: TZ04</div>
+            </div>
             <div class="product-desc">
               خامة شمواه ناعمة – سايز من 60 لـ 90 كيلو مرتاح.
             </div>
@@ -482,91 +558,90 @@
           </div>
         </article>
 
-        <!-- الموديل الجديد: دريس قطعتين + بالطو جوخ -->
-        <article class="product-card">
-          <a href="product.html?product=coatdress" class="product-img-wrapper">
-            <img src="coatdress-main.jpg" alt="موديل دريس قطعتين مع بالطو جوخ" loading="lazy">
+        <!-- دريس بالطو جوخ قطعتين -->
+        <article class="product-card" data-code="CD05" data-name="دريس قطعتين بالطو جوخ">
+          <div class="product-img-wrapper" data-link="product.html?product=coatdress">
+            <img src="coatdress-main.jpg" alt="دريس قطعتين بالطو جوخ" loading="lazy">
             <div class="product-discount-tag">خصم من 1049ج إلى 849ج</div>
-          </a>
+          </div>
           <div class="product-body">
-            <div class="product-name">دريس قطعتين مع بالطو جوخ</div>
+            <div class="product-name-row">
+              <div class="product-name">دريس قطعتين بالطو جوخ</div>
+              <div class="product-code">كود: CD05</div>
+            </div>
             <div class="product-desc">
-              بيزك دريس ريب + بالطو جوخ ليكرا مستورد عالي الجودة، طالع شيك جداً ومناسب للمشاوير والخروجات.
+              بيزك ريب مع بالطو جوخ ليكرا مستورد – ون سايز تلبيس لحد 85 ك.
             </div>
             <div class="product-price-row">
               <span class="product-price">849 ج</span>
               <span class="product-oldprice">1049 ج</span>
             </div>
-            <div class="product-note">وان سايز تلبيس لحد 85 ك مرتاح – ألوان متعددة على حسب التوفر.</div>
+            <div class="product-note">ألوان: روز – أوف وايت – بني – هافان – أسود – زيتي.</div>
             <div class="product-footer">
-              <a href="product.html?product=coatdress" class="btn btn-primary">شوفي الألوان واطلبي ☁️</a>
+              <a href="product.html?product=coatdress" class="btn btn-primary">شوفي الألوان واطلبي 🤎</a>
             </div>
           </div>
         </article>
 
-      </div>
-    </section>
+        <!-- دريس قطيفة مضلع (كوليكشن حديقة) -->
+        <article class="product-card" data-code="VG06" data-name="دريس قطيفة مضلع مستورد">
+          <div class="product-img-wrapper" data-link="product.html?product=garden">
+            <img src="garden-main.jpg" alt="دريس قطيفة مضلع مستورد" loading="lazy">
+            <div class="product-discount-tag">خصم من 949ج إلى 649ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name-row">
+              <div class="product-name">كوليكشن درسات قطيفة مضلع</div>
+              <div class="product-code">كود: VG06</div>
+            </div>
+            <div class="product-desc">
+              خامة قطيفة مضلع مستوردة – قصات واسعة وشيك، تلبيس من 65 لـ 85 كيلو.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">649 ج</span>
+              <span class="product-oldprice">949 ج</span>
+            </div>
+            <div class="product-note">ألوان: كحلي – زيتوني – بيج – بني – أسود – أوف وايت.</div>
+            <div class="product-footer">
+              <a href="product.html?product=garden" class="btn btn-primary">شوفي الألوان واطلبي 🌸</a>
+            </div>
+          </div>
+        </article>
 
-    <!-- تذييل بسيط للتواصل -->
-    <p style="text-align:center;font-size:12px;color:#555;margin-top:20px;">
-      للتواصل والاقتراحات على واتساب: <strong>01029942139</strong>
-    </p>
-  </main>
+        <!-- دريس سوستة كابتشو فرو -->
+        <article class="product-card" data-code="ZC07" data-name="دريس سوستة كابتشو فرو">
+          <div class="product-img-wrapper" data-link="product.html?product=zipcoat">
+            <img src="zipcoat-main.jpg" alt="دريس سوستة كابتشو فرو" loading="lazy">
+            <div class="product-discount-tag">خصم من 849ج إلى 649ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name-row">
+              <div class="product-name">دريس سوستة كابتشو فرو</div>
+              <div class="product-code">كود: ZC07</div>
+            </div>
+            <div class="product-desc">
+              جوخ ليكرا مستورد مع كابتشو فرو – ون سايز تلبيس لحد 85 ك.
+            </div>
+            <div class="product-price-row">
+              <span class="product-price">649 ج</span>
+              <span class="product-oldprice">849 ج</span>
+            </div>
+            <div class="product-note">ألوان: جملي – زيتي – بيج – نبيتي – أسود.</div>
+            <div class="product-footer">
+              <a href="product.html?product=zipcoat" class="btn btn-primary">شوفي الألوان واطلبي ❄️</a>
+            </div>
+          </div>
+        </article>
 
-  <script>
-    const CART_KEY = 'tefa_cart';
-
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function updateCartCount() {
-      const cart = getCart();
-      const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-      const badge = document.getElementById('cart-count');
-      if (!badge) return;
-      badge.textContent = count;
-      badge.style.visibility = count > 0 ? 'visible' : 'hidden';
-    }
-
-    // عد تنازلي 3 أيام من أول زيارة
-    function initCountdown() {
-      const targetMs = Date.now() + 3 * 24 * 60 * 60 * 1000;
-      const el = document.getElementById('countdown');
-
-      function tick() {
-        const diff = targetMs - Date.now();
-        if (diff <= 0) {
-          el.textContent = "انتهى العرض 🎉";
-          return;
-        }
-        const totalSeconds = Math.floor(diff / 1000);
-        const days = Math.floor(totalSeconds / (24*3600));
-        const hours = Math.floor((totalSeconds % (24*3600)) / 3600);
-        const mins = Math.floor((totalSeconds % 3600) / 60);
-        const secs = totalSeconds % 60;
-        el.textContent =
-          days + " يوم " +
-          String(hours).padStart(2,'0') + " ساعة " +
-          String(mins).padStart(2,'0') + " د " +
-          String(secs).padStart(2,'0') + " ث";
-      }
-
-      tick();
-      setInterval(tick, 1000);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      updateCartCount();
-      initCountdown();
-      window.addEventListener('storage', (e) => {
-        if (e.key === CART_KEY) updateCartCount();
-      });
-    });
-  </script>
-</body>
-</html>
+        <!-- دريس سادة حزام شفاف كم بلونة -->
+        <article class="product-card" data-code="BD08" data-name="دريس ساده حزام شفاف كم بلونه">
+          <div class="product-img-wrapper" data-link="product.html?product=balloondress">
+            <img src="balloondress-main.jpg" alt="دريس ساده حزام شفاف كم بلونه" loading="lazy">
+            <div class="product-discount-tag">خصم من 799ج إلى 599ج</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name-row">
+              <div class="product-name">دريس ساده كم بلونة مع حزام</div>
+              <div class="product-code">كود: BD08</div>
+            </div>
+            <d
