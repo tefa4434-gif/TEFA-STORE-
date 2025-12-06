@@ -310,7 +310,7 @@
 
   <div class="toast" id="toast">تمت إضافة اللون إلى السلة بنجاح 🥰</div>
 
-  <!-- صوت بسيط عند الإضافة (حطي ملف notify.mp3 جنب الصفحة) -->
+  <!-- صوت بسيط عند الإضافة (خلي ملف notify.mp3 جنب الصفحة) -->
   <audio id="add-sound">
     <source src="notify.mp3" type="audio/mpeg">
   </audio>
@@ -340,7 +340,7 @@
       badge.style.visibility = count > 0 ? 'visible' : 'hidden';
     }
 
-    // تعريف المنتجات والألوان (نفس اللي في index من غير لعب)
+    // نفس أسماء الموديلات اللي عندك في index
     const PRODUCTS = {
       rozalin: {
         key: 'rozalin',
@@ -410,7 +410,7 @@
       },
       coatdress: {
         key: 'coatdress',
-        name: 'دريس قطعتين بالطو جوخ',
+        name: 'دريس قطعتين + بالطو جوخ',
         desc: 'بيزك دريس ريب مع بالطو جوخ ليكرا مستورد عالي الجودة.',
         extra: 'المقاس: ون سايز تلبيس لحد 85 كيلو تقريباً.',
         price: 849,
@@ -427,7 +427,7 @@
       },
       velvetdress: {
         key: 'velvetdress',
-        name: 'كوليكشن درسات قطيفة مضلع',
+        name: 'دريس قطيفة مضلع – كوليكشن محجبات',
         desc: 'تألقي بأحدث كوليكشن محجبات خامة قطيفة مضلع مستوردة.',
         extra: 'المقاس: من 65 لـ 85 كيلو تقريباً.',
         price: 649,
@@ -477,14 +477,6 @@
       }
     };
 
-    // لو index بيبعث كود قديم (cd05, vg06, zc07, bd08) نربطها بالمفاتيح الجديدة
-    const PRODUCT_ALIAS = {
-      cd05: 'coatdress',
-      vg06: 'velvetdress',
-      zc07: 'zipcoat',
-      bd08: 'beltballoon',
-    };
-
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
@@ -507,14 +499,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      let productKey = getQueryParam('product') || 'rozalin';
-
-      // لو الكود من النوع CD05 / cd05 ... نحوله
-      const lower = productKey.toLowerCase();
-      if (PRODUCT_ALIAS[lower]) {
-        productKey = PRODUCT_ALIAS[lower];
-      }
-
+      const productKey = getQueryParam('product') || 'rozalin';
       const product = PRODUCTS[productKey] || PRODUCTS['rozalin'];
 
       const imgEl = document.getElementById('product-image');
@@ -536,7 +521,7 @@
       let selectedColorKey = null;
       let selectedColorObj = null;
 
-      // رسم دوائر الألوان (كلها شغالة)
+      // رسم دوائر الألوان
       product.colors.forEach(color => {
         const dot = document.createElement('button');
         dot.type = 'button';
@@ -579,6 +564,7 @@
 
         const cart = getCart();
 
+        // لو نفس المنتج ونفس اللون موجود، نزود الكمية فقط
         const existing = cart.find(
           item => item.productKey === product.key && item.colorKey === selectedColorKey
         );
@@ -593,12 +579,8 @@
             price: product.price,
             qty: qty,
             colorKey: selectedColorKey,
-            colorName: selectedColorObj.label,
-            colorLabel: selectedColorObj.label,
-            colorText: selectedColorObj.label,
-            colorHex: selectedColorObj.hex,
-            color: selectedColorObj.hex,
-            colorCode: selectedColorObj.hex,
+            colorName: selectedColorObj.label, // cart.html بيستخدمها
+            colorCode: selectedColorObj.hex,   // cart.html بيستخدمها للـ dot
             image: selectedColorObj.image || product.mainImage
           });
         }
@@ -618,4 +600,9 @@
 
       updateCartCount();
       window.addEventListener('storage', (e) => {
-        if (e.key === CART_KEY) updat
+        if (e.key === CART_KEY) updateCartCount();
+      });
+    });
+  </script>
+</body>
+</html>
