@@ -33,7 +33,7 @@
     .countdown {
       font-weight: 800;
       letter-spacing: 0.5px;
-      font-size: 15px; /* تكبير العداد */
+      font-size: 20px; /* تكبير العداد */
     }
 
     /* Header */
@@ -245,16 +245,12 @@
       color: #555;
       margin-bottom: 10px;
     }
+
+    /* كل موديلين جنب بعض */
     .products-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
-    }
-    @media (min-width: 600px) {
-      /* كل موديلين جنب بعض */
-      .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     .product-card {
@@ -646,4 +642,10 @@
     function updateCartCount() {
       const cart = getCart();
       const count = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-      const badge = document.getElementById('cart-count
+      const badge = document.getElementById('cart-count');
+      if (badge) {
+        badge.textContent = count;
+      }
+    }
+
+    document.addEventListener('DO
